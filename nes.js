@@ -4,7 +4,7 @@
 // @description   newz.dk er nu endnu mere perfekt!
 // @include       http://newz.dk/*
 // @include       http://*.newz.dk/*
-// @require       http://sites.google.com/site/daveschindler/jquery-html5-storage-plugin/jquery.Storage.js
+// @require       jQuery
 // @version       0.1
 // ==/UserScript==
 
@@ -13,16 +13,28 @@ function init() {
 	
 	$(content).insertAfter('#nmTopBar');
 
-	if $.Storage.get("ajaxPageChange")
+	//if $.Storage.get("ajaxPageChange")
 		ajaxPageChange();
 }
 
 function ajaxPageChange() {
-	$('.pagination a').click(function(){
+	// Indsætter en loading.gif
+	// Forsvinder efter første fAJAX, da den ikke er .live (jeg retter det senere)
+	content = '<div class="loading" style="float: left; margin: -2px 10px; padding: 5px; position: relative; width: 330px;"><p><img src="http://d9projects.com/loading.gif" /> Weeeeeeeeee.</p></div>';
+	$(content).insertAfter('.pagination');
+	$(".loading").ajaxStart(function(){
+		$('.pagination').hide();
+		$(this).show();
+	}).ajaxStop(function(){
+		$(this).hide();
+		$('.pagination').show();
+	}).hide();
+	
+	$('.pagination a').live('click', function(){
 		$.ajax({
 			url: $(this).attr('href'),
 			success: function (data) {
-				//window.testa = data;
+				//window.testa = data; // debug
 				
 				// Henter title (side og titel på tråd), som indsættes i <title> og <h1>
 				// newz.dk sætter normalt kun side ind i <h1>, når man skifter side, tsk tsk
@@ -32,22 +44,24 @@ function ajaxPageChange() {
 				$("title").html(a);
 				$("#postcontainer").html($(data).find("#postcontainer").html());
 				
-				// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
-				UpdatePosts();
+				// Sætter hash til første indlæg, så man kan kopiere link til den rette side
+				window.location.hash = $("#comments > div:first-child h2 a:first-child").attr('name');
 				
 				// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
-				re = /_pageId = (\d);/;
-				_pageId = re.exec(data)[1];
-				re = /_lastPage = (\d);/;
-				_lastPage = re.exec(data)[1];
-				
+				re = /_pageId = (\d+);/;
+				_pageId = parseInt(re.exec(data)[1]);
+				re = /_lastPage = (\d+);/;
+				_lastPage = parseInt(re.exec(data)[1]);
 				if (_pageId != _lastPage)
 					PauseAutoUpdate()
 				else
 					StartAutoUpdate();
 				
-				// Sætter event handles for de nye knapper
-				ajaxPageChange();
+				// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
+				UpdatePosts();
+				
+				// Sætter event handles for de nye knapper -- lige meget med .live
+				//ajaxPageChange();
 			}
 		});
 		return false;
