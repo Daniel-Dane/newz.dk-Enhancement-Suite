@@ -4,14 +4,14 @@
 // @description   newz.dk er nu endnu mere perfekt!
 // @include       http://newz.dk/*
 // @include       http://*.newz.dk/*
-// @require       jQuery
+// @require       https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js
 // @version       0.1
 // ==/UserScript==
 
 function init() {
-	content = '<div style="font-size: 12pt"><input type="checkbox" id="kage" name="kage"><label for="kage"> test</label></div>';
+	//content = '<div style="font-size: 12pt"><input type="checkbox" id="kage" name="kage"><label for="kage"> test</label></div>';
 	
-	$(content).insertAfter('#nmTopBar');
+	$('<div/>').insertAfter('#nmTopBar').css('font-size', '12pt').html('<input type="checkbox" id="kage" name="kage"><label for="kage"> test</label>');
 
 	//if $.Storage.get("ajaxPageChange")
 		ajaxPageChange();
