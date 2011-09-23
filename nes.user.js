@@ -19,7 +19,6 @@ function init() {
 
 	function insertLoadingGif() {
 		// Indsætter en loading.gif
-		alert('123');
 		$('<span/>').insertAfter('.pagination').html('<div class="loading" style="float: left; margin: -2px 10px; padding: 5px; position: relative; width: 330px;"><p><img src="http://d9projects.com/loading.gif" /> Weeeeeeeeee.</p></div>');
 		$(".loading").ajaxStart(function() {
 			$('.pagination').hide();
@@ -28,7 +27,6 @@ function init() {
 			$(this).hide();
 			$('.pagination').show();
 		}).hide();
-		alert('321');
 	}
 
 function ajaxPageChange() {
