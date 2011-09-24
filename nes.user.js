@@ -53,12 +53,12 @@ function ajaxPageChange() {
 				re = /_lastPage = (\d+);/;
 				_lastPage = +(re.exec(data)[1]);
 				if (_pageId != _lastPage)
-					PauseAutoUpdate()
+					location.href = "javascript:void(PauseAutoUpdate());";
 				else
-					StartAutoUpdate();
+					location.href = "javascript:void(StartAutoUpdate());";
 
 				// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handles igen (newz.dk-funktion)
-				UpdatePosts();
+				location.href = "javascript:void(UpdatePosts());";
 				
 				insertLoadingGif();
 			}
