@@ -38,7 +38,8 @@ function ajaxPageChange() {
 			success: function (data) {
 				// Henter title (side og titel på tråd), som indsættes i <title> og <h1>
 				// newz.dk sætter normalt kun side ind i <h1>, når man skifter side, tsk tsk
-				a = /<title>(.+)&raquo;.+&raquo;.+<\/title>/.exec(data)[1];
+				re = /<title>(.+)&raquo;.+&raquo;.+<\/title>/;
+				a = re.exec(data)[1];
 				$("#container div h1").html(a);
 				$("title").html(a);
 				$("#postcontainer").html($(data).find("#postcontainer").html());
@@ -47,16 +48,16 @@ function ajaxPageChange() {
 				//window.location.hash = $("#comments > div:first-child h2 a:first-child").attr('name');
 				
 				// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
-				a = /_pageId = (\d+);/.exec(data)[1];
-				b = /_lastPage = (\d+);/.exec(data)[1];
-				location.href = "javascript:(function(){ _pageId   = +(" + a + ")})()"
-				location.href = "javascript:(function(){ _lastPage = +(" + b + ")})()"
-				if (a != b)
+				re = /_pageId = (\d+);/;
+				_pageId = +(re.exec(data)[1]);
+				re = /_lastPage = (\d+);/;
+				_lastPage = +(re.exec(data)[1]);
+				if (_pageId != _lastPage)
 					location.href = "javascript:void(PauseAutoUpdate());";
 				else
 					location.href = "javascript:void(StartAutoUpdate());";
 
-				// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
+				// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handles igen (newz.dk-funktion)
 				location.href = "javascript:void(UpdatePosts());";
 				
 				insertLoadingGif();
