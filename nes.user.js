@@ -23,11 +23,13 @@
 // Sætter en ordentlig overskrift på tråden
 // newz.dk sætter normalt kun side-nr. ind i <h1>, når man skifter side, tsk tsk
 function fixTitle() {
-	$("#container div h1").html('Side ' + newz._pageId + ' » ' + /(Side \d+ » )*([^»]+) ».+/.exec(document.title)[2]);
-	if (/Side \d+/.exec(document.title))
-		document.title = document.title.replace(/Side \d+/, "Side " + newz._pageId)
-	else
-		document.title = "Side " + newz._pageId + " » " + document.title;
+	if (newz._lastPage > 1) {
+		$("#container div h1").html('Side ' + newz._pageId + ' » ' + /(Side \d+ » )*([^»]+) ».+/.exec(document.title)[2]);
+		if (/Side \d+/.exec(document.title))
+			document.title = document.title.replace(/Side \d+/, "Side " + newz._pageId)
+		else
+			document.title = "Side " + newz._pageId + " » " + document.title;
+	}
 }
 
 function init() {
