@@ -11,19 +11,19 @@
 // @version       0.2
 // ==/UserScript==
 
-//Chrome og Opera loader jQuery og jQuery.Storage i scriptet
-if (typeof($) == 'undefined') {
-	loadJQuery();
-	loadJQueryStorage();
-	
+try {
 	newz = function() {
 		var el = document.createElement('p');
 		el.setAttribute('onclick', 'return window;');
 		return el.onclick();
 	}();
-}else{
-	newz = unsafeWindow;
 }
+catch(e) {
+	newz = unsafeWindow; //unsafeWindow er kun for Greasemonkey(Firefox)
+}
+
+loadJQuery();
+loadJQueryStorage();
 
 // Sætter en ordentlig overskrift på tråden
 // newz.dk sætter normalt kun side-nr. ind i <h1>, når man skifter side, tsk tsk
