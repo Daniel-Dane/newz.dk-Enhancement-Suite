@@ -6,8 +6,6 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @require       https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js
-// @require       http://sites.google.com/site/daveschindler/jquery-html5-storage-plugin/jquery.Storage.js
 // @version       0.2
 // ==/UserScript==
 
