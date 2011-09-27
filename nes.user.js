@@ -82,8 +82,12 @@ function ajaxPageChange() {
 					$(this).attr('href', /(.+)(\/page)*/.exec(window.location.href)[1] + '/page' + /\d+/.exec($(this).attr('href')));
 				});
 				
-				// Sætter hash til første indlæg, så man kan kopiere link til den rette side -- irriterende, så nvm
-				//window.location.hash = $("#comments > div:first-child h2 a:first-child").attr('name');
+				// Sætter hash til første indlæg, så man kan kopiere link til den rette side
+				var firstChild = $("#comments > div:first-child h2 a:first-child");
+				var firstChildName = firstChild.attr('name');
+				firstChild.attr('name', '');
+				window.location.hash = firstChildName;
+				firstChild.attr('name', firstChildName);
 
 				// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
 				$(".pagination a").each(function(i) {
