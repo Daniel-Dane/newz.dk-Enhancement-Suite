@@ -70,7 +70,7 @@ function ajaxPageChange() {
 		$.ajax({
 			dataType: 'xml',
 			url: "/z4/action.php",
-			data: {"class":"Z4_Forum_Item", "action":"page", "id":newz._threadId, "offset":/.+\/page(\d+)/.exec(this.href)[1]},
+			data: {"class":"Z4_Forum_Item", "action":"page", "id":newz._threadId, "offset":/page(\d+)$/.exec(this.href)[1]},
 			success: function (xml) {
 				data = $("Response", xml).text();
 				$("#postcontainer").html(data);
