@@ -20,7 +20,7 @@ try {
 }
 //Chrome understøtter ikke @include, @exclude eller @match i userscripts
 if (!(/^(.+\.)?newz\.dk$/.test(newz.location.host)))
-	return;
+	try { return; } catch(e){}
 loadScripts();
 init();
 
