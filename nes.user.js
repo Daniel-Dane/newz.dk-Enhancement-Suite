@@ -21,7 +21,7 @@ catch(e) {
 }
 
 //Chrome understøtter ikke @include, @exclude eller @match i userscripts
-if (!/^(.+\.)?newz\.dk$/.test(newz.location.host))
+if (!(/^(.+\.)?newz\.dk$/.test(newz.location.host)))
 	return;
 
 loadScripts();
