@@ -1,6 +1,6 @@
 ﻿// ==UserScript==
 // @name          newz.dk Enhancement Suite
-// @namespace     http://www.example.com/gmscripts dunno skiftes
+// @namespace     https://github.com/Daniel-Dane/newz.dk-Enhancement-Suite/raw/master/nes.user.js
 // @description   newz.dk er nu endnu mere perfekt!
 // @include       http://newz.dk/*
 // @include       http://*.newz.dk/*
@@ -15,22 +15,76 @@ try {
 		el.setAttribute('onclick', 'return window;');
 		return el.onclick();
 	}();
-}
-catch(e) {
+} catch(e) {
 	newz = unsafeWindow; //unsafeWindow er kun for Greasemonkey(Firefox)
 }
-
 //Chrome understøtter ikke @include, @exclude eller @match i userscripts
 if (!(/^(.+\.)?newz\.dk$/.test(newz.location.host)))
 	return;
-
 loadScripts();
 init();
-fixTitle();
+
+function init() {
+	// NES-indstillingsboksen
+	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0;" id="NES-menu" />').insertAfter('#nmTopBar')
+	.html(' \
+	<h3><span>newz.dk Enhancement Suite</span></h3> \
+	<div style="text-align: left; padding-left: 12px;"> \
+	<input type="checkbox" id="fixTitleSetting" name="fixTitleSetting"><label for="fixTitleSetting"> Bedre overskrifter</label><br> \
+	<input type="checkbox" id="ajaxPageChange" name="ajaxPageChange"><label for="ajaxPageChange"> AJAX-sideskfit</label> \
+	<div id="ajaxPageChangeSub" style="padding-left: 12px;"> \
+		<input type="checkbox" id="ajaxPageChangeGoToTop" name="ajaxPageChangeGoToTop"><label for="ajaxPageChangeGoToTop"> Hop til top ved AJAX-sideskift</label> \
+	</div> \
+	<div style="margin-top: 12px;"> \
+		<hr> \
+		Ændringerne sættes i effekt ved næste genindlæsning. \
+	</div> \
+	</div> \
+	').hide();
+	
+	// Knappen til at vise/skjule indstillingerne
+	$('#nmSiteSelect').next().find('a:last').before('<a href="javascript:" id="NES-toggle">NES-indstillinger</a> | ');
+	$('#NES-toggle').click(function() {
+		$('#NES-menu').toggle();
+	});
+	
+	// Henter indstillinger
+	ajaxPageChangeGoToTop = ($.Storage.get("ajaxPageChangeGoToTop") == "true");
+	if (fixTitleSetting = ($.Storage.get("fixTitleSetting") == "true"))
+		fixTitle();
+	if ($.Storage.get("ajaxPageChange") == "true")
+		ajaxPageChange();
+	
+	// Event handlers til knapperne
+	$("#ajaxPageChange").bind("click", function() {
+		$.Storage.set("ajaxPageChange", this.checked ? 'true' : 'false');
+		updateSettingsSub();
+	})
+	.attr('checked', ($.Storage.get("ajaxPageChange") == 'true'));
+	
+	$("#fixTitleSetting").bind("click", function() {
+		$.Storage.set("fixTitleSetting", this.checked ? 'true' : 'false');
+	})
+	.attr('checked', ($.Storage.get("fixTitleSetting") == 'true'));
+	
+	$("#ajaxPageChangeGoToTop").bind("click", function() {
+		$.Storage.set("ajaxPageChangeGoToTop", this.checked ? 'true' : 'false');
+	})
+	.attr('checked', ($.Storage.get("ajaxPageChangeGoToTop") == 'true'));
+	
+	updateSettingsSub();
+}
+
+function updateSettingsSub() {
+	$('#ajaxPageChangeSub input').attr('disabled', !($('#ajaxPageChange').attr('checked')));
+}
 
 $(document).ajaxSuccess(function(event, xhr, options) {
 	// Fikser newz.dk's buggede AJAX
 	if (options.data.match('class=Z4_Forum_Item&action=page') !== null) {
+		if (ajaxPageChangeGoToTop)
+			newz.location.href = '#';
+		
 		// Sætter hash til første indlæg, så man kan kopiere link til den rette side
 		var firstChild = $("#comments > div:first-child h2 a:first-child");
 		var firstChildName = firstChild.attr('name');
@@ -53,7 +107,9 @@ $(document).ajaxSuccess(function(event, xhr, options) {
 		$(".pagination a").each(function() {
 			$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
 		});
-		fixTitle();
+		
+		if (fixTitleSetting)
+			fixTitle();
 		insertLoadingGif();
 	}
 });
@@ -71,19 +127,6 @@ function fixTitle() {
 		else
 			document.title = "Side " + newz._pageId + " » " + document.title;
 	}
-}
-
-function init() {
-	// Røvstor streng liiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiige HER:
-	$('<div/>').insertAfter('#nmTopBar').css('font-size', '1.2em').html('<input type="checkbox" id="ajaxPageChange" name="ajaxPageChange"><label for="ajaxPageChange"> ajaxPageChange</label>');
-	
-	$("#ajaxPageChange").bind("click", function() {
-		$.Storage.set("ajaxPageChange", this.checked ? 'true' : 'false')
-	})
-	.attr('checked', ($.Storage.get("ajaxPageChange") == 'true'));
-	
-	if ($.Storage.get("ajaxPageChange") == "true")
-		ajaxPageChange();
 }
 
 function insertLoadingGif() {
