@@ -19,6 +19,11 @@ try {
 catch(e) {
 	newz = unsafeWindow; //unsafeWindow er kun for Greasemonkey(Firefox)
 }
+
+//Chrome understøtter ikke @include, @exclude eller @match i userscripts
+if (!/^(.+\.)?newz\.dk$/.test(newz.location.host))
+	return;
+
 loadScripts();
 init();
 fixTitle();
