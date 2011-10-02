@@ -106,13 +106,7 @@ $(document).ajaxSuccess(function(event, xhr, options) {
 		$(".loading").hide();
 		$('.pagination').show();
 		
-		if ((a = newz.location.href.indexOf('#')) == -1)
-			var href = newz.location.href
-		else
-			var href = newz.location.href.substr(0, a);
-		
-		if ((a = href.indexOf('/page')) != -1)
-			var href = href.substr(0, a);
+		href = getUrl();
 		
 		$(".pagination a").each(function() {
 			$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
