@@ -23,6 +23,7 @@ if (!(/^(.+\.)?newz\.dk$/.test(newz.location.host)))
 	try { return; } catch(e) {}
 loadScripts();
 init();
+addPermLink();
 
 function init() {
 	// NES-indstillingsboksen
@@ -105,7 +106,6 @@ $(document).ajaxSuccess(function(event, xhr, options) {
 		$(".loading").hide();
 		$('.pagination').show();
 		
-		// hash fragment hører ikke til i location.href, god fucking damnit
 		if ((a = newz.location.href.indexOf('#')) == -1)
 			var href = newz.location.href
 		else
@@ -122,8 +122,19 @@ $(document).ajaxSuccess(function(event, xhr, options) {
 			fixTitle();
 		insertLoadingGif();
 		improvedQuote();
+		addPermLink();
 	}
 });
+
+function addPermLink() {
+	href = getUrl();
+	
+	$('.comment h2').each(function() {
+		var a = $(this).html();
+		a = a.replace(/#(\d+):/, '<a href="' + href + '/page' + newz._pageId + '#$1">#$1:</a>')
+		$(this).html(a);
+	});	
+}
 
 function improvedQuote() {
 	if (improvedQuoteSetting) {
@@ -283,6 +294,18 @@ function ajaxPageChange() {
 		});
 		return false;
 	});
+}
+
+function getUrl() {
+	if ((a = newz.location.href.indexOf('#')) == -1)
+		var href = newz.location.href
+	else
+		var href = newz.location.href.substr(0, a);
+	
+	if ((a = href.indexOf('/page')) != -1)
+		var href = href.substr(0, a);
+	
+	return href;
 }
 
 //
