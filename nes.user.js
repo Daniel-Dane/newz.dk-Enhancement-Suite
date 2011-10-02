@@ -18,9 +18,9 @@ try {
 } catch(e) {
 	newz = unsafeWindow; //unsafeWindow er kun for Greasemonkey(Firefox)
 }
-//Chrome understøtter ikke @include, @exclude eller @match i userscripts
+// Chrome understøtter ikke @include, @exclude eller @match i userscripts
 if (!(/^(.+\.)?newz\.dk$/.test(newz.location.host)))
-	try { return; } catch(e){}
+	try { return; } catch(e) {}
 loadScripts();
 init();
 
@@ -35,9 +35,12 @@ function init() {
 	<div id="ajaxPageChangeSub" style="padding-left: 12px;"> \
 		<input type="checkbox" id="ajaxPageChangeGoToTop" name="ajaxPageChangeGoToTop"><label for="ajaxPageChangeGoToTop"> Hop til top ved AJAX-sideskift</label> \
 	</div> \
+	<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg* (beta)</label> \
 	<div style="margin-top: 12px;"> \
 		<hr> \
-		Ændringerne sættes i effekt ved næste genindlæsning. \
+		Ændringerne sættes i effekt ved næste genindlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk-Enhancement-Suite">kynz</a>! \
+		<br> \
+		*) Kun nogle browsere (typisk Firefox og Chrome). \
 	</div> \
 	</div> \
 	').hide();
@@ -54,23 +57,30 @@ function init() {
 		fixTitle();
 	if ($.Storage.get("ajaxPageChange") == "true")
 		ajaxPageChange();
+	if (improvedQuoteSetting = ($.Storage.get("improvedQuoteSetting") == "true"))
+		improvedQuote();
 	
 	// Event handlers til knapperne
+	$("#fixTitleSetting").bind("click", function() {
+		$.Storage.set("fixTitleSetting", this.checked ? 'true' : 'false');
+		})
+	.attr('checked', ($.Storage.get("fixTitleSetting") == 'true'));
+	
 	$("#ajaxPageChange").bind("click", function() {
 		$.Storage.set("ajaxPageChange", this.checked ? 'true' : 'false');
 		updateSettingsSub();
 	})
 	.attr('checked', ($.Storage.get("ajaxPageChange") == 'true'));
 	
-	$("#fixTitleSetting").bind("click", function() {
-		$.Storage.set("fixTitleSetting", this.checked ? 'true' : 'false');
-	})
-	.attr('checked', ($.Storage.get("fixTitleSetting") == 'true'));
-	
 	$("#ajaxPageChangeGoToTop").bind("click", function() {
 		$.Storage.set("ajaxPageChangeGoToTop", this.checked ? 'true' : 'false');
 	})
 	.attr('checked', ($.Storage.get("ajaxPageChangeGoToTop") == 'true'));
+	
+	$("#improvedQuoteSetting").bind("click", function() {
+		$.Storage.set("improvedQuoteSetting", this.checked ? 'true' : 'false');
+	})
+	.attr('checked', ($.Storage.get("improvedQuoteSetting") == 'true'));
 	
 	updateSettingsSub();
 }
@@ -111,8 +121,104 @@ $(document).ajaxSuccess(function(event, xhr, options) {
 		if (fixTitleSetting)
 			fixTitle();
 		insertLoadingGif();
+		improvedQuote();
 	}
 });
+
+function improvedQuote() {
+	if (improvedQuoteSetting) {
+		$(".quoteitem").removeClass().addClass('quoteitemNES'); // newz.dk unbinder selv efterfølgende, så vi bliver nødt til at omdøbe class
+		
+		// Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk, hvor et fiks indgår. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
+		$(".quoteitemNES").unbind('click').bind("click", function(e) {
+			// Finder indlæggets id (ikke nummer)
+			var $post = $(this).parents(".comment");
+			var postId = $post.attr("id").substring(4);
+			
+			// Finder indlæggets nummer (ikke id)
+			var itemId = $post.find("h2 a").attr("name");
+			
+			// Finder indlæggets ejermand (den som prutten ikke lugte kan)
+			var username = $post.find("h2 a:last").html();
+			
+			// Hvis den ikke kunne findes, prøv et andet sted (dunno hvor)
+			if (!username) {
+				username = $post.find('.right_box a:last').html();
+			}
+			
+			// Jeg bruger ikke document.selection, som andre browsere (IE, gammel IE, Opera?) bruger, så det må du ordne, m910q.
+			// Checker, om markeringen er inden for indlæggets tekst. Virker i Firefox og Chrome.
+			if ($(newz.getSelection().getRangeAt(0).commonAncestorContainer).parents('#' + $post.attr("id")).length > 0) {
+				// Dette kan sikkert reduceres til noget pænere...
+				sel = newz.getSelection();
+				var container = document.createElement("div");
+				container.appendChild(sel.getRangeAt(0).cloneContents());
+				html = container.innerHTML;
+				
+				html = html.replace(/\<\/p\>\<p\>/g, "\n\n");
+				html = html.replace(/\<br\>/g, "\n");
+				
+				html = html.replace(/\<strong\>/g, "[b]");
+				html = html.replace(/\<\/strong\>/g, "[/b]");
+				
+				html = html.replace(/\<em\>/g, "[i]");
+				html = html.replace(/\<\/em\>/g, "[/i]");
+				
+				html = html.replace(/\<u\>/g, "[u]");
+				html = html.replace(/\<\/u\>/g, "[/u]");
+				
+				html = html.replace(/\<s\>/g, "[s]");
+				html = html.replace(/\<\/s\>/g, "[/s]");
+				
+				html = html.replace(/\<a href="(.+?)"\>(.+?)(\.\.)?\<\/a\>/g, '[url=$1]$2[/url]') // til url i [url]
+				// Ovenstående matcher også url uden [url] og giver dem en [url]. Det skal ændres. Jeg har prøvet.
+				
+				// Denne del skal stadig forbedres
+				html = html.replace(/\<code\>/g, "\n"); // Skal laves om til en ordentlig [code]
+				html = html.replace(/\<blockquote\>/g, "\n"); // Skal laves om til en ordentlig [quote]
+				
+				// Stripper resten af html'et
+				html = html.replace(/\<(.*?)\>/g, "");
+				html = html.replace(/\<\/(.*?)\>/g, "");
+				
+				// Finder kommentarfeltet og indsætter et linjeknæk før det citerede indlæg, hvis feltet ikke er tomt
+				var comment = $("#id_comment").val();
+				if (comment.length > 0) {
+					comment += "\n\n";
+				}
+				
+				// Sætter indlægget ind i en quote, som vi kender den
+				comment += "[quote=" + username + " (" + itemId + ")]" + html + "[/quote]";
+				$("#id_comment").val(comment);
+			} else {
+				$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
+					var text = $.trim($("Response", xml).text());
+					text = $.trim(
+						// Ser ud til at fjerne en eller anden quote, så kan det være denne linje, som er skyld i, at der forsvinder quotes, når man citerer?
+						text.replace(/\[quote[^\]]*\].*?\[\/quote\]/m, "")
+						
+						// Fjerner flere end ét efter hinanden følgende linjeknæk
+						.replace("\n\n\n\n", "\n\n")
+					);
+					
+					// Finder kommentarfeltet og indsætter et linjeknæk før det citerede indlæg, hvis feltet ikke er tomt
+					var comment = $("#id_comment").val();
+					if (comment.length > 0) {
+						comment += "\n\n";
+					}
+					
+					// Sætter indlægget ind i en quote, som vi kender den
+					comment += "[quote=" + username + " (" + itemId + ")]" + text + "[/quote]";
+					$("#id_comment").val(comment);
+				}
+				, "xml");
+			}
+			
+			e.preventDefault();
+			return false;
+		});
+	}
+}
 
 // Sætter en ordentlig overskrift på tråden
 // newz.dk sætter normalt kun side-nr. ind i <h1>, når man skifter side, tsk tsk
