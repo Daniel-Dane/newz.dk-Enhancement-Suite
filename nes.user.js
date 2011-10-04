@@ -21,15 +21,16 @@ try {
 // Chrome understøtter ikke @include, @exclude eller @match i userscripts
 if (!(/^(.+\.)?newz\.dk$/.test(newz.location.host)))
 	try { return; } catch(e) {}
+var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 loadScripts();
 init();
 addPermLink();
 
 function init() {
 	// NES-indstillingsboksen
-	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0;" id="NES-menu" />').insertAfter('#nmTopBar')
+	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0; width: 600px;" id="NES-menu" />').insertAfter('#nmTopBar')
 	.html(' \
-	<h3><span>newz.dk Enhancement Suite</span></h3> \
+	<h3 style=\'background: url("http://newz.dk.css.zfour.dk/gfx/default/bg_h3.png") repeat-x scroll 100% 0 transparent;\'><span>newz.dk Enhancement Suite</span></h3> \
 	<div style="text-align: left; padding-left: 12px;"> \
 	<input type="checkbox" id="fixTitleSetting" name="fixTitleSetting"><label for="fixTitleSetting"> Bedre overskrifter</label><br> \
 	<input type="checkbox" id="ajaxPageChange" name="ajaxPageChange"><label for="ajaxPageChange"> AJAX-sideskfit</label> \
@@ -41,7 +42,7 @@ function init() {
 		<hr> \
 		Ændringerne sættes i effekt ved næste genindlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk-Enhancement-Suite">kynz</a>! \
 		<br> \
-		*) Kun nogle browsere (typisk Firefox og Chrome). \
+		*) Kun Firefox (og lidt Chrome). \
 	</div> \
 	</div> \
 	').hide();
@@ -93,15 +94,20 @@ function updateSettingsSub() {
 $(document).ajaxSuccess(function(event, xhr, options) {
 	// Fikser newz.dk's buggede AJAX
 	if (options.data.match('class=Z4_Forum_Item&action=page') !== null) {
-		if (ajaxPageChangeGoToTop)
-			newz.location.href = '#';
-		
-		// Sætter hash til første indlæg, så man kan kopiere link til den rette side
-		var firstChild = $("#comments > div:first-child h2 a:first-child");
-		var firstChildName = firstChild.attr('name');
-		firstChild.attr('name', '');
-		newz.location.hash = firstChildName;
-		firstChild.attr('name', firstChildName);
+		if (startHash != '') {
+			newz.location.hash = startHash;
+			startHash = '';
+		} else {
+			if (ajaxPageChangeGoToTop)
+				newz.location.href = '#';
+			
+			// Sætter hash til første indlæg, så man kan kopiere link til den rette side
+			var firstChild = $("#comments > div:first-child h2 a:first-child");
+			var firstChildName = firstChild.attr('name');
+			firstChild.attr('name', '');
+			newz.location.hash = firstChildName;
+			firstChild.attr('name', firstChildName);
+		}
 		
 		$(".loading").hide();
 		$('.pagination').show();
@@ -258,6 +264,8 @@ function ajaxPageChange() {
 		e.preventDefault();
 		$('.pagination').hide();
 		$(".loading").show();
+		
+		startHash = '';
 		
 		$.ajax({
 			dataType: 'xml',
