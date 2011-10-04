@@ -221,8 +221,8 @@ function improvedQuote() {
 		} else {
 			// Finder ud af, om der er noget, som er markeret
 			try {
-				if (typeof (window.getSelection) != 'undefined') {
-					var select_string = window.getSelection();
+				if (typeof (newz.getSelection) != 'undefined') {
+					var select_string = newz.getSelection();
 				} else if (document.selection) {
 					var select_string = document.selection.createRange().text;
 				} else {
