@@ -59,8 +59,7 @@ function init() {
 		fixTitle();
 	if ($.Storage.get("ajaxPageChange") == "true")
 		ajaxPageChange();
-	if (improvedQuoteSetting = ($.Storage.get("improvedQuoteSetting") == "true"))
-		improvedQuote();
+	improvedQuoteSetting = ($.Storage.get("improvedQuoteSetting") == "true");
 	
 	// Event handlers til knapperne
 	$("#fixTitleSetting").bind("click", function() {
@@ -88,7 +87,9 @@ function init() {
 	
 	// I store tråde ender man nogle gange en side for langt
 	if (newz._pageId > newz._lastPage)
-		newz.ReceiveData(newz._lastPage);
+		newz.ReceiveData(newz._lastPage)
+	else
+		improvedQuote();
 }
 
 function updateSettingsSub() {
@@ -140,30 +141,36 @@ function addPermLink() {
 	});	
 }
 
+// Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk med vigtige ændringer. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
 function improvedQuote() {
-	if (improvedQuoteSetting) {
-		$(".quoteitem").unbind('click').removeClass().addClass('quoteitemNES'); // newz.dk unbinder selv efterfølgende, så vi bliver nødt til at omdøbe class
+	// newz.dk unbinder selv efterfølgende, så vi bliver nødt til at omdøbe class
+	$(".quoteitem").unbind('click').removeClass().addClass('quoteitemNES').bind("click", function(e) {
+		e.preventDefault();
 		
-		// Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk, hvor et fiks indgår. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
-		$(".quoteitemNES").bind("click", function(e) {
-			// Finder indlæggets id (ikke nummer)
-			var $post = $(this).parents(".comment");
-			var postId = $post.attr("id").substring(4);
-			
-			// Finder indlæggets nummer (ikke id)
-			var itemId = $post.find("h2 a").attr("name");
-			
-			// Finder indlæggets ejermand (den som prutten ikke lugte kan)
-			var username = $post.find("h2 a:last").html();
-			
-			// Hvis den ikke kunne findes, prøv et andet sted (dunno hvor)
-			if (!username) {
-				username = $post.find('.right_box a:last').html();
-			}
-			
-			// Jeg bruger ikke document.selection, som andre browsere (IE, gammel IE, Opera?) bruger, så det må du ordne, m910q.
-			// Checker, om markeringen er inden for indlæggets tekst. Virker i Firefox og Chrome.
-			if ($(newz.getSelection().getRangeAt(0).commonAncestorContainer).parents('#' + $post.attr("id")).length > 0) {
+		// Finder indlæggets id (ikke nummer)
+		var $post = $(this).parents(".comment");
+		var postId = $post.attr("id").substring(4);
+		
+		// Finder indlæggets nummer (ikke id)
+		var itemId = $post.find("h2 a").attr("name");
+		
+		// Finder indlæggets ejermand (den som prutten ikke lugte kan)
+		var username = $post.find("h2 a:last").html();
+		
+		// Hvis den ikke kunne findes, prøv et andet sted (dunno hvor)
+		if (!username) {
+			username = $post.find('.right_box a:last').html();
+		}
+		
+		// Bliver false, hvis improvedQuoteSetting eller den originale synes, at den sagtens kan klare markeringen
+		var hentFraServer = true;
+		
+		// Jeg bruger ikke document.selection, som andre browsere (IE, gammel IE, Opera?) bruger, så det må du ordne, m910q.
+		// Checker, om markeringen er inden for indlæggets tekst. Virker i Firefox og Chrome.
+		if (improvedQuoteSetting) {
+			if ((newz.getSelection().rangeCount > 0) && ($(newz.getSelection().getRangeAt(0).commonAncestorContainer).parents('#' + $post.attr("id")).length > 0)) {
+				hentFraServer = false;
+				
 				// Dette kan sikkert reduceres til noget pænere...
 				sel = newz.getSelection();
 				var container = document.createElement("div");
@@ -210,34 +217,69 @@ function improvedQuote() {
 				// Sætter indlægget ind i en quote, som vi kender den
 				comment += "[quote=" + username + " (" + itemId + ")]" + html + "[/quote]";
 				$("#id_comment").val(comment);
-			} else {
-				$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
-					var text = $.trim($("Response", xml).text());
-					text = $.trim(
-						// Ser ud til at fjerne en eller anden quote, så kan det være denne linje, som er skyld i, at der forsvinder quotes, når man citerer?
-						text//.replace(/\[quote[^\]]*\].*?\[\/quote\]/m, "")
-						
-						// Fjerner flere end ét efter hinanden følgende linjeknæk
-						.replace("\n\n\n\n", "\n\n")
-					);
-					
-					// Finder kommentarfeltet og indsætter et linjeknæk før det citerede indlæg, hvis feltet ikke er tomt
-					var comment = $("#id_comment").val();
-					if (comment.length > 0) {
-						comment += "\n\n";
-					}
-					
-					// Sætter indlægget ind i en quote, som vi kender den
-					comment += "[quote=" + username + " (" + itemId + ")]" + text + "[/quote]";
-					$("#id_comment").val(comment);
+			}
+		} else {
+			// Finder ud af, om der er noget, som er markeret
+			try {
+				if (typeof (window.getSelection) != 'undefined') {
+					var select_string = window.getSelection();
+				} else if (document.selection) {
+					var select_string = document.selection.createRange().text;
+				} else {
+					var select_string = '';
 				}
-				, "xml");
+			}
+			catch(e) {
+				var select_string = '';
 			}
 			
-			e.preventDefault();
-			return false;
-		});
-	}
+			// Læg venligst mærke til, at konvertering til [b] og deslige er udeladt (WTF)
+			var posttext = $post.find('.comment_content').html();
+			posttext = posttext.replace(/\<\/p\>\<p\>/g, "\n\n");
+			posttext = posttext.replace(/\<br\>/g, "\n");
+			posttext = posttext.replace(/\<code\>/g, "\n");
+			posttext = posttext.replace(/\<blockquote\>/g, "\n");
+			posttext = posttext.replace(/\<([a-z]+)\>/g, "");
+			posttext = posttext.replace(/\<\/([a-z]+)\>/g, "");
+			
+			if (select_string != '' && posttext.indexOf(select_string) == -1) {
+				select_string = '';
+			}
+			
+			if (select_string != '')  {
+				hentFraServer = false;
+			
+				var comment = $("#id_comment").val();
+				if (comment.length > 0) {
+					comment+="\n\n";
+				}
+				comment += "[quote=" + username + " (" + itemId + ")]" + select_string + "[/quote]";
+				$("#id_comment").val(comment);
+			}
+		}
+		
+		if (hentFraServer) {
+			$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
+				var text = $.trim($("Response", xml).text());
+				
+				// Fjerner flere end ét efter hinanden følgende linjeknæk
+				text = $.trim(text.replace("\n\n\n\n", "\n\n"));
+				
+				// Finder kommentarfeltet og indsætter et linjeknæk før det citerede indlæg, hvis feltet ikke er tomt
+				var comment = $("#id_comment").val();
+				if (comment.length > 0) {
+					comment += "\n\n";
+				}
+				
+				// Sætter indlægget ind i en quote, som vi kender den
+				comment += "[quote=" + username + " (" + itemId + ")]" + text + "[/quote]";
+				$("#id_comment").val(comment);
+			}
+			, "xml");
+		}
+		
+		return false;
+	});
 }
 
 // Sætter en ordentlig overskrift på tråden
