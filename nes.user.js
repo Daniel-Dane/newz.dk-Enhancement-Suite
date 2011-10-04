@@ -85,6 +85,10 @@ function init() {
 	.attr('checked', ($.Storage.get("improvedQuoteSetting") == 'true'));
 	
 	updateSettingsSub();
+	
+	// I store tråde ender man nogle gange en side for langt
+	if (newz._pageId > newz._lastPage)
+		newz.ReceiveData(newz._lastPage);
 }
 
 function updateSettingsSub() {
@@ -138,10 +142,10 @@ function addPermLink() {
 
 function improvedQuote() {
 	if (improvedQuoteSetting) {
-		$(".quoteitem").removeClass().addClass('quoteitemNES'); // newz.dk unbinder selv efterfølgende, så vi bliver nødt til at omdøbe class
+		$(".quoteitem").unbind('click').removeClass().addClass('quoteitemNES'); // newz.dk unbinder selv efterfølgende, så vi bliver nødt til at omdøbe class
 		
 		// Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk, hvor et fiks indgår. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
-		$(".quoteitemNES").unbind('click').bind("click", function(e) {
+		$(".quoteitemNES").bind("click", function(e) {
 			// Finder indlæggets id (ikke nummer)
 			var $post = $(this).parents(".comment");
 			var postId = $post.attr("id").substring(4);
@@ -211,7 +215,7 @@ function improvedQuote() {
 					var text = $.trim($("Response", xml).text());
 					text = $.trim(
 						// Ser ud til at fjerne en eller anden quote, så kan det være denne linje, som er skyld i, at der forsvinder quotes, når man citerer?
-						text.replace(/\[quote[^\]]*\].*?\[\/quote\]/m, "")
+						text//.replace(/\[quote[^\]]*\].*?\[\/quote\]/m, "")
 						
 						// Fjerner flere end ét efter hinanden følgende linjeknæk
 						.replace("\n\n\n\n", "\n\n")
