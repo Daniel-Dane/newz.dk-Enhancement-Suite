@@ -169,54 +169,56 @@ function improvedQuote() {
 		// Checker, om markeringen er inden for indlæggets tekst. Virker i Firefox og Chrome.
 		if (improvedQuoteSetting) {
 			if ((newz.getSelection().rangeCount > 0) && ($(newz.getSelection().getRangeAt(0).commonAncestorContainer).parents('#' + $post.attr("id")).length > 0)) {
-				hentFraServer = false;
-				
 				// Dette kan sikkert reduceres til noget pænere...
 				sel = newz.getSelection();
 				var container = document.createElement("div");
 				container.appendChild(sel.getRangeAt(0).cloneContents());
 				html = container.innerHTML;
 				
-				html = html.replace(/\<\/p\>\<p\>/g, "\n\n");
-				html = html.replace(/\<br\>/g, "\n");
+				if (html != '') {
+					hentFraServer = false;
 				
-				html = html.replace(/\<strong\>/g, "[b]");
-				html = html.replace(/\<\/strong\>/g, "[/b]");
-				
-				html = html.replace(/\<em\>/g, "[i]");
-				html = html.replace(/\<\/em\>/g, "[/i]");
-				
-				html = html.replace(/\<u\>/g, "[u]");
-				html = html.replace(/\<\/u\>/g, "[/u]");
-				
-				html = html.replace(/\<s\>/g, "[s]");
-				html = html.replace(/\<\/s\>/g, "[/s]");
-				
-				// Denne del skal stadig forbedres
-				html = html.replace(/\<code\>/g, "\n"); // Skal laves om til en ordentlig [code]
-				html = html.replace(/\<blockquote\>/g, "\n"); // Skal laves om til en ordentlig [quote] -- Stort arbejde. Jeg har prøvet.
-				// Denne del skal stadig forbedres
-				
-				// Skal være efter [quote]
-				html = html.replace(/\<a href="(.+?)"\>(.+?)(\.\.)?\<\/a\>/g, '[url=$1]$2[/url]') // til url i [url]
-				// Ovenstående matcher også url uden [url] og giver dem en [url]. Det skal ændres. Jeg har prøvet.
-				
-				// Stripper resten af html'et
-				html = html.replace(/\<(.*?)\>/g, "");
-				html = html.replace(/\<\/(.*?)\>/g, "");
-				
-				// Entity decode
-				html = Encoder.htmlDecode(html);
-				
-				// Finder kommentarfeltet og indsætter et linjeknæk før det citerede indlæg, hvis feltet ikke er tomt
-				var comment = $("#id_comment").val();
-				if (comment.length > 0) {
-					comment += "\n\n";
+					html = html.replace(/\<\/p\>\<p\>/g, "\n\n");
+					html = html.replace(/\<br\>/g, "\n");
+					
+					html = html.replace(/\<strong\>/g, "[b]");
+					html = html.replace(/\<\/strong\>/g, "[/b]");
+					
+					html = html.replace(/\<em\>/g, "[i]");
+					html = html.replace(/\<\/em\>/g, "[/i]");
+					
+					html = html.replace(/\<u\>/g, "[u]");
+					html = html.replace(/\<\/u\>/g, "[/u]");
+					
+					html = html.replace(/\<s\>/g, "[s]");
+					html = html.replace(/\<\/s\>/g, "[/s]");
+					
+					// Denne del skal stadig forbedres
+					html = html.replace(/\<code\>/g, "\n"); // Skal laves om til en ordentlig [code]
+					html = html.replace(/\<blockquote\>/g, "\n"); // Skal laves om til en ordentlig [quote] -- Stort arbejde. Jeg har prøvet.
+					// Denne del skal stadig forbedres
+					
+					// Skal være efter [quote]
+					html = html.replace(/\<a href="(.+?)"\>(.+?)(\.\.)?\<\/a\>/g, '[url=$1]$2[/url]') // til url i [url]
+					// Ovenstående matcher også url uden [url] og giver dem en [url]. Det skal ændres. Jeg har prøvet.
+					
+					// Stripper resten af html'et
+					html = html.replace(/\<(.*?)\>/g, "");
+					html = html.replace(/\<\/(.*?)\>/g, "");
+					
+					// Entity decode
+					html = Encoder.htmlDecode(html);
+					
+					// Finder kommentarfeltet og indsætter et linjeknæk før det citerede indlæg, hvis feltet ikke er tomt
+					var comment = $("#id_comment").val();
+					if (comment.length > 0) {
+						comment += "\n\n";
+					}
+					
+					// Sætter indlægget ind i en quote, som vi kender den
+					comment += "[quote=" + username + " (" + itemId + ")]" + html + "[/quote]";
+					$("#id_comment").val(comment);
 				}
-				
-				// Sætter indlægget ind i en quote, som vi kender den
-				comment += "[quote=" + username + " (" + itemId + ")]" + html + "[/quote]";
-				$("#id_comment").val(comment);
 			}
 		} else {
 			// Finder ud af, om der er noget, som er markeret
