@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       0.2.1
+// @version       0.2.2
 // ==/UserScript==
 
 try {
@@ -22,6 +22,7 @@ try {
 if (!(/^(.+\.)?newz\.dk$/.test(newz.location.host)))
 	try { return; } catch(e) {}
 var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+var postSortByRating = false;
 loadScripts();
 init();
 addPermLink();
@@ -32,18 +33,19 @@ function init() {
 	.html(' \
 	<h3 style=\'background: url("http://newz.dk.css.zfour.dk/gfx/default/bg_h3.png") repeat-x scroll 100% 0 transparent;\'><span>newz.dk Enhancement Suite</span></h3> \
 	<div style="text-align: left; padding-left: 12px;"> \
-	<input type="checkbox" id="fixTitleSetting" name="fixTitleSetting"><label for="fixTitleSetting"> Bedre overskrifter</label><br> \
-	<input type="checkbox" id="ajaxPageChange" name="ajaxPageChange"><label for="ajaxPageChange"> AJAX-sideskfit</label> \
-	<div id="ajaxPageChangeSub" style="padding-left: 12px;"> \
-		<input type="checkbox" id="ajaxPageChangeGoToTop" name="ajaxPageChangeGoToTop"><label for="ajaxPageChangeGoToTop"> Hop til top ved AJAX-sideskift</label> \
-	</div> \
-	<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg* (beta)</label> \
-	<div style="margin-top: 12px;"> \
-		<hr> \
-		Ændringerne sættes i effekt ved næste genindlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk-Enhancement-Suite">kynz</a>! \
-		<br> \
-		*) Kun Firefox (og lidt Chrome). \
-	</div> \
+		<button style="float: right;" id="sortRating">Sorter indlæg efter rating</button> \
+		<input type="checkbox" id="fixTitleSetting" name="fixTitleSetting"><label for="fixTitleSetting"> Bedre overskrifter</label><br> \
+		<input type="checkbox" id="ajaxPageChange" name="ajaxPageChange"><label for="ajaxPageChange"> AJAX-sideskfit</label> \
+		<div id="ajaxPageChangeSub" style="padding-left: 12px;"> \
+			<input type="checkbox" id="ajaxPageChangeGoToTop" name="ajaxPageChangeGoToTop"><label for="ajaxPageChangeGoToTop"> Hop til top ved AJAX-sideskift</label> \
+		</div> \
+		<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg* (beta)</label> \
+		<div style="margin-top: 12px;"> \
+			<hr> \
+			Ændringerne sættes i effekt ved næste genindlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk-Enhancement-Suite">kynz</a>! \
+			<br> \
+			*) Kun Firefox (og lidt Chrome). \
+		</div> \
 	</div> \
 	').hide();
 	
@@ -83,11 +85,20 @@ function init() {
 	})
 	.attr('checked', ($.Storage.get("improvedQuoteSetting") == 'true'));
 	
+	$("#sortRating").bind("click", function() {
+		postSortByRating = true;
+		$('.comment').each(function() {
+			if ($(this).find('.comment_rating_details').css('display') == 'none')
+				$(this).find('.information').click();
+		});
+		$(this).attr('disabled', true).text('* POOF *');
+	});
+	
 	updateSettingsSub();
 	
 	// I store tråde ender man nogle gange en side for langt
 	if (newz._pageId > newz._lastPage)
-		newz.ReceiveData(newz._lastPage)
+		newz.ReceiveData(newz._lastPage);
 	else
 		improvedQuote();
 }
@@ -128,6 +139,44 @@ $(document).ajaxSuccess(function(event, xhr, options) {
 		insertLoadingGif();
 		improvedQuote();
 		addPermLink();
+	}
+});
+
+$(document).ajaxStop(function() {
+	if (postSortByRating) {
+		point = new Array();
+		point[1] = 2;
+		point[2] = 1;
+		point[4] = 1;
+		point[3] = 0;
+		point[5] = 0;
+		point[6] = -1;
+		point[7] = -2;
+		
+		var el = $('#comments');
+		var list = $('.comment');
+		var rating = new Array();
+		
+		$('.comment').each(function() {
+			var p = 0;
+			$(this).find('.comment_rating_details tbody tr').each(function() {
+				p += point[+this.id.substr(7)]
+			});
+			$(this).find('.rating_name').append(' (' + p + ')');
+			rating[this.id] = p;
+		});
+		
+		list.sort(function(a, b) {
+			return (rating[a.id] == rating[b.id]) ? 0 : ((rating[a.id] < rating[b.id]) ? 1 : -1);
+		});
+		
+		el.append(list);
+		
+		postSortByRating = false;
+		$('.comment').each(function() {
+			if ($(this).find('.comment_rating_details').css('display') != 'none')
+				$(this).find('.information').click();
+		});
 	}
 });
 
@@ -293,7 +342,7 @@ function fixTitle() {
 			$("#container div h1").html('Side ' + newz._pageId + ' » ' + regexMatch[2]);
 
 		if (/Side \d+/.test(document.title))
-			document.title = document.title.replace(/Side \d+/, "Side " + newz._pageId)
+			document.title = document.title.replace(/Side \d+/, "Side " + newz._pageId);
 		else
 			document.title = "Side " + newz._pageId + " » " + document.title;
 	}
@@ -334,7 +383,7 @@ function ajaxPageChange() {
 				newz._pageId = +(/offset=(\d+)/.exec(this.url)[1]);
 				if (newz._pageId == newz._lastPage) {
 					newz._updateFrequency = 10000
-					newz.StartAutoUpdate()
+					newz.StartAutoUpdate();
 				} else
 					newz.PauseAutoUpdate();
 				
@@ -348,7 +397,7 @@ function ajaxPageChange() {
 
 function getUrl() {
 	if ((a = newz.location.href.indexOf('#')) == -1)
-		var href = newz.location.href
+		var href = newz.location.href;
 	else
 		var href = newz.location.href.substr(0, a);
 	
