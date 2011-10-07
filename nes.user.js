@@ -19,13 +19,13 @@ try {
 	newz = unsafeWindow; //unsafeWindow er kun for Greasemonkey(Firefox)
 }
 // Chrome understøtter ikke @include, @exclude eller @match i userscripts
-if (!(/^(.+\.)?newz\.dk$/.test(newz.location.host)))
-	try { return; } catch(e) {}
-var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-var postSortByRating = false;
-loadScripts();
-init();
-addPermLink();
+if (/^(.+\.)?newz\.dk$/.test(newz.location.host)) {
+	var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+	var postSortByRating = false;
+	loadScripts();
+	init();
+	addPermLink();
+}
 
 function init() {
 	// NES-indstillingsboksen
