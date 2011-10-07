@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       0.2.2
+// @version       0.2.1
 // ==/UserScript==
 
 try {
@@ -139,6 +139,8 @@ $(document).ajaxSuccess(function(event, xhr, options) {
 		insertLoadingGif();
 		improvedQuote();
 		addPermLink();
+		
+		$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 	}
 });
 
