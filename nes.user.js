@@ -23,8 +23,10 @@ if (/^(.+\.)?newz\.dk$/.test(newz.location.host)) {
 	var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	loadScripts();
-	init();
-	addPermLink();
+	$(document).ready(function(){
+		init();
+		addPermLink();
+	});
 }
 
 function init() {
