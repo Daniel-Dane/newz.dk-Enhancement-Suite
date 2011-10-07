@@ -109,7 +109,7 @@ function updateSettingsSub() {
 
 $(document).ajaxSuccess(function(event, xhr, options) {
 	// Fikser newz.dk's buggede AJAX
-	if (options.data.match('class=Z4_Forum_Item&action=page') !== null) {
+	if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
 		if (startHash != '') {
 			newz.location.hash = startHash;
 			startHash = '';
