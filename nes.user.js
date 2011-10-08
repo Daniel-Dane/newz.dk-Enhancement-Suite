@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       0.2.1
+// @version       0.9.1
 // ==/UserScript==
 
 try {
@@ -22,14 +22,23 @@ try {
 if (/^(.+\.)?newz\.dk$/.test(newz.location.host)) {
 	var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
+	var nesStable = true;
+	var nesVersion = 91; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '0.9.1'; // Så doven er jeg...
+	var lastUpdateCheck = 0;
 	loadScripts();
-	$(document).ready(function(){
+	$(document).ready(function() {
 		init();
-		addPermLink();
 	});
 }
 
 function init() {
+	lastUpdateCheck = $.Storage.get("lastUpdateCheck");
+	if (lastUpdateCheck == undefined)
+		$.Storage.set("lastUpdateCheck", (lastUpdateCheck = new Date(0))+'');
+	
+	lastUpdateCheck = new Date(lastUpdateCheck);
+	
 	// NES-indstillingsboksen
 	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0; width: 600px;" id="NES-menu" />').insertAfter('#nmTopBar')
 	.html(' \
@@ -47,7 +56,10 @@ function init() {
 			Ændringerne sættes i effekt ved næste genindlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk-Enhancement-Suite">kynz</a>! \
 			<br> \
 			*) Kun Firefox (og lidt Chrome). \
+			<br> \
+			Version ' + nesVersionString + (nesStable ? ' stable' : ' dev') + '.<span id="updateMsg"> Sidste opdateringscheck: ' + ((lastUpdateCheck - (new Date(0)) == 0) ? 'NEVER!' : lastUpdateCheck.toLocaleString()) + '. <a id="updateCheck" href="#">Check efter nye opdateringer.</a></span> \
 		</div> \
+		<marquee id="updateNote" style="color: red; font-weight: bold; font-style: italic; margin-bottom: 0px; padding-bottom: 0px; text-decoration: underline; margin-left: -12px; display: none; font-size: 15px;" direction="right"><blink>Ny opdatering!</blink></marquee> \
 	</div> \
 	').hide();
 	
@@ -96,14 +108,13 @@ function init() {
 		$(this).attr('disabled', true).text('* POOF *');
 	});
 	
+	$("#updateCheck").bind("click", function(e) {
+		e.preventDefault();
+		checkForUpdate(true);
+		return false;
+	});
+	
 	updateSettingsSub();
-	
-	// I store tråde ender man nogle gange en side for langt
-	if (newz._pageId > newz._lastPage)
-		newz.ReceiveData(newz._lastPage);
-	else
-		improvedQuote();
-	
 	
 	$(document).ajaxSuccess(function(event, xhr, options) {
 		// Fikser newz.dk's buggede AJAX
@@ -179,6 +190,38 @@ function init() {
 			});
 		}
 	});
+	
+	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
+	if (newz._pageId > newz._lastPage)
+		newz.ReceiveData(newz._lastPage);
+	else {
+		improvedQuote();
+		addPermLink();
+	}
+	
+	if (nesStable)
+		checkForUpdate(false);
+}
+
+function checkForUpdate(userCalled) {
+	var checkDate = new Date();
+	checkDate.setDate(checkDate.getDate() - 3); // 3 dage
+	
+	if ((userCalled) || (checkDate > lastUpdateCheck)) {
+		$.Storage.set("lastUpdateCheck", (lastUpdateCheck = new Date())+'');
+
+		$.getScript('https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/version.info', function() {
+			if (newz.nes_version > nesVersion) {
+				$('#updateNote').attr('direction', 'up').show().attr('direction', 'right');
+				$('#updateMsg').html(' <a href="https://github.com/Daniel-Dane/newz.dk-Enhancement-Suite/raw/master/nes.user.js">HENT MIG, HENT MIG, HENT MIG, HENT MIG, HENT MIG, HENT MIG, HENT MIG.</a>');
+				if (!userCalled)
+					$('#NES-menu').show();
+			} else {
+				if (userCalled)
+					$('#updateMsg').text(' Nyeste version.');
+			}
+		});
+	}
 }
 
 function updateSettingsSub() {
