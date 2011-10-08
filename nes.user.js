@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       0.9.1
+// @version       0.9.2
 // ==/UserScript==
 
 try {
@@ -23,8 +23,8 @@ if (/^(.+\.)?newz\.dk$/.test(newz.location.host)) {
 	var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	var nesStable = true;
-	var nesVersion = 91; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '0.9.1'; // Så doven er jeg...
+	var nesVersion = 92; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '0.9.2'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -205,7 +205,7 @@ function init() {
 
 function checkForUpdate(userCalled) {
 	var checkDate = new Date();
-	checkDate.setDate(checkDate.getDate() - 3); // 3 dage
+	checkDate.setDate(checkDate.getDate() - 1); // 1 dag
 	
 	if ((userCalled) || (checkDate > lastUpdateCheck)) {
 		$.Storage.set("lastUpdateCheck", (lastUpdateCheck = new Date())+'');
