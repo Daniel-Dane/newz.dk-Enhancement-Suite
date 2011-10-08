@@ -103,86 +103,87 @@ function init() {
 		newz.ReceiveData(newz._lastPage);
 	else
 		improvedQuote();
+	
+	
+	$(document).ajaxSuccess(function(event, xhr, options) {
+		// Fikser newz.dk's buggede AJAX
+		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
+			if (startHash != '') {
+				newz.location.hash = startHash;
+				startHash = '';
+			} else {
+				if (ajaxPageChangeGoToTop)
+					newz.location.href = '#';
+				
+				// Sætter hash til første indlæg, så man kan kopiere link til den rette side
+				var firstChild = $("#comments > div:first-child h2 a:first-child");
+				var firstChildName = firstChild.attr('name');
+				firstChild.attr('name', '');
+				newz.location.hash = firstChildName;
+				firstChild.attr('name', firstChildName);
+			}
+			
+			$(".loading").hide();
+			$('.pagination').show();
+			
+			href = getUrl();
+			
+			$(".pagination a").each(function() {
+				$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
+			});
+			
+			if (fixTitleSetting)
+				fixTitle();
+			insertLoadingGif();
+			improvedQuote();
+			addPermLink();
+			
+			$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
+		}
+	});
+
+	$(document).ajaxStop(function() {
+		if (postSortByRating) {
+			point = new Array();
+			point[1] = 2;
+			point[2] = 1;
+			point[4] = 1;
+			point[3] = 0;
+			point[5] = 0;
+			point[6] = -1;
+			point[7] = -2;
+			
+			var el = $('#comments');
+			var list = $('.comment');
+			var rating = new Array();
+			
+			$('.comment').each(function() {
+				var p = 0;
+				$(this).find('.comment_rating_details tbody tr').each(function() {
+					p += point[+this.id.substr(7)]
+				});
+				$(this).find('.rating_name').append(' (' + p + ')');
+				rating[this.id] = p;
+			});
+			
+			list.sort(function(a, b) {
+				return (rating[a.id] == rating[b.id]) ? 0 : ((rating[a.id] < rating[b.id]) ? 1 : -1);
+			});
+			
+			el.append(list);
+			
+			postSortByRating = false;
+			$('.comment').each(function() {
+				if ($(this).find('.comment_rating_details').css('display') != 'none')
+					$(this).find('.information').click();
+			});
+		}
+	});
 }
 
 function updateSettingsSub() {
 	$('#ajaxPageChangeSub input').attr('disabled', !($('#ajaxPageChange').attr('checked')));
 }
-
-$(document).ajaxSuccess(function(event, xhr, options) {
-	// Fikser newz.dk's buggede AJAX
-	if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
-		if (startHash != '') {
-			newz.location.hash = startHash;
-			startHash = '';
-		} else {
-			if (ajaxPageChangeGoToTop)
-				newz.location.href = '#';
-			
-			// Sætter hash til første indlæg, så man kan kopiere link til den rette side
-			var firstChild = $("#comments > div:first-child h2 a:first-child");
-			var firstChildName = firstChild.attr('name');
-			firstChild.attr('name', '');
-			newz.location.hash = firstChildName;
-			firstChild.attr('name', firstChildName);
-		}
-		
-		$(".loading").hide();
-		$('.pagination').show();
-		
-		href = getUrl();
-		
-		$(".pagination a").each(function() {
-			$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
-		});
-		
-		if (fixTitleSetting)
-			fixTitle();
-		insertLoadingGif();
-		improvedQuote();
-		addPermLink();
-		
-		$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
-	}
-});
-
-$(document).ajaxStop(function() {
-	if (postSortByRating) {
-		point = new Array();
-		point[1] = 2;
-		point[2] = 1;
-		point[4] = 1;
-		point[3] = 0;
-		point[5] = 0;
-		point[6] = -1;
-		point[7] = -2;
-		
-		var el = $('#comments');
-		var list = $('.comment');
-		var rating = new Array();
-		
-		$('.comment').each(function() {
-			var p = 0;
-			$(this).find('.comment_rating_details tbody tr').each(function() {
-				p += point[+this.id.substr(7)]
-			});
-			$(this).find('.rating_name').append(' (' + p + ')');
-			rating[this.id] = p;
-		});
-		
-		list.sort(function(a, b) {
-			return (rating[a.id] == rating[b.id]) ? 0 : ((rating[a.id] < rating[b.id]) ? 1 : -1);
-		});
-		
-		el.append(list);
-		
-		postSortByRating = false;
-		$('.comment').each(function() {
-			if ($(this).find('.comment_rating_details').css('display') != 'none')
-				$(this).find('.information').click();
-		});
-	}
-});
 
 function addPermLink() {
 	href = getUrl();
