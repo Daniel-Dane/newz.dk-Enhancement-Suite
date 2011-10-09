@@ -403,6 +403,9 @@ function insertLoadingGif() {
 }
 
 function ajaxPageChange() {
+	if (newz.location.pathname.indexOf('/om-os/statistik/') == 0)
+		return;
+
 	insertLoadingGif();
 	
 	$('.pagination a').live('click', function(e) {
