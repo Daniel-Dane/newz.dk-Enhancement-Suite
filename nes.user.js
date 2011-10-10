@@ -57,9 +57,9 @@ function init() {
 			<br> \
 			*) Kun Firefox (og lidt Chrome). \
 			<br> \
-			Version ' + nesVersionString + (nesStable ? ' stable' : ' dev') + '.<span id="updateMsg"> Sidste opdateringscheck: ' + ((lastUpdateCheck - (new Date(0)) == 0) ? 'NEVER!' : lastUpdateCheck.toLocaleString()) + '. <a id="updateCheck" href="#">Check efter nye opdateringer.</a></span> \
+			Version ' + nesVersionString + (nesStable ? ' stable' : ' dev') + '.<span id="updateMsg"> Sidste opdateringscheck: ' + ((lastUpdateCheck - (new Date(0)) == 0) ? 'NEVER' : lastUpdateCheck.toLocaleString()) + '. <a id="updateCheck" href="#">Check efter nye opdateringer.</a></span> \
 		</div> \
-		<marquee id="updateNote" style="color: red; font-weight: bold; font-style: italic; margin-bottom: 0px; padding-bottom: 0px; text-decoration: underline; margin-left: -12px; display: none; font-size: 15px;" direction="right"><blink>Ny opdatering!</blink></marquee> \
+		<div id="updateNote" style="display: none; color: red; font-weight: bold; font-style: italic; margin-bottom: 0px; padding-bottom: 0px; text-decoration: underline; margin-left: -12px; font-size: 15px;">Ny opdatering! Ny opdatering! Ny opdatering! Ny opdatering! Ny opdatering! Ny opda</div> \
 	</div> \
 	').hide();
 	
@@ -215,6 +215,8 @@ function checkForUpdate(userCalled) {
 	
 	if ((userCalled) || (checkDate > lastUpdateCheck)) {
 		$.Storage.set("lastUpdateCheck", (lastUpdateCheck = new Date())+'');
+		// Hvis der aldrig er blevet checket efter en opdatering, vil det selvfølgelig gøres nu, og i så fald vil "NEVER" aldrig dukke op, hvis auto-update-check virker.
+		$('#updateMsg').text(' Sidste opdateringscheck: ' + lastUpdateCheck.toLocaleString() + '.');
 
 		$.getScript('https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/version.info', function() {
 			if (newz.nes_version > nesVersion) {
