@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       0.9.3
+// @version       0.9.4
 // ==/UserScript==
 
 try {
@@ -23,8 +23,8 @@ if (/^(.+\.)?newz\.dk$/.test(newz.location.host)) {
 	var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	var nesStable = true;
-	var nesVersion = 93; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '0.9.3'; // Så doven er jeg...
+	var nesVersion = 94; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '0.9.4'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -50,7 +50,8 @@ function init() {
 		<div id="ajaxPageChangeSub" style="padding-left: 12px;"> \
 			<input type="checkbox" id="ajaxPageChangeGoToTop" name="ajaxPageChangeGoToTop"><label for="ajaxPageChangeGoToTop"> Hop til top ved AJAX-sideskift</label> \
 		</div> \
-		<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg* (beta)</label> \
+		<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg* (beta)</label><br> \
+		<input type="checkbox" id="applyTargetBlank" name="applyTargetBlank"><label for="applyTargetBlank"> Åbn alle links i ny fane.</label> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
 			Ændringerne sættes i effekt ved næste genindlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk-Enhancement-Suite">kynz</a>! \
@@ -64,9 +65,11 @@ function init() {
 	').hide();
 	
 	// Knappen til at vise/skjule indstillingerne
-	$('#nmSiteSelect').next().find('a:last').before('<a href="javascript:" id="NES-toggle">NES-indstillinger</a> | ');
-	$('#NES-toggle').click(function() {
+	$('#nmSiteSelect').next().find('a:last').before('<a href="#" id="NES-toggle">NES-indstillinger</a> | ');
+	$('#NES-toggle').click(function(e) {
+		e.preventDefault();
 		$('#NES-menu').toggle();
+		return false;
 	});
 	
 	// Henter indstillinger
@@ -76,6 +79,8 @@ function init() {
 	if ($.Storage.get("ajaxPageChange") == "true")
 		ajaxPageChange();
 	improvedQuoteSetting = ($.Storage.get("improvedQuoteSetting") == "true");
+	if (applyTargetBlank = ($.Storage.get("applyTargetBlank") == "true"))
+		$('a').attr('target', '_blank');
 	
 	// Event handlers til knapperne
 	$("#fixTitleSetting").bind("click", function() {
@@ -98,6 +103,11 @@ function init() {
 		$.Storage.set("improvedQuoteSetting", this.checked ? 'true' : 'false');
 	})
 	.attr('checked', ($.Storage.get("improvedQuoteSetting") == 'true'));
+	
+	$("#applyTargetBlank").bind("click", function() {
+		$.Storage.set("applyTargetBlank", this.checked ? 'true' : 'false');
+	})
+	.attr('checked', ($.Storage.get("applyTargetBlank") == 'true'));
 	
 	$("#sortRating").bind("click", function() {
 		postSortByRating = true;
@@ -207,6 +217,31 @@ function init() {
 	
 	if (nesStable)
 		checkForUpdate(false);
+	
+	/*
+	// Det virker sgu. HUSK: Scope er i window (altså uden for nes).
+	$('head').append($('<script>').html(' \
+		OldSubmitPost = SubmitPost; \
+		SubmitPost = function(instantSubmitNew) {alert(instantSubmitNew); OldSubmitPost(instantSubmitNew)} \
+	'));
+	*/
+
+	// Fix af "Sorter indlæg efter rating", så den finder det nyeste indlæg det rigtige sted.
+	$('head').append($('<script>').html(' \
+		OldGetLastPostId = GetLastPostId; \
+		GetLastPostId = function() { \
+			if ($("#sortRating").text() == "* POOF *") { \
+				var maxid = 0; \
+				$(".comment").each(function() { \
+					var id = this.id.substr(4); \
+					if (id > maxid) \
+						maxid = id; \
+				}); \
+				return maxid; \
+			} else \
+				return OldGetLastPostId(); \
+		} \
+	'));
 }
 
 function checkForUpdate(userCalled) {
@@ -231,31 +266,6 @@ function checkForUpdate(userCalled) {
 		});
 	}
 }
-
-/*
-// Det virker sgu. HUSK: Scope er i window (altså uden for nes).
-$('head').append($('<script>').html(' \
-	OldSubmitPost = SubmitPost; \
-	SubmitPost = function(instantSubmitNew) {alert(instantSubmitNew); OldSubmitPost(instantSubmitNew)} \
-'));
-*/
-
-// Fix af "Bedre citering af indlæg", så den finder det nyeste indlæg det rigtige sted.
-$('head').append($('<script>').html(' \
-	OldGetLastPostId = GetLastPostId; \
-	GetLastPostId = function() { \
-		if ($("#sortRating").text() == "* POOF *") { \
-			var maxid = 0; \
-			$(".comment").each(function() { \
-				var id = this.id.substr(4); \
-				if (id > maxid) \
-					maxid = id; \
-			}); \
-			return maxid; \
-		} else \
-			return OldGetLastPostId(); \
-	} \
-'));
 
 function updateSettingsSub() {
 	$('#ajaxPageChangeSub input').attr('disabled', !($('#ajaxPageChange').attr('checked')));
