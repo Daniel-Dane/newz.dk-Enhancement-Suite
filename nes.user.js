@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       0.9.2
+// @version       0.9.3
 // ==/UserScript==
 
 try {
@@ -23,8 +23,8 @@ if (/^(.+\.)?newz\.dk$/.test(newz.location.host)) {
 	var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	var nesStable = true;
-	var nesVersion = 92; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '0.9.2'; // Så doven er jeg...
+	var nesVersion = 93; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '0.9.3'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -151,10 +151,17 @@ function init() {
 			
 			$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 		}
+		
+		// Sætter fix og such til det umiddelbart indsendte indlæg. Der _skal_ bruges options.data, da det er POST.
+		if (options.data.match('class=Z4_Forum_Item&action=usersave') !== null) {
+			improvedQuote();
+			addPermLink();
+		}
 	});
 
 	$(document).ajaxStop(function() {
 		if (postSortByRating) {
+			postSortByRating = false;
 			point = new Array();
 			point[1] = 2;
 			point[2] = 1;
@@ -183,7 +190,6 @@ function init() {
 			
 			el.append(list);
 			
-			postSortByRating = false;
 			$('.comment').each(function() {
 				if ($(this).find('.comment_rating_details').css('display') != 'none')
 					$(this).find('.information').click();
@@ -223,6 +229,31 @@ function checkForUpdate(userCalled) {
 		});
 	}
 }
+
+/*
+// Det virker sgu. HUSK: Scope er i window (altså uden for nes).
+$('head').append($('<script>').html(' \
+	OldSubmitPost = SubmitPost; \
+	SubmitPost = function(instantSubmitNew) {alert(instantSubmitNew); OldSubmitPost(instantSubmitNew)} \
+'));
+*/
+
+// Fix af "Bedre citering af indlæg", så den finder det nyeste indlæg det rigtige sted.
+$('head').append($('<script>').html(' \
+	OldGetLastPostId = GetLastPostId; \
+	GetLastPostId = function() { \
+		if ($("#sortRating").text() == "* POOF *") { \
+			var maxid = 0; \
+			$(".comment").each(function() { \
+				var id = this.id.substr(4); \
+				if (id > maxid) \
+					maxid = id; \
+			}); \
+			return maxid; \
+		} else \
+			return OldGetLastPostId(); \
+	} \
+'));
 
 function updateSettingsSub() {
 	$('#ajaxPageChangeSub input').attr('disabled', !($('#ajaxPageChange').attr('checked')));
