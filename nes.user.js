@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       0.9.5
+// @version       1.0
 // ==/UserScript==
 
 try {
@@ -23,8 +23,8 @@ if (/^(.+\.)?newz\.dk$/.test(newz.location.host)) {
 	var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	var nesStable = true;
-	var nesVersion = 95; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '0.9.5'; // Så doven er jeg...
+	var nesVersion = 100; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '1.0.0'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
