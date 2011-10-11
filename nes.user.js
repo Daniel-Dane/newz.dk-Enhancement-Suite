@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       0.9.4
+// @version       0.9.5
 // ==/UserScript==
 
 try {
@@ -23,8 +23,8 @@ if (/^(.+\.)?newz\.dk$/.test(newz.location.host)) {
 	var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	var nesStable = true;
-	var nesVersion = 94; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '0.9.4'; // Så doven er jeg...
+	var nesVersion = 95; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '0.9.5'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -51,10 +51,10 @@ function init() {
 			<input type="checkbox" id="ajaxPageChangeGoToTop" name="ajaxPageChangeGoToTop"><label for="ajaxPageChangeGoToTop"> Hop til top ved AJAX-sideskift</label> \
 		</div> \
 		<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg* (beta)</label><br> \
-		<input type="checkbox" id="applyTargetBlank" name="applyTargetBlank"><label for="applyTargetBlank"> Åbn alle links i ny fane.</label> \
+		<input type="checkbox" id="applyTargetBlank" name="applyTargetBlank"><label for="applyTargetBlank"> Åbn alle links i ny fane</label> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
-			Ændringerne sættes i effekt ved næste genindlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk-Enhancement-Suite">kynz</a>! \
+			Ændringerne sættes i effekt ved næste genindlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk_Enhancement_Suite">kynz</a>! \
 			<br> \
 			*) Kun Firefox (og lidt Chrome). \
 			<br> \
