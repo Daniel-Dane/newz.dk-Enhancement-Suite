@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       1.0
+// @version       1.0.1
 // ==/UserScript==
 
 try {
@@ -23,8 +23,8 @@ if (/^(.+\.)?newz\.dk$/.test(newz.location.host)) {
 	var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	var nesStable = true;
-	var nesVersion = 100; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '1.0.0'; // Så doven er jeg...
+	var nesVersion = 101; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '1.0.1'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -446,7 +446,7 @@ function insertLoadingGif() {
 }
 
 function ajaxPageChange() {
-	if (newz.location.pathname.indexOf('/om-os/statistik/') == 0)
+	if ((newz.location.pathname.indexOf('/om-os/statistik/') == 0) || (/^.*newz.dk(\/)?(page\d+)?$/.test(window.location.href)))
 		return;
 
 	insertLoadingGif();
