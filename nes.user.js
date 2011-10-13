@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       1.0.1
+// @version       1.0.2
 // ==/UserScript==
 
 try {
@@ -19,12 +19,12 @@ try {
 	newz = unsafeWindow; //unsafeWindow er kun for Greasemonkey(Firefox)
 }
 // Chrome understøtter ikke @include, @exclude eller @match i userscripts
-if (/^(.+\.)?newz\.dk$/.test(newz.location.host)) {
-	var startHash = newz.location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+if (/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) {
+	var startHash = location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	var nesStable = true;
-	var nesVersion = 101; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '1.0.1'; // Så doven er jeg...
+	var nesVersion = 102; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '1.0.2'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -130,17 +130,19 @@ function init() {
 		// Fikser newz.dk's buggede AJAX
 		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
 			if (startHash != '') {
-				newz.location.hash = startHash;
+				location.hash = startHash;
 				startHash = '';
 			} else {
-				if (ajaxPageChangeGoToTop)
-					newz.location.href = '#';
+				if (ajaxPageChangeGoToTop) {
+					location.href = '#';
+					$(newz).scrollTop(0);
+				}
 				
 				// Sætter hash til første indlæg, så man kan kopiere link til den rette side
 				var firstChild = $("#comments > div:first-child h2 a:first-child");
 				var firstChildName = firstChild.attr('name');
 				firstChild.attr('name', '');
-				newz.location.hash = firstChildName;
+				location.hash = firstChildName;
 				firstChild.attr('name', firstChildName);
 			}
 			
@@ -284,7 +286,7 @@ function addPermLink() {
 // Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk med vigtige ændringer. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
 function improvedQuote() {
 	// newz.dk unbinder selv efterfølgende, så vi bliver nødt til at omdøbe class
-	$(".quoteitem").unbind('click').removeClass().addClass('quoteitemNES').bind("click", function(e) {
+	$(".quoteitem").unbind('click').removeClass().bind("click", function(e) {
 		e.preventDefault();
 		
 		// Finder indlæggets id (ikke nummer)
@@ -446,7 +448,7 @@ function insertLoadingGif() {
 }
 
 function ajaxPageChange() {
-	if ((newz.location.pathname.indexOf('/om-os/statistik/') == 0) || (/^.*newz.dk(\/)?(page\d+)?$/.test(window.location.href)))
+	if ((location.pathname.indexOf('/om-os/statistik/') == 0) || (/^.*newz.dk(\/)?(page\d+)?$/.test(location.href)))
 		return;
 
 	insertLoadingGif();
@@ -490,10 +492,10 @@ function ajaxPageChange() {
 }
 
 function getUrl() {
-	if ((a = newz.location.href.indexOf('#')) == -1)
-		var href = newz.location.href;
+	if ((a = location.href.indexOf('#')) == -1)
+		var href = location.href;
 	else
-		var href = newz.location.href.substr(0, a);
+		var href = location.href.substr(0, a);
 	
 	if ((a = href.indexOf('/page')) != -1)
 		var href = href.substr(0, a);
