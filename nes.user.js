@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       1.0.3
+// @version       1.0.4
 // ==/UserScript==
 
 try {
@@ -23,8 +23,8 @@ if (/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) {
 	var startHash = location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	var nesStable = true;
-	var nesVersion = 103; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '1.0.3'; // Så doven er jeg...
+	var nesVersion = 104; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '1.0.4'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -83,31 +83,13 @@ function init() {
 		$('a').attr('target', '_blank');
 	
 	// Event handlers til knapperne
-	$("#fixTitleSetting").bind("click", function() {
-		$.Storage.set("fixTitleSetting", this.checked ? 'true' : 'false');
-		})
-	.attr('checked', ($.Storage.get("fixTitleSetting") == 'true'));
-	
-	$("#ajaxPageChange").bind("click", function() {
-		$.Storage.set("ajaxPageChange", this.checked ? 'true' : 'false');
-		updateSettingsSub();
-	})
-	.attr('checked', ($.Storage.get("ajaxPageChange") == 'true'));
-	
-	$("#ajaxPageChangeGoToTop").bind("click", function() {
-		$.Storage.set("ajaxPageChangeGoToTop", this.checked ? 'true' : 'false');
-	})
-	.attr('checked', ($.Storage.get("ajaxPageChangeGoToTop") == 'true'));
-	
-	$("#improvedQuoteSetting").bind("click", function() {
-		$.Storage.set("improvedQuoteSetting", this.checked ? 'true' : 'false');
-	})
-	.attr('checked', ($.Storage.get("improvedQuoteSetting") == 'true'));
-	
-	$("#applyTargetBlank").bind("click", function() {
-		$.Storage.set("applyTargetBlank", this.checked ? 'true' : 'false');
-	})
-	.attr('checked', ($.Storage.get("applyTargetBlank") == 'true'));
+	handlerList = ['fixTitleSetting', 'ajaxPageChange', 'ajaxPageChangeGoToTop', 'improvedQuoteSetting', 'applyTargetBlank'];
+	for (var i = 0; i < handlerList.length; i++) {
+		$("#" + handlerList[i]).bind("click", function() {
+			$.Storage.set(this.id, this.checked ? 'true' : 'false');
+			updateSettingsSub();
+		}).attr('checked', ($.Storage.get(handlerList[i]) == 'true'));
+	}
 	
 	$("#sortRating").bind("click", function() {
 		postSortByRating = true;
@@ -258,6 +240,8 @@ function init() {
 function fixPosts(object) {
 	improvedQuote();
 	addPermLink(object);
+	if (applyTargetBlank)
+		$('a').attr('target', '_blank');
 }
 
 function checkForUpdate(userCalled) {
