@@ -1,2 +1,2 @@
-﻿var nes_version = 102;
+﻿var nes_version = 103;
 // Skal være på formen XXYZ, hvor XX = major, Y = minor, Z = maintenance (ie. bugfixes). Ex: (00)51 (=0.5.1), (0)100 (=1.0.0), 1234 (=12.3.4). Begrænsningen er så, at Y og Z ikke må overstige 9.

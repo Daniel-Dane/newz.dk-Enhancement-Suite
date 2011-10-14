@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       1.0.2
+// @version       1.0.3
 // ==/UserScript==
 
 try {
@@ -23,8 +23,8 @@ if (/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) {
 	var startHash = location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	var nesStable = true;
-	var nesVersion = 102; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '1.0.2'; // Så doven er jeg...
+	var nesVersion = 103; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '1.0.3'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -76,7 +76,7 @@ function init() {
 	ajaxPageChangeGoToTop = ($.Storage.get("ajaxPageChangeGoToTop") == "true");
 	if (fixTitleSetting = ($.Storage.get("fixTitleSetting") == "true"))
 		fixTitle();
-	if ($.Storage.get("ajaxPageChange") == "true")
+	if (ajaxPageChangeSetting = ($.Storage.get("ajaxPageChange") == "true"))
 		ajaxPageChange();
 	improvedQuoteSetting = ($.Storage.get("improvedQuoteSetting") == "true");
 	if (applyTargetBlank = ($.Storage.get("applyTargetBlank") == "true"))
@@ -157,17 +157,25 @@ function init() {
 			
 			if (fixTitleSetting)
 				fixTitle();
-			insertLoadingGif();
-			improvedQuote();
-			addPermLink();
+			if (ajaxPageChangeSetting)
+				insertLoadingGif();
+			fixPosts();
 			
 			$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 		}
 		
 		// Sætter fix og such til det umiddelbart indsendte indlæg. Der _skal_ bruges options.data, da det er POST.
 		if (options.data.match('class=Z4_Forum_Item&action=usersave') !== null) {
-			improvedQuote();
-			addPermLink();
+			var a = $('#comments > div:last');
+			if (a.text().trim() != '')
+				fixPosts(a);
+		}
+		
+		// Efter den løbende AJAX-indhentning af nye indlæg
+		if (options.url.match('class=Z4_Forum_Item&action=new') !== null) {
+			var a = $('#comments > div:last');
+			if (a.text().trim() != '')
+				fixPosts(a);
 		}
 	});
 
@@ -212,10 +220,8 @@ function init() {
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (newz._pageId > newz._lastPage)
 		newz.ReceiveData(newz._lastPage);
-	else {
-		improvedQuote();
-		addPermLink();
-	}
+	else
+		fixPosts();
 	
 	if (nesStable)
 		checkForUpdate(false);
@@ -227,23 +233,31 @@ function init() {
 		SubmitPost = function(instantSubmitNew) {alert(instantSubmitNew); OldSubmitPost(instantSubmitNew)} \
 	'));
 	*/
-
+	
 	// Fix af "Sorter indlæg efter rating", så den finder det nyeste indlæg det rigtige sted.
 	$('head').append($('<script>').html(' \
-		OldGetLastPostId = GetLastPostId; \
-		GetLastPostId = function() { \
-			if ($("#sortRating").text() == "* POOF *") { \
-				var maxid = 0; \
-				$(".comment").each(function() { \
-					var id = this.id.substr(4); \
-					if (id > maxid) \
-						maxid = id; \
-				}); \
-				return maxid; \
-			} else \
-				return OldGetLastPostId(); \
+		if (typeof GetLastPostId != "undefined") { \
+			OldGetLastPostId = GetLastPostId; \
+			GetLastPostId = function() { \
+				if ($("#sortRating").text() == "* POOF *") { \
+					var maxid = 0; \
+					$(".comment").each(function() { \
+						var id = this.id.substr(4); \
+						if (id > maxid) \
+							maxid = id; \
+					}); \
+					return maxid; \
+				} else \
+					return OldGetLastPostId(); \
+			} \
 		} \
 	'));
+}
+
+// Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg og ved den løbende AJAX-indhentning af nye indlæg
+function fixPosts(object) {
+	improvedQuote();
+	addPermLink(object);
 }
 
 function checkForUpdate(userCalled) {
@@ -273,10 +287,15 @@ function updateSettingsSub() {
 	$('#ajaxPageChangeSub input').attr('disabled', !($('#ajaxPageChange').attr('checked')));
 }
 
-function addPermLink() {
+function addPermLink(object) {
 	href = getUrl();
 	
-	$('.comment h2').each(function() {
+	if (typeof object == "undefined")
+		object = $('.comment h2');
+	else
+		object = object.find('.comment h2');
+	
+	object.each(function() {
 		var a = $(this).html();
 		a = a.replace(/#(\d+):/, '<a href="' + href + '/page' + newz._pageId + '#$1">#$1:</a>')
 		$(this).html(a);
