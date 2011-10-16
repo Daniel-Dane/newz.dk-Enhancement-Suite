@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       1.0.4
+// @version       1.0.5
 // ==/UserScript==
 
 try {
@@ -23,8 +23,8 @@ if (/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) {
 	var startHash = location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 	var postSortByRating = false;
 	var nesStable = true;
-	var nesVersion = 104; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '1.0.4'; // Så doven er jeg...
+	var nesVersion = 105; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '1.0.5'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -451,7 +451,11 @@ function insertLoadingGif() {
 }
 
 function ajaxPageChange() {
-	if ((location.pathname.indexOf('/om-os/statistik/') == 0) || (/^.*newz.dk(\/)?(page\d+)?$/.test(location.href)))
+	if (
+		(location.pathname.indexOf('/om-os/statistik/') == 0) ||         // Slå fra under statistikker
+		(/^.*newz.dk(\/)?(page\d+)?$/.test(location.href)) ||            // Slå fra på forsiden
+		(/\/rating(time|selftime|total|self)\//.test(location.pathname)) // Slå fra under vurderingsfordelingslisterne
+	)
 		return;
 
 	insertLoadingGif();
