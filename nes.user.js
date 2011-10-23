@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       1.1
+// @version       1.1.1
 // ==/UserScript==
 
 try {
@@ -24,8 +24,8 @@ if (/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) {
 	var startPage = newz._pageId; // Bruges af "Sideskift ved henvisning til indlæg på anden side"
 	var startScroll = 0;          // Bruges også af ovenstående
 	var postSortByRating = false;
-	var nesVersion = 110; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '1.1.0'; // Så doven er jeg...
+	var nesVersion = 111; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '1.1.1'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -158,6 +158,9 @@ function init() {
 	});
 	
 	updateSettingsSub();
+	
+	$("<style type='text/css'>.text_content{width: 381px;}</style>").appendTo("head");
+	
 	
 	$(document).ajaxSuccess(function(event, xhr, options) {
 		// Fikser newz.dk's buggede AJAX
