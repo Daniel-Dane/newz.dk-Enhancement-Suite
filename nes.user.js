@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       1.1.1
+// @version       1.1.2
 // ==/UserScript==
 
 try {
@@ -24,8 +24,8 @@ if (/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) {
 	var startPage = newz._pageId; // Bruges af "Sideskift ved henvisning til indlæg på anden side"
 	var startScroll = 0;          // Bruges også af ovenstående
 	var postSortByRating = false;
-	var nesVersion = 111; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '1.1.1'; // Så doven er jeg...
+	var nesVersion = 112; // Ændres her, nedenunder, i @version og "version.info"
+	var nesVersionString = '1.1.2'; // Så doven er jeg...
 	var lastUpdateCheck = 0;
 	loadScripts();
 	$(document).ready(function() {
@@ -385,14 +385,14 @@ function addLinkToPostReferenceFunc(object) {
 					if ($(this).parents('#post_preview').length == 1)
 						p = 'post_preview';
 					// #tal efterfulgt af enten mellemrum, linjeknæk, kolon, komma eller punktum samt ved afsluttet afsnit eller linje
-					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|.|<\/p>|$)/gm, function(str, a, b) {
+					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|<\/p>|$)/gm, function(str, a, b) {
 						if (a < 100)
 							c = Math.floor((50 * (newz._pageId - 1)) / 100) * 100 + +a;
 						else
 							c = a;
 						var him = $('.comment:has(a[name=' + c + '])').attr('id');
-						return '<a' + (((showPostOnMouseOverReference) && ((c > 50 * (newz._pageId - 1)) && (c <= 50 * (newz._pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost(\'' + him + '\')" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : '') + ' href="#' + c + '">#' + a + '</a>' + b;
-					}));
+						return '<a' + (((showPostOnMouseOverReference) && ((c > 50 * (newz._pageId - 1)) && (c <= 50 * (newz._pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost(\'' + him + '\')" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : ' onclick="return true;"') + ' href="#' + c + '">#' + a + '</a>' + b;
+					}).replace(/&/gm, '&amp;'));
 				}
 			});
 		});
