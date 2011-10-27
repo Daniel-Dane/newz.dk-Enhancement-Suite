@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       1.1.2
+// @version       1.1.3
 // ==/UserScript==
 
 try {
@@ -20,20 +20,26 @@ try {
 }
 // Chrome understøtter ikke @include, @exclude eller @match i userscripts
 if (/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) {
-	var startHash = location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-	var startPage = newz._pageId; // Bruges af "Sideskift ved henvisning til indlæg på anden side"
-	var startScroll = 0;          // Bruges også af ovenstående
-	var postSortByRating = false;
-	var nesVersion = 112; // Ændres her, nedenunder, i @version og "version.info"
-	var nesVersionString = '1.1.2'; // Så doven er jeg...
-	var lastUpdateCheck = 0;
-	loadScripts();
-	$(document).ready(function() {
-		init();
-	});
+	if (typeof NES_loaded == "undefined")
+		var NES_loaded = false;
+	if (!NES_loaded) {
+		var startHash = location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+		var startPage = newz._pageId; // Bruges af "Sideskift ved henvisning til indlæg på anden side"
+		var startScroll = 0;          // Bruges også af ovenstående
+		var postSortByRating = false;
+		var nesVersion = 113; // Ændres her, nedenunder, i @version og "version.info"
+		var nesVersionString = '1.1.3'; // Så doven er jeg...
+		var lastUpdateCheck = 0;
+		loadScripts();
+		$(document).ready(function() {
+			init();
+		});
+	}
 }
 
 function init() {
+	NES_loaded = true;
+	
 	lastUpdateCheck = $.Storage.get("lastUpdateCheck");
 	if (lastUpdateCheck == undefined)
 		$.Storage.set("lastUpdateCheck", (lastUpdateCheck = new Date(0))+'');
