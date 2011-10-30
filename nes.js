@@ -141,10 +141,10 @@ function init() {
 		// Retter newz.dk's buggede AJAX
 		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
 			if (startHash != '') {
-				alert(ajaxPageChangeAwesomePostChange + '\n' + startPage + '\n' + _pageId + '\n' + startHash);
 				if ((ajaxPageChangeAwesomePostChange) && (startPage == _pageId))
 					$(window).scrollTop(startScroll);
 				else {
+					alert(ajaxPageChangeAwesomePostChange + '\n' + startPage + '\n' + _pageId + '\n' + startHash);
 					$(window).scrollTop($('.comment a[name=' + startHash + ']').offset().top);
 					location.hash = startHash;
 				}
