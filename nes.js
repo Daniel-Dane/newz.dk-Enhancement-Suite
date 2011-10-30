@@ -284,7 +284,7 @@ function init() {
 	}
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
-	if (_pageId > _lastPage)
+	if (window._pageId > window._lastPage)
 		ReceiveData(_lastPage);
 	else
 		fixPosts();
