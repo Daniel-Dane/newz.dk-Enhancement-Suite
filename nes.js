@@ -18,7 +18,7 @@ if (!localStorage) {
 		var startScroll = 0;           // Bruges også af ovenstående
 		var postSortByRating = false;  // true, når der er trykket på "Sorter indlæg efter rating"
 		$(document).ready(function() {
-			startPage = _pageId;
+			startPage = _pageId || -1;
 			init();
 		});
 	}
