@@ -18,7 +18,7 @@ if (!localStorage) {
 		var startScroll = 0;            // Bruges også af ovenstående
 		var postSortByRating = false;   // true, når der er trykket på "Sorter indlæg efter rating"
 		$(document).ready(function() {
-			startPage = window._pageId; // Kommer først senere. Måske. Bruger window, så startPage bliver undefined, hvis den ikke findes (uden window, failer koden).
+			startPage = window._pageId; // Kommer først senere på siden. Bruger window, så startPage bliver undefined, hvis den ikke findes (uden window failer koden).
 			init();
 		});
 	}
@@ -141,6 +141,7 @@ function init() {
 		// Retter newz.dk's buggede AJAX
 		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
 			if (startHash != '') {
+				alert(ajaxPageChangeAwesomePostChange + '\n' + startPage + '\n' + _pageId + '\n' + startHash);
 				if ((ajaxPageChangeAwesomePostChange) && (startPage == _pageId))
 					$(window).scrollTop(startScroll);
 				else {
@@ -530,7 +531,7 @@ function improvedQuote(object) {
 // Sætter en ordentlig overskrift på tråden
 // newz.dk sætter normalt kun side-nr. ind i <h1>, når man skifter side, tsk tsk
 function fixTitle() {
-	if (_lastPage > 1) {
+	if (window._lastPage > 1) {
 		var regexMatch;
 		if (regexMatch = /(Side \d+ » )*([^»]+) ».+/.exec(document.title))
 			$("#container div h1").html('Side ' + _pageId + ' » ' + regexMatch[2]);
