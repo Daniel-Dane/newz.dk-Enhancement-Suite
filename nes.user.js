@@ -1,4 +1,4 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name          newz.dk Enhancement Suite
 // @namespace     https://github.com/Daniel-Dane/newz.dk-Enhancement-Suite/raw/master/nes.user.js
 // @description   newz.dk er nu endnu mere perfekt!
