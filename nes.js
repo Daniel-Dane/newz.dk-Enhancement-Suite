@@ -144,8 +144,8 @@ function init() {
 				if ((ajaxPageChangeAwesomePostChange) && (startPage == _pageId))
 					$(window).scrollTop(startScroll);
 				else {
-					alert(ajaxPageChangeAwesomePostChange + '\n' + startPage + '\n' + _pageId + '\n' + startHash);
-					$(window).scrollTop($('.comment a[name=' + startHash + ']').offset().top);
+					console.log(ajaxPageChangeAwesomePostChange + '\n' + startPage + '\n' + _pageId + '\n' + startHash);
+					$(window).scrollTop($('.comment a[name=' + startHash.substr(1) + ']').offset().top);
 					location.hash = startHash;
 				}
 				
