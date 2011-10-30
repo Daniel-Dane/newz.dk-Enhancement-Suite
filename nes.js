@@ -14,10 +14,11 @@ if (!localStorage) {
 	if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!NES_loaded)) {
 		NES_loaded = true;
 		var startHash = location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-		var startPage = _pageId;  // Bruges af "Sideskift ved henvisning til indlæg på anden side"
+		var startPage = 0;             // Bruges af "Sideskift ved henvisning til indlæg på anden side"
 		var startScroll = 0;           // Bruges også af ovenstående
 		var postSortByRating = false;  // true, når der er trykket på "Sorter indlæg efter rating"
 		$(document).ready(function() {
+			startPage = _pageId;
 			init();
 		});
 	}
