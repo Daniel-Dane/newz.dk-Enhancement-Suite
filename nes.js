@@ -14,7 +14,7 @@ if (!localStorage) {
 	if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!NES_loaded)) {
 		NES_loaded = true;
 		var startHash = location.hash; // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-		var startPage = newz._pageId;  // Bruges af "Sideskift ved henvisning til indlæg på anden side"
+		var startPage = _pageId;  // Bruges af "Sideskift ved henvisning til indlæg på anden side"
 		var startScroll = 0;           // Bruges også af ovenstående
 		var postSortByRating = false;  // true, når der er trykket på "Sorter indlæg efter rating"
 		$(document).ready(function() {
@@ -140,17 +140,17 @@ function init() {
 		// Retter newz.dk's buggede AJAX
 		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
 			if (startHash != '') {
-				if ((ajaxPageChangeAwesomePostChange) && (startPage == newz._pageId))
-					$(newz).scrollTop(startScroll);
+				if ((ajaxPageChangeAwesomePostChange) && (startPage == _pageId))
+					$(window).scrollTop(startScroll);
 				else {
-					$(newz).scrollTop($('.comment a[name=' + startHash + ']').offset().top);
+					$(window).scrollTop($('.comment a[name=' + startHash + ']').offset().top);
 					location.hash = startHash;
 				}
 				
 				startHash = '';
 			} else {
 				if (ajaxPageChangeGoToTop)
-					$(newz).scrollTop(0);
+					$(window).scrollTop(0);
 				
 				// Sætter hash til første indlæg, så man kan kopiere link til den rette side
 				var firstChild = $("#comments > div:first-child h2 a:first-child");
@@ -231,18 +231,18 @@ function init() {
 	});
 	
 	if (ajaxPageChangeAwesomePostChange) {
-		$(newz).bind('hashchange', function() {
+		$(window).bind('hashchange', function() {
 			if ((location.hash == '') || (location.hash == '#new'))
 				var a = 50 * (startPage - 1) + 1;
 			else	
 				var a = +location.hash.substr(1);
 			
-			if (!isNaN(a) && (a > 0) && (a <= 50 * (newz._lastPage - 1) + 50) && ((a <= 50 * (newz._pageId - 1)) || (a > 50 * (newz._pageId - 1) + 50))) {
-				if (startPage == newz._pageId)
-					startScroll = $(newz).scrollTop();
+			if (!isNaN(a) && (a > 0) && (a <= 50 * (_lastPage - 1) + 50) && ((a <= 50 * (_pageId - 1)) || (a > 50 * (_pageId - 1) + 50))) {
+				if (startPage == _pageId)
+					startScroll = $(window).scrollTop();
 				
 				// Hopper til top, så brugeren ved, at der skiftes side
-				$(newz).scrollTop(0);
+				$(window).scrollTop(0);
 				
 				$('.pagination').hide();
 				$(".loading").show();
@@ -254,7 +254,7 @@ function init() {
 				$.ajax({
 					dataType: 'xml',
 					url: "/z4/action.php",
-					data: {"class":"Z4_Forum_Item", "action":"page", "id":newz._threadId, "offset":Math.ceil(a / newz._pageSize)},
+					data: {"class":"Z4_Forum_Item", "action":"page", "id":_threadId, "offset":Math.ceil(a / _pageSize)},
 					success: function (xml) {
 						$("#postcontainer").html($("Response", xml).text());
 						
@@ -262,19 +262,19 @@ function init() {
 						$(".pagination a").each(function(i) {
 							// Sakset fra newz.dk's egen kode. _lastPage returneres ikke fra AJAX, så hmn kigger simpelthen alle <a>'erne igennem
 							pageId = (+(this.href.substring(this.href.indexOf("page")+4)));
-							if (typeof pageId != 'undefined' && pageId > newz._lastPage) {
-								newz._lastPage = pageId;
+							if (typeof pageId != 'undefined' && pageId > _lastPage) {
+								_lastPage = pageId;
 							}
 						});
-						newz._pageId = +(/offset=(\d+)/.exec(this.url)[1]);
-						if (newz._pageId == newz._lastPage) {
-							newz._updateFrequency = 10000;
-							newz.StartAutoUpdate();
+						_pageId = +(/offset=(\d+)/.exec(this.url)[1]);
+						if (_pageId == _lastPage) {
+							_updateFrequency = 10000;
+							StartAutoUpdate();
 						} else
-							newz.PauseAutoUpdate();
+							PauseAutoUpdate();
 						
 						// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
-						newz.UpdatePosts();
+						UpdatePosts();
 					}
 				});
 			}
@@ -282,8 +282,8 @@ function init() {
 	}
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
-	if (newz._pageId > newz._lastPage)
-		newz.ReceiveData(newz._lastPage);
+	if (_pageId > _lastPage)
+		ReceiveData(_lastPage);
 	else
 		fixPosts();
 	
@@ -356,11 +356,11 @@ function addLinkToPostReferenceFunc(object) {
 					// #tal efterfulgt af enten mellemrum, linjeknæk, kolon, komma eller punktum samt ved afsluttet afsnit eller linje
 					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|<\/p>|$)/gm, function(str, a, b) {
 						if (a < 100)
-							c = Math.floor((50 * (newz._pageId - 1)) / 100) * 100 + +a;
+							c = Math.floor((50 * (_pageId - 1)) / 100) * 100 + +a;
 						else
 							c = a;
 						var him = $('.comment:has(a[name=' + c + '])').attr('id');
-						return '<a' + (((showPostOnMouseOverReference) && ((c > 50 * (newz._pageId - 1)) && (c <= 50 * (newz._pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost(\'' + him + '\')" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : ' onclick="return true;"') + ' href="#' + c + '">#' + a + '</a>' + b;
+						return '<a' + (((showPostOnMouseOverReference) && ((c > 50 * (_pageId - 1)) && (c <= 50 * (_pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost(\'' + him + '\')" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : ' onclick="return true;"') + ' href="#' + c + '">#' + a + '</a>' + b;
 					}).replace(/&/gm, '&amp;'));
 				}
 			});
@@ -373,7 +373,7 @@ function addPermLink(object) {
 	
 	$('.comment h2', object).each(function() {
 		var a = $(this).html();
-		a = a.replace(/#(\d+):/, '<a href="' + href + '/page' + newz._pageId + '#$1">#$1:</a>')
+		a = a.replace(/#(\d+):/, '<a href="' + href + '/page' + _pageId + '#$1">#$1:</a>')
 		$(this).html(a);
 	});	
 }
@@ -407,9 +407,9 @@ function improvedQuote(object) {
 		// Jeg bruger ikke document.selection, som andre browsere (IE, gammel IE, Opera?) bruger, så det må du ordne, m910q.
 		// Checker, om markeringen er inden for indlæggets tekst. Virker i Firefox og Chrome.
 		if (improvedQuoteSetting) {
-			if ((newz.getSelection().rangeCount > 0) && ($(newz.getSelection().getRangeAt(0).commonAncestorContainer).parents('#' + $post.attr("id")).length > 0)) {
+			if ((getSelection().rangeCount > 0) && ($(getSelection().getRangeAt(0).commonAncestorContainer).parents('#' + $post.attr("id")).length > 0)) {
 				// Dette kan sikkert reduceres til noget pænere...
-				sel = newz.getSelection();
+				sel = getSelection();
 				var container = document.createElement("div");
 				container.appendChild(sel.getRangeAt(0).cloneContents());
 				html = container.innerHTML;
@@ -462,8 +462,8 @@ function improvedQuote(object) {
 		} else {
 			// Finder ud af, om der er noget, som er markeret
 			try {
-				if (typeof (newz.getSelection) != 'undefined') {
-					var select_string = newz.getSelection();
+				if (typeof (getSelection) != 'undefined') {
+					var select_string = getSelection();
 				} else if (document.selection) {
 					var select_string = document.selection.createRange().text;
 				} else {
@@ -529,15 +529,15 @@ function improvedQuote(object) {
 // Sætter en ordentlig overskrift på tråden
 // newz.dk sætter normalt kun side-nr. ind i <h1>, når man skifter side, tsk tsk
 function fixTitle() {
-	if (newz._lastPage > 1) {
+	if (_lastPage > 1) {
 		var regexMatch;
 		if (regexMatch = /(Side \d+ » )*([^»]+) ».+/.exec(document.title))
-			$("#container div h1").html('Side ' + newz._pageId + ' » ' + regexMatch[2]);
+			$("#container div h1").html('Side ' + _pageId + ' » ' + regexMatch[2]);
 
 		if (/Side \d+/.test(document.title))
-			document.title = document.title.replace(/Side \d+/, "Side " + newz._pageId);
+			document.title = document.title.replace(/Side \d+/, "Side " + _pageId);
 		else
-			document.title = "Side " + newz._pageId + " » " + document.title;
+			document.title = "Side " + _pageId + " » " + document.title;
 	}
 }
 
@@ -567,7 +567,7 @@ function ajaxPageChange() {
 		$.ajax({
 			dataType: 'xml',
 			url: "/z4/action.php",
-			data: {"class":"Z4_Forum_Item", "action":"page", "id":newz._threadId, "offset":/page(\d+)$/.exec(this.href)[1]},
+			data: {"class":"Z4_Forum_Item", "action":"page", "id":_threadId, "offset":/page(\d+)$/.exec(this.href)[1]},
 			success: function (xml) {
 				$("#postcontainer").html($("Response", xml).text());
 				
@@ -575,19 +575,19 @@ function ajaxPageChange() {
 				$(".pagination a").each(function(i) {
 					// Sakset fra newz.dk's egen kode. _lastPage returneres ikke fra AJAX, så hmn kigger simpelthen alle <a>'erne igennem
 					pageId = (+(this.href.substring(this.href.indexOf("page")+4)));
-					if (typeof pageId != 'undefined' && pageId > newz._lastPage) {
-						newz._lastPage = pageId;
+					if (typeof pageId != 'undefined' && pageId > _lastPage) {
+						_lastPage = pageId;
 					}
 				});
-				newz._pageId = +(/offset=(\d+)/.exec(this.url)[1]);
-				if (newz._pageId == newz._lastPage) {
-					newz._updateFrequency = 10000;
-					newz.StartAutoUpdate();
+				_pageId = +(/offset=(\d+)/.exec(this.url)[1]);
+				if (_pageId == _lastPage) {
+					_updateFrequency = 10000;
+					StartAutoUpdate();
 				} else
-					newz.PauseAutoUpdate();
+					PauseAutoUpdate();
 				
-				// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
-				newz.UpdatePosts();
+				// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (dk-funktion)
+				UpdatePosts();
 			}
 		});
 		return false;
