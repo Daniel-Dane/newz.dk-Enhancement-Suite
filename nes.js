@@ -9,7 +9,9 @@ var NES_loaded = NES_loaded || false;
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
 
 if (!localStorage) {
-	alert('Failbrowser. NES kan ikke køre her.');
+	$(document).ready(function() {
+		$('<div>Failbrowser. NES kan ikke køre her.</div>').css({color:'red', fontSize:'large'}).insertBefore($('#center').prev());
+	});
 } else {
 	if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!NES_loaded)) {
 		NES_loaded = true;
@@ -192,7 +194,7 @@ function init() {
 		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == '-1'))
 			fixPosts($('#post_preview .content'))
 	});
-
+	
 	$(document).ajaxStop(function() {
 		if (postSortByRating) {
 			postSortByRating = false;
