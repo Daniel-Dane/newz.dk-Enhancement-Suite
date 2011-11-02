@@ -8,7 +8,7 @@ var NES_loaded = NES_loaded || false;
 // Følgende indsættes i indstillinger -> stylesheet
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
 
-if (typeof localStorage == 'undefined') {
+if ((typeof localStorage == 'undefined') || (typeof window.history.pushState == 'undefined')) {
 	$(document).ready(function() {
 		$('<div>Failbrowser. NES kan ikke køre her.</div>').css({color:'red', fontSize:'large'}).insertBefore($('#center').prev());
 	});
@@ -76,7 +76,7 @@ function init() {
 	ajaxPageChangeAwesomePostChange = ((localStorage["ajaxPageChangeAwesomePostChange"] == "true") && (ajaxPageChangeSetting));
 	addLinkToPostReference = (localStorage["addLinkToPostReference"] == "true");
 	if (showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true")) {
-	$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'right: 680px;' : 'left: 400px') + "}</style>").appendTo("head");
+		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'right: 680px;' : 'left: 400px') + "}</style>").appendTo("head");
 		$('head').append($('<script>').html(' \
 			function NES_showPost(me, him) { \
 				var q = $("#" + him); \
