@@ -10,17 +10,14 @@ var NES_loaded = NES_loaded || false;
 
 if ((typeof localStorage == 'undefined') || (typeof window.history.pushState == 'undefined')) {
 	$(document).ready(function() {
-		$('<div>Failbrowser. NES kan ikke køre her.</div>').css({color:'red', fontSize:'large'}).insertBefore($('#center').prev());
+		$('#nmSiteSelect').next().find('a:last').before('Failbrowser. NES kan ikke køre her. | ');
 	});
 } else {
 	if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!NES_loaded)) {
 		NES_loaded = true;
 		var startHash = location.hash;  // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-		var startPage = 0;              // Bruges af "Sideskift ved henvisning til indlæg på anden side"
-		var startScroll = 0;            // Bruges også af ovenstående
 		var postSortByRating = false;   // true, når der er trykket på "Sorter indlæg efter rating"
 		$(document).ready(function() {
-			startPage = window._pageId; // Kommer først senere på siden. Bruger window, så startPage bliver undefined, hvis den ikke findes (uden window failer koden).
 			init();
 		});
 	}
@@ -36,12 +33,6 @@ function init() {
 			<button id="sortRating">Sorter indlæg efter rating</button><br> \
 			<br><span style="float: right">pewbe mode: &nbsp;</span><br><select id="pewbeMode" style="float: right;"><option value="1">informativ</option><option value="2">interessant</option><option value="4">relevant</option><option value="3">sjov</option><option selected="selected" value="0">neutral</option><option value="5">gentagelse</option><option value="6">irrelevant</option><option value="7">flamebait</option></select> \
 		</div> \
-		<input type="checkbox" id="fixTitleSetting" name="fixTitleSetting"><label for="fixTitleSetting"> Bedre overskrifter</label><br> \
-		<input type="checkbox" id="ajaxPageChange" name="ajaxPageChange"><label for="ajaxPageChange"> AJAX-sideskfit</label> \
-		<div id="ajaxPageChangeSub" style="padding-left: 16px;"> \
-			<input type="checkbox" id="ajaxPageChangeGoToTop" name="ajaxPageChangeGoToTop"><label for="ajaxPageChangeGoToTop"> Hop til top ved AJAX-sideskift</label><br> \
-			<input type="checkbox" id="ajaxPageChangeAwesomePostChange" name="ajaxPageChangeAwesomePostChange"><label for="ajaxPageChangeAwesomePostChange"> Sideskift ved henvisning til indlæg på anden side</label> \
-		</div> \
 		<input type="checkbox" id="addLinkToPostReference" name="addLinkToPostReference"><label for="addLinkToPostReference"> "#tal"-henvisninger får et link (understøtter ikke <a href="http://newz.dk/~chewy">Chewy</a>)</label><br> \
 		<div id="addLinkToPostReferenceSub" style="padding-left: 16px;"> \
 			<input type="checkbox" id="showPostOnMouseOverReference" name="showPostOnMouseOverReference"><label for="showPostOnMouseOverReference"> Vis det refererede indlæg ved mouseover (beta)</label><br> \
@@ -56,8 +47,7 @@ function init() {
 			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk_Enhancement_Suite">kynz</a>! Version ' + nesVersion + '. \
 		</div> \
 	</div> \
-	')
-	.hide();
+	').hide();
 	
 	// "NES-indstillinger"-knappen
 	$('#nmSiteSelect').next().find('a:last').before('<a href="#" id="NES-toggle">NES-indstillinger</a> | ');
@@ -68,12 +58,6 @@ function init() {
 	});
 	
 	// Henter indstillinger
-	if (fixTitleSetting = (localStorage["fixTitleSetting"] == "true"))
-		fixTitle();
-	if (ajaxPageChangeSetting = (localStorage["ajaxPageChange"] == "true"))
-		ajaxPageChange();
-	ajaxPageChangeGoToTop = (localStorage["ajaxPageChangeGoToTop"] == "true");
-	ajaxPageChangeAwesomePostChange = ((localStorage["ajaxPageChangeAwesomePostChange"] == "true") && (ajaxPageChangeSetting));
 	addLinkToPostReference = (localStorage["addLinkToPostReference"] == "true");
 	if (showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true")) {
 		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'right: 680px;' : 'left: 400px') + "}</style>").appendTo("head");
@@ -103,18 +87,16 @@ function init() {
 		 */
 		Encoder={EncodeType:"entity",isEmpty:function(val){if(val){return((val===null)||val.length==0||/^\s+$/.test(val))}else{return true}},arr1:new Array('&nbsp;','&iexcl;','&cent;','&pound;','&curren;','&yen;','&brvbar;','&sect;','&uml;','&copy;','&ordf;','&laquo;','&not;','&shy;','&reg;','&macr;','&deg;','&plusmn;','&sup2;','&sup3;','&acute;','&micro;','&para;','&middot;','&cedil;','&sup1;','&ordm;','&raquo;','&frac14;','&frac12;','&frac34;','&iquest;','&Agrave;','&Aacute;','&Acirc;','&Atilde;','&Auml;','&Aring;','&Aelig;','&Ccedil;','&Egrave;','&Eacute;','&Ecirc;','&Euml;','&Igrave;','&Iacute;','&Icirc;','&Iuml;','&ETH;','&Ntilde;','&Ograve;','&Oacute;','&Ocirc;','&Otilde;','&Ouml;','&times;','&Oslash;','&Ugrave;','&Uacute;','&Ucirc;','&Uuml;','&Yacute;','&THORN;','&szlig;','&agrave;','&aacute;','&acirc;','&atilde;','&auml;','&aring;','&aelig;','&ccedil;','&egrave;','&eacute;','&ecirc;','&euml;','&igrave;','&iacute;','&icirc;','&iuml;','&eth;','&ntilde;','&ograve;','&oacute;','&ocirc;','&otilde;','&ouml;','&divide;','&Oslash;','&ugrave;','&uacute;','&ucirc;','&uuml;','&yacute;','&thorn;','&yuml;','&quot;','&amp;','&lt;','&gt;','&oelig;','&oelig;','&scaron;','&scaron;','&yuml;','&circ;','&tilde;','&ensp;','&emsp;','&thinsp;','&zwnj;','&zwj;','&lrm;','&rlm;','&ndash;','&mdash;','&lsquo;','&rsquo;','&sbquo;','&ldquo;','&rdquo;','&bdquo;','&dagger;','&dagger;','&permil;','&lsaquo;','&rsaquo;','&euro;','&fnof;','&alpha;','&beta;','&gamma;','&delta;','&epsilon;','&zeta;','&eta;','&theta;','&iota;','&kappa;','&lambda;','&mu;','&nu;','&xi;','&omicron;','&pi;','&rho;','&sigma;','&tau;','&upsilon;','&phi;','&chi;','&psi;','&omega;','&alpha;','&beta;','&gamma;','&delta;','&epsilon;','&zeta;','&eta;','&theta;','&iota;','&kappa;','&lambda;','&mu;','&nu;','&xi;','&omicron;','&pi;','&rho;','&sigmaf;','&sigma;','&tau;','&upsilon;','&phi;','&chi;','&psi;','&omega;','&thetasym;','&upsih;','&piv;','&bull;','&hellip;','&prime;','&prime;','&oline;','&frasl;','&weierp;','&image;','&real;','&trade;','&alefsym;','&larr;','&uarr;','&rarr;','&darr;','&harr;','&crarr;','&larr;','&uarr;','&rarr;','&darr;','&harr;','&forall;','&part;','&exist;','&empty;','&nabla;','&isin;','&notin;','&ni;','&prod;','&sum;','&minus;','&lowast;','&radic;','&prop;','&infin;','&ang;','&and;','&or;','&cap;','&cup;','&int;','&there4;','&sim;','&cong;','&asymp;','&ne;','&equiv;','&le;','&ge;','&sub;','&sup;','&nsub;','&sube;','&supe;','&oplus;','&otimes;','&perp;','&sdot;','&lceil;','&rceil;','&lfloor;','&rfloor;','&lang;','&rang;','&loz;','&spades;','&clubs;','&hearts;','&diams;'),arr2:new Array('&#160;','&#161;','&#162;','&#163;','&#164;','&#165;','&#166;','&#167;','&#168;','&#169;','&#170;','&#171;','&#172;','&#173;','&#174;','&#175;','&#176;','&#177;','&#178;','&#179;','&#180;','&#181;','&#182;','&#183;','&#184;','&#185;','&#186;','&#187;','&#188;','&#189;','&#190;','&#191;','&#192;','&#193;','&#194;','&#195;','&#196;','&#197;','&#198;','&#199;','&#200;','&#201;','&#202;','&#203;','&#204;','&#205;','&#206;','&#207;','&#208;','&#209;','&#210;','&#211;','&#212;','&#213;','&#214;','&#215;','&#216;','&#217;','&#218;','&#219;','&#220;','&#221;','&#222;','&#223;','&#224;','&#225;','&#226;','&#227;','&#228;','&#229;','&#230;','&#231;','&#232;','&#233;','&#234;','&#235;','&#236;','&#237;','&#238;','&#239;','&#240;','&#241;','&#242;','&#243;','&#244;','&#245;','&#246;','&#247;','&#248;','&#249;','&#250;','&#251;','&#252;','&#253;','&#254;','&#255;','&#34;','&#38;','&#60;','&#62;','&#338;','&#339;','&#352;','&#353;','&#376;','&#710;','&#732;','&#8194;','&#8195;','&#8201;','&#8204;','&#8205;','&#8206;','&#8207;','&#8211;','&#8212;','&#8216;','&#8217;','&#8218;','&#8220;','&#8221;','&#8222;','&#8224;','&#8225;','&#8240;','&#8249;','&#8250;','&#8364;','&#402;','&#913;','&#914;','&#915;','&#916;','&#917;','&#918;','&#919;','&#920;','&#921;','&#922;','&#923;','&#924;','&#925;','&#926;','&#927;','&#928;','&#929;','&#931;','&#932;','&#933;','&#934;','&#935;','&#936;','&#937;','&#945;','&#946;','&#947;','&#948;','&#949;','&#950;','&#951;','&#952;','&#953;','&#954;','&#955;','&#956;','&#957;','&#958;','&#959;','&#960;','&#961;','&#962;','&#963;','&#964;','&#965;','&#966;','&#967;','&#968;','&#969;','&#977;','&#978;','&#982;','&#8226;','&#8230;','&#8242;','&#8243;','&#8254;','&#8260;','&#8472;','&#8465;','&#8476;','&#8482;','&#8501;','&#8592;','&#8593;','&#8594;','&#8595;','&#8596;','&#8629;','&#8656;','&#8657;','&#8658;','&#8659;','&#8660;','&#8704;','&#8706;','&#8707;','&#8709;','&#8711;','&#8712;','&#8713;','&#8715;','&#8719;','&#8721;','&#8722;','&#8727;','&#8730;','&#8733;','&#8734;','&#8736;','&#8743;','&#8744;','&#8745;','&#8746;','&#8747;','&#8756;','&#8764;','&#8773;','&#8776;','&#8800;','&#8801;','&#8804;','&#8805;','&#8834;','&#8835;','&#8836;','&#8838;','&#8839;','&#8853;','&#8855;','&#8869;','&#8901;','&#8968;','&#8969;','&#8970;','&#8971;','&#9001;','&#9002;','&#9674;','&#9824;','&#9827;','&#9829;','&#9830;'),HTML2Numerical:function(s){return this.swapArrayVals(s,this.arr1,this.arr2)},NumericalToHTML:function(s){return this.swapArrayVals(s,this.arr2,this.arr1)},numEncode:function(s){if(this.isEmpty(s))return"";var e="";for(var i=0;i<s.length;i++){var c=s.charAt(i);if(c<" "||c>"~"){c="&#"+c.charCodeAt()+";"}e+=c}return e},htmlDecode:function(s){var c,m,d=s;if(this.isEmpty(d))return"";d=this.HTML2Numerical(d);arr=d.match(/&#[0-9]{1,5};/g);if(arr!=null){for(var x=0;x<arr.length;x++){m=arr[x];c=m.substring(2,m.length-1);if(c>=-32768&&c<=65535){d=d.replace(m,String.fromCharCode(c))}else{d=d.replace(m,"")}}}return d},htmlEncode:function(s,dbl){if(this.isEmpty(s))return"";dbl=dbl||false;if(dbl){if(this.EncodeType=="numerical"){s=s.replace(/&/g,"&#38;")}else{s=s.replace(/&/g,"&amp;")}}s=this.XSSEncode(s,false);if(this.EncodeType=="numerical"||!dbl){s=this.HTML2Numerical(s)}s=this.numEncode(s);if(!dbl){s=s.replace(/&#/g,"##AMPHASH##");if(this.EncodeType=="numerical"){s=s.replace(/&/g,"&#38;")}else{s=s.replace(/&/g,"&amp;")}s=s.replace(/##AMPHASH##/g,"&#")}s=s.replace(/&#\d*([^\d;]|$)/g,"$1");if(!dbl){s=this.correctEncoding(s)}if(this.EncodeType=="entity"){s=this.NumericalToHTML(s)}return s},XSSEncode:function(s,en){if(!this.isEmpty(s)){en=en||true;if(en){s=s.replace(/\'/g,"&#39;");s=s.replace(/\"/g,"&quot;");s=s.replace(/</g,"&lt;");s=s.replace(/>/g,"&gt;")}else{s=s.replace(/\'/g,"&#39;");s=s.replace(/\"/g,"&#34;");s=s.replace(/</g,"&#60;");s=s.replace(/>/g,"&#62;")}return s}else{return""}},hasEncoded:function(s){if(/&#[0-9]{1,5};/g.test(s)){return true}else if(/&[A-Z]{2,6};/gi.test(s)){return true}else{return false}},stripUnicode:function(s){return s.replace(/[^\x20-\x7E]/g,"")},correctEncoding:function(s){return s.replace(/(&amp;)(amp;)+/,"$1")},swapArrayVals:function(s,arr1,arr2){if(this.isEmpty(s))return"";var re;if(arr1&&arr2){if(arr1.length==arr2.length){for(var x=0,i=arr1.length;x<i;x++){re=new RegExp(arr1[x],'g');s=s.replace(re,arr2[x])}}}return s},inArray:function(item,arr){for(var i=0,x=arr.length;i<x;i++){if(arr[i]===item){return i}}return-1}}
 	}
-	if (applyTargetBlank = (localStorage["applyTargetBlank"] == "true"))
-		$('a').attr('target', '_blank');
+	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
 	
 	// Event handlers til knapperne
-	handlerList = ['fixTitleSetting', 'ajaxPageChange', 'ajaxPageChangeGoToTop', 'ajaxPageChangeAwesomePostChange', 'addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'improvedQuoteSetting', 'applyTargetBlank'];
+	handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'improvedQuoteSetting', 'applyTargetBlank'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
 			updateSettingsSub();
 		}).attr('checked', (localStorage[handlerList[i]] == 'true'));
 	}
-	
 	$("#sortRating").bind("click", function() {
 		postSortByRating = true;
 		$('.comments_new').remove();
@@ -125,7 +107,6 @@ function init() {
 				$(this).find(".information").click();
 		});
 	});
-	
 	$("#pewbeMode").bind("change", function() {
 		var a = this.selectedIndex;
 		$(".comment_rate").each(function() {
@@ -134,48 +115,30 @@ function init() {
 		});
 	});
 	
-	updateSettingsSub();
-	
 	// Fikser bredden af indlæg, så [list] ikke sniger sig ind over højresiden af indlæggene samt nyhedslisten, så teksten ikke går for langt og ikke kan læses
 	$("<style type='text/css'>.text_content{width: 381px;} .indexsection ul li {width: inherit !important;}</style>").appendTo("head");
 	
 	$(document).ajaxSuccess(function(event, xhr, options) {
 		// Retter newz.dk's buggede AJAX
 		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
+			href = NES_getUrl();
+			
 			if (startHash != '') {
-				if ((ajaxPageChangeAwesomePostChange) && (startPage == _pageId))
-					$(window).scrollTop(startScroll);
-				else {
-					$(window).scrollTop($('.comment a[name=' + startHash.substr(1) + ']').offset().top);
-					location.hash = startHash;
-				}
-				
+				$(window).scrollTop($('.comment a[name=' + startHash.substr(1) + ']').offset().top);
+				history.replaceState({page: _pageId}, '', href + '/page' + _pageId + startHash);
 				startHash = '';
-			} else {
-				if (ajaxPageChangeGoToTop)
-					$(window).scrollTop(0);
-				
-				// Sætter hash til første indlæg, så man kan kopiere link til den rette side
-				var firstChild = $("#comments > div:first-child h2 a:first-child");
-				var firstChildName = firstChild.attr('name');
-				firstChild.attr('name', '');
-				location.hash = firstChildName;
-				firstChild.attr('name', firstChildName);
-			}
+			} else
+				$(window).scrollTop(0);
 			
 			$(".loading").hide();
 			$('.pagination').show();
-			
-			href = getUrl();
 			
 			$(".pagination a").each(function() {
 				$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
 			});
 			
-			if (fixTitleSetting)
-				fixTitle();
-			if (ajaxPageChangeSetting)
-				insertLoadingGif();
+			fixTitle();
+			insertLoadingGif();
 			fixPosts();
 			
 			$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
@@ -191,7 +154,7 @@ function init() {
 		}
 		
 		// Preview (slået fra, når man opretter en tråd)
-		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == '-1'))
+		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1))
 			fixPosts($('#post_preview .content'))
 	});
 	
@@ -233,62 +196,21 @@ function init() {
 		}
 	});
 	
-	if (ajaxPageChangeAwesomePostChange) {
-		$(window).bind('hashchange', function() {
-			if ((location.hash == '') || (location.hash == '#new'))
-				var a = 50 * (startPage - 1) + 1;
-			else	
-				var a = +location.hash.substr(1);
+	$(window).bind('hashchange', function() {
+		var a = +location.hash.substr(1);
+		
+		if (!isNaN(a) && (a > 0) && (a <= 50 * (_lastPage - 1) + 50) && ((a <= 50 * (_pageId - 1)) || (a > 50 * (_pageId - 1) + 50))) {
+			// Hopper til top, så brugeren ved, at der skiftes side
+			$(window).scrollTop(0);
 			
-			if (!isNaN(a) && (a > 0) && (a <= 50 * (_lastPage - 1) + 50) && ((a <= 50 * (_pageId - 1)) || (a > 50 * (_pageId - 1) + 50))) {
-				if (startPage == _pageId)
-					startScroll = $(window).scrollTop();
-				
-				// Hopper til top, så brugeren ved, at der skiftes side
-				$(window).scrollTop(0);
-				
-				$('.pagination').hide();
-				$(".loading").show();
-				
-				// Sørger for, at ajaxSuccess ikke hopper forkert
-				startHash = a;
-				
-				// Copypasta fra ajaxPageChange() med <s>modifikationer</s> én modifikation... Hmm... Jeg laver det nok om til en funktion senere hen
-				$.ajax({
-					dataType: 'xml',
-					url: "/z4/action.php",
-					data: {"class":"Z4_Forum_Item", "action":"page", "id":_threadId, "offset":Math.ceil(a / _pageSize)},
-					success: function (xml) {
-						$("#postcontainer").html($("Response", xml).text());
-						
-						// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
-						$(".pagination a").each(function(i) {
-							// Sakset fra newz.dk's egen kode. _lastPage returneres ikke fra AJAX, så hmn kigger simpelthen alle <a>'erne igennem
-							pageId = (+(this.href.substring(this.href.indexOf("page")+4)));
-							if (typeof pageId != 'undefined' && pageId > _lastPage) {
-								_lastPage = pageId;
-							}
-						});
-						_pageId = +(/offset=(\d+)/.exec(this.url)[1]);
-						if (_pageId == _lastPage) {
-							_updateFrequency = 10000;
-							StartAutoUpdate();
-						} else
-							PauseAutoUpdate();
-						
-						// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
-						UpdatePosts();
-					}
-				});
-			}
-		});
-	}
+			startHash = '';
+			NES_fetchPage(Math.ceil(a / _pageSize), 1, a);
+		}
+	});
 	
-	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
-	if (window._pageId > window._lastPage)
-		ReceiveData(_lastPage);
-	else
-		fixPosts();
+	$(window).bind('popstate', function(e) {
+		var a = e.state;
+	});
 	
 	// Fix af "Sorter indlæg efter rating", så den finder det nyeste indlæg det rigtige sted.
 	if (typeof GetLastPostId != "undefined") {
@@ -306,10 +228,21 @@ function init() {
 				return OldGetLastPostId();
 		}
 	}
+	
+	fixTitle();
+	ajaxPageChange();
+	updateSettingsSub();
+	
+	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
+	if (window._pageId > window._lastPage)
+		NES_fetchPage(_lastPage, 0);
+	else {
+		history.replaceState({page: _pageId}, '', location.href);
+		fixPosts();
+	}
 }
 
 function updateSettingsSub() {
-	$('#ajaxPageChangeSub input').attr('disabled', !$('#ajaxPageChange').attr('checked'));
 	$('#addLinkToPostReferenceSub > input').attr('disabled', !$('#addLinkToPostReference').attr('checked'));
 	$('#showPostOnMouseOverReferenceSub input').attr('disabled', (!$('#showPostOnMouseOverReference').attr('checked') || !$('#addLinkToPostReference').attr('checked')));
 }
@@ -372,7 +305,7 @@ function addLinkToPostReferenceFunc(object) {
 }
 
 function addPermLink(object) {
-	href = getUrl();
+	href = NES_getUrl();
 	
 	$('.comment h2', object).each(function() {
 		var a = $(this).html();
@@ -562,42 +495,65 @@ function ajaxPageChange() {
 	
 	$('.pagination a').live('click', function(e) {
 		e.preventDefault();
-		$('.pagination').hide();
-		$(".loading").show();
-		
 		startHash = '';
-		
-		$.ajax({
-			dataType: 'xml',
-			url: "/z4/action.php",
-			data: {"class":"Z4_Forum_Item", "action":"page", "id":_threadId, "offset":/page(\d+)$/.exec(this.href)[1]},
-			success: function (xml) {
-				$("#postcontainer").html($("Response", xml).text());
-				
-				// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
-				$(".pagination a").each(function(i) {
-					// Sakset fra newz.dk's egen kode. _lastPage returneres ikke fra AJAX, så hmn kigger simpelthen alle <a>'erne igennem
-					pageId = (+(this.href.substring(this.href.indexOf("page")+4)));
-					if (typeof pageId != 'undefined' && pageId > _lastPage) {
-						_lastPage = pageId;
-					}
-				});
-				_pageId = +(/offset=(\d+)/.exec(this.url)[1]);
-				if (_pageId == _lastPage) {
-					_updateFrequency = 10000;
-					StartAutoUpdate();
-				} else
-					PauseAutoUpdate();
-				
-				// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (dk-funktion)
-				UpdatePosts();
-			}
-		});
+		NES_fetchPage(/page(\d+)$/.exec(this.href)[1], 1);
 		return false;
 	});
 }
 
-function getUrl() {
+// pageNo = sidenummer
+// state: 0 = replaceState (fikser nuværende side), 1 = pushState (skifter side), 2 = ingen ændring i historien (skifter side pga. hop i historien)
+function NES_fetchPage(pageNo, state, hash) {
+	var successFunc = function(pageNo, state, hash) {
+		return function (xml) {
+			$("#postcontainer").html($("Response", xml).text());
+			
+			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
+			$(".pagination a").each(function(i) {
+				// Sakset fra newz.dk's egen kode. _lastPage returneres ikke fra AJAX, så hmn kigger simpelthen alle <a>'erne igennem
+				var pageId = +(this.href.substring(this.href.indexOf("page") + 4));
+				if (typeof pageId != 'undefined' && pageId > _lastPage)
+					_lastPage = pageId;
+			});
+			_pageId = pageNo;//+(/offset=(\d+)/.exec(this.url)[1]);
+			if (_pageId == _lastPage) {
+				_updateFrequency = 10000;
+				StartAutoUpdate();
+			} else
+				PauseAutoUpdate();
+			
+			// Jeg ved ikke lige, hvordan jeg ellers får state igennem hertil...
+			//var state = +(/state=(\d+)/.exec(this.url)[1]);
+			if (state == 0)
+				history.replaceState({page: _pageId}, '', location.pathname + '/page' + _pageId);
+			else if (state == 1) {
+				if (typeof hash == 'undefined')
+					hash = '';
+				else
+					hash = '#' + hash;
+				history.pushState({page: _pageId}, '', location.pathname + '/page' + _pageId + hash);
+			} else if (state == 2) {
+				
+			}
+			
+			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
+			UpdatePosts();
+		}
+	}
+	
+	$('.pagination').hide();
+	$(".loading").show();
+	
+	$.ajax({
+		dataType: 'xml',
+		url: "/z4/action.php",
+		data: {"class":"Z4_Forum_Item", "action":"page", "id":_threadId, "offset":pageNo},
+		success: successFunc(pageNo, state, hash)
+	});
+}
+
+// URL uden /page samt #
+function NES_getUrl() {
 	var a = 0;
 	
 	if ((a = location.href.indexOf('#')) == -1)
