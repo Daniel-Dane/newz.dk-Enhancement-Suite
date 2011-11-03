@@ -499,7 +499,9 @@ function ajaxPageChange() {
 	$('.pagination a').live('click', function(e) {
 		e.preventDefault();
 		startHash = '';
-		NES_fetchPage(/page(\d+)$/.exec(this.href)[1], 1);
+		var p = /page(\d+)$/.exec(this.href)[1];
+		history.pushState({page: _pageId}, '', href + '/page' + p);
+		NES_fetchPage(p, 1);
 		return false;
 	});
 }
@@ -531,7 +533,6 @@ function NES_fetchPage(pageNo, state, hash) {
 			if (state == 0)
 				history.replaceState({page: _pageId}, '', href + '/page' + _pageId);
 			else if (state == 1) {
-				history.pushState({page: _pageId}, '', href + '/page' + _pageId);
 				$(window).scrollTop(0);
 			} else if (state == 2) {
 				history.replaceState({page: _pageId}, '', href + '/page' + _pageId + '#' + hash);
