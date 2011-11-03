@@ -210,6 +210,7 @@ function init() {
 	
 	window.onpopstate = function(e) {
 		var a = e.state;
+		console.log(a);
 		if (a == null || a == _pageId)
 			return;
 		NES_fetchPage(a.page, 3);
