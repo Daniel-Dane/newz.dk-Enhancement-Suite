@@ -203,6 +203,7 @@ function init() {
 			$(window).scrollTop(0);
 			
 			startHash = '';
+			history.replaceState({page: _pageId}, '', href + '/page' + _pageId + '#' + hash);
 			NES_fetchPage(Math.ceil(a / _pageSize), 2, a);
 		}
 	});
@@ -535,7 +536,6 @@ function NES_fetchPage(pageNo, state, hash) {
 			else if (state == 1) {
 				$(window).scrollTop(0);
 			} else if (state == 2) {
-				history.replaceState({page: _pageId}, '', href + '/page' + _pageId + '#' + hash);
 				$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
 			}
 			
