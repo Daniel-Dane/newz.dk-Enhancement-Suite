@@ -208,7 +208,7 @@ function init() {
 		}
 	});
 	
-	$(window).bind('popstate', function(e) {
+	window.onpopstate = function(e) {
 		var a = e.state;
 		console.log(a.page);
 	});
@@ -525,18 +525,21 @@ function NES_fetchPage(pageNo, state, hash) {
 			
 			// Jeg ved ikke lige, hvordan jeg ellers får state igennem hertil...
 			//var state = +(/state=(\d+)/.exec(this.url)[1]);
+			
+			href = NES_getUrl();
+			
 			if (state == 0)
-				history.replaceState({page: _pageId}, '', location.pathname + '/page' + _pageId);
+				history.replaceState({page: _pageId}, '', href + '/page' + _pageId);
 			else if (state == 1) {
 				if (typeof hash == 'undefined')
 					hash = '';
 				else
 					hash = '#' + hash;
-				history.pushState({page: _pageId}, '', location.pathname + '/page' + _pageId + hash);
+				history.pushState({page: _pageId}, '', href + '/page' + _pageId + hash);
 			} else if (state == 2) {
 				
 			}
-			
+			console.log(pageNo + '|' + state + '|' + hash);
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
 			UpdatePosts();
 		}
