@@ -204,7 +204,7 @@ function init() {
 			$(window).scrollTop(0);
 			
 			startHash = '';
-			NES_fetchPage(Math.ceil(a / _pageSize), 1, a);
+			NES_fetchPage(Math.ceil(a / _pageSize), 2, a);
 		}
 	});
 	
@@ -212,7 +212,7 @@ function init() {
 		var a = e.state;
 		if (a == null || a == _pageId)
 			return;
-		NES_fetchPage(a.page, 2);
+		NES_fetchPage(a.page, 3);
 	};
 	
 	// Fix af "Sorter indlæg efter rating", så den finder det nyeste indlæg det rigtige sted.
@@ -505,7 +505,7 @@ function ajaxPageChange() {
 }
 
 // pageNo: sidenummer
-//  state: 0 = replaceState (fikser nuværende side), 1 = pushState (skifter side), 2 = ingen ændring i historien (skifter side pga. hop i historien)
+//  state: 0 = replaceState (fikser nuværende side), 1/2 = pushState (skifter side), 3 = ingen ændring i historien (skifter side pga. hop i historien)
 //   hash: Hvis der skal hoppes til et bestemt indlæg
 function NES_fetchPage(pageNo, state, hash) {
 	var successFunc = function(pageNo, state, hash) {
@@ -531,13 +531,10 @@ function NES_fetchPage(pageNo, state, hash) {
 			if (state == 0)
 				history.replaceState({page: _pageId}, '', href + '/page' + _pageId);
 			else if (state == 1) {
-				if (typeof hash == 'undefined')
-					hash = '';
-				else
-					hash = '#' + hash;
-				history.pushState({page: _pageId}, '', href + '/page' + _pageId + hash);
+				history.pushState({page: _pageId}, '', href + '/page' + _pageId);
 			} else if (state == 2) {
-				
+				history.pushState({page: _pageId}, '', href + '/page' + _pageId + hash);
+				$(window).scrollTop($('.comment a[name=' + startHash.substr(1) + ']').offset().top);
 			}
 			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
