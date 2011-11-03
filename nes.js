@@ -506,7 +506,7 @@ function ajaxPageChange() {
 }
 
 // pageNo: sidenummer
-//  state: 0 = replaceState (fikser nuværende side), 1/2 = pushState (skifter side), 3 = ingen ændring i historien (skifter side pga. hop i historien)
+//  state: 0 = replaceState (fikser nuværende side), 1 = pushState (skifter side), 2 = hopper til side, hvorpå indlægget ligger, 3 = ingen ændring i historien (skifter side pga. hop i historien)
 //   hash: Hvis der skal hoppes til et bestemt indlæg
 function NES_fetchPage(pageNo, state, hash) {
 	var successFunc = function(pageNo, state, hash) {
@@ -534,7 +534,7 @@ function NES_fetchPage(pageNo, state, hash) {
 			else if (state == 1) {
 				history.pushState({page: _pageId}, '', href + '/page' + _pageId);
 			} else if (state == 2) {
-				history.pushState({page: _pageId}, '', href + '/page' + _pageId + '#' + hash);
+				history.replaceState({page: _pageId}, '', href + '/page' + _pageId + '#' + hash);
 				$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
 			}
 			
