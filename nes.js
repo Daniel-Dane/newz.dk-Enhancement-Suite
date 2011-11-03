@@ -210,6 +210,7 @@ function init() {
 	
 	$(window).bind('popstate', function(e) {
 		var a = e.state;
+		console.log(a.page);
 	});
 	
 	// Fix af "Sorter indlæg efter rating", så den finder det nyeste indlæg det rigtige sted.
