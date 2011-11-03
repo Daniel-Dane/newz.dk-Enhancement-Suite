@@ -203,8 +203,9 @@ function init() {
 			$(window).scrollTop(0);
 			
 			startHash = '';
-			history.replaceState({page: _pageId}, '', href + '/page' + _pageId + '#' + hash);
-			NES_fetchPage(Math.ceil(a / _pageSize), 2, a);
+			var p = Math.ceil(a / _pageSize);
+			history.replaceState({page: _pageId}, '', href + '/page' + p + '#' + a);
+			NES_fetchPage(p, 2, a);
 		}
 	});
 	
