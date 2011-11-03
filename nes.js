@@ -127,8 +127,7 @@ function init() {
 				$(window).scrollTop($('.comment h2:has(a[name=' + startHash.substr(1) + '])').offset().top);
 				history.replaceState({page: _pageId}, '', href + '/page' + _pageId + startHash);
 				startHash = '';
-			} else
-				$(window).scrollTop(0);
+			}
 			
 			$(".loading").hide();
 			$('.pagination').show();
@@ -533,6 +532,7 @@ function NES_fetchPage(pageNo, state, hash) {
 				history.replaceState({page: _pageId}, '', href + '/page' + _pageId);
 			else if (state == 1) {
 				history.pushState({page: _pageId}, '', href + '/page' + _pageId);
+				$(window).scrollTop(0);
 			} else if (state == 2) {
 				history.replaceState({page: _pageId}, '', href + '/page' + _pageId + '#' + hash);
 				$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
