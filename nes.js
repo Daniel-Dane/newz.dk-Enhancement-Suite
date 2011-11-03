@@ -210,7 +210,9 @@ function init() {
 	
 	window.onpopstate = function(e) {
 		var a = e.state;
-		console.log(a.page);
+		if (a == null || a == _pageId)
+			return;
+		NES_fetchPage(a.page, 2);
 	};
 	
 	// Fix af "Sorter indlæg efter rating", så den finder det nyeste indlæg det rigtige sted.
@@ -502,8 +504,9 @@ function ajaxPageChange() {
 	});
 }
 
-// pageNo = sidenummer
-// state: 0 = replaceState (fikser nuværende side), 1 = pushState (skifter side), 2 = ingen ændring i historien (skifter side pga. hop i historien)
+// pageNo: sidenummer
+//  state: 0 = replaceState (fikser nuværende side), 1 = pushState (skifter side), 2 = ingen ændring i historien (skifter side pga. hop i historien)
+//   hash: Hvis der skal hoppes til et bestemt indlæg
 function NES_fetchPage(pageNo, state, hash) {
 	var successFunc = function(pageNo, state, hash) {
 		return function (xml) {
@@ -516,15 +519,12 @@ function NES_fetchPage(pageNo, state, hash) {
 				if (typeof pageId != 'undefined' && pageId > _lastPage)
 					_lastPage = pageId;
 			});
-			_pageId = pageNo;//+(/offset=(\d+)/.exec(this.url)[1]);
+			_pageId = pageNo;
 			if (_pageId == _lastPage) {
 				_updateFrequency = 10000;
 				StartAutoUpdate();
 			} else
 				PauseAutoUpdate();
-			
-			// Jeg ved ikke lige, hvordan jeg ellers får state igennem hertil...
-			//var state = +(/state=(\d+)/.exec(this.url)[1]);
 			
 			href = NES_getUrl();
 			
@@ -539,7 +539,7 @@ function NES_fetchPage(pageNo, state, hash) {
 			} else if (state == 2) {
 				
 			}
-			console.log(pageNo + '|' + state + '|' + hash);
+			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
 			UpdatePosts();
 		}
