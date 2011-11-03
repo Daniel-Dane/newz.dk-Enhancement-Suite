@@ -124,7 +124,7 @@ function init() {
 			href = NES_getUrl();
 			
 			if (startHash != '') {
-				$(window).scrollTop($('.comment a[name=' + startHash.substr(1) + ']').offset().top);
+				$(window).scrollTop($('.comment h2:has(a[name=' + startHash.substr(1) + '])').offset().top);
 				history.replaceState({page: _pageId}, '', href + '/page' + _pageId + startHash);
 				startHash = '';
 			} else
@@ -534,8 +534,7 @@ function NES_fetchPage(pageNo, state, hash) {
 				history.pushState({page: _pageId}, '', href + '/page' + _pageId);
 			} else if (state == 2) {
 				history.pushState({page: _pageId}, '', href + '/page' + _pageId + '#' + hash);
-				$(window).scrollTop($('.comment a[name=' + hash + ']').offset().top);
-				console.log(hash);
+				$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
 			}
 			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
