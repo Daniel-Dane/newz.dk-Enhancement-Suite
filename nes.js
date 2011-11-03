@@ -533,8 +533,8 @@ function NES_fetchPage(pageNo, state, hash) {
 			else if (state == 1) {
 				history.pushState({page: _pageId}, '', href + '/page' + _pageId);
 			} else if (state == 2) {
-				history.pushState({page: _pageId}, '', href + '/page' + _pageId + hash);
-				$(window).scrollTop($('.comment a[name=' + startHash.substr(1) + ']').offset().top);
+				history.pushState({page: _pageId}, '', href + '/page' + _pageId + '#' + hash);
+				$(window).scrollTop($('.comment a[name=' + hash + ']').offset().top);
 			}
 			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
