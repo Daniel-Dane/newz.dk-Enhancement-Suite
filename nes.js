@@ -204,7 +204,7 @@ function init() {
 			
 			startHash = '';
 			var p = Math.ceil(a / _pageSize);
-			history.replaceState({page: _pageId}, '', href + '/page' + p + '#' + a);
+			history.replaceState({page: p}, '', href + '/page' + p + '#' + a);
 			NES_fetchPage(p, 2, a);
 		}
 	});
@@ -502,7 +502,7 @@ function ajaxPageChange() {
 		e.preventDefault();
 		startHash = '';
 		var p = /page(\d+)$/.exec(this.href)[1];
-		history.pushState({page: _pageId}, '', href + '/page' + p);
+		history.pushState({page: p}, '', href + '/page' + p);
 		NES_fetchPage(p, 1);
 		return false;
 	});
