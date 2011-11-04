@@ -234,6 +234,25 @@ function NES_init() {
 		}
 	}
 	
+	// Gemmer de sidste fem indlæg
+	$("#id_commentpost").unbind("click").bind("click", function(e) {
+		function getIt(v) {
+			var r = localStorage['commentHistory' + v];
+			return (r == null) ? '' : r;
+		}
+		
+		var a = $("#id_comment").val();
+		if ($.trim(a).length > 1) {
+			for (var i = 4; i > 0; i--) {
+				localStorage['commentHistory' + i] = getIt(i - 1);
+			}
+			localStorage['commentHistory0'] = a;
+		}
+		
+		SubmitPost(true);
+		e.preventDefault();
+	});
+	
 	NES_fixTitle();
 	NES_ajaxPageChange();
 	NES_updateSettingsSub();
