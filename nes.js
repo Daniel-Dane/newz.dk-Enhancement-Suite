@@ -269,11 +269,8 @@ function NES_init() {
 	*/
 	
 	$("#id_comment").keyup(function() {
-		var a = $("#id_comment").val();
-		if ($.trim(a).length > 1) {
-			localStorage['commentHistory0'] = a;
-			NES_updateCommentList();
-		}
+		localStorage['commentHistory0'] = $("#id_comment").val();
+		NES_updateCommentList();
 	});
 	
 	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
