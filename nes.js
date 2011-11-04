@@ -250,9 +250,14 @@ function NES_init() {
 			localStorage['commentHistory0'] = a;
 		}
 		
+		NES_updateCommentList();
+		
 		SubmitPost(true);
 		e.preventDefault();
 	});
+	
+	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
+	NES_updateCommentList();
 	
 	NES_fixTitle();
 	NES_ajaxPageChange();
@@ -487,6 +492,17 @@ function NES_improvedQuote(object) {
 		$('#id_comment').keyup();
 		return false;
 	});
+}
+
+function NES_updateCommentList() {
+	$('#commentStorage').empty();
+	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()])" style="max-width: 150px">')
+		.appendTo('#commentStorage');
+	a.append('<option value="-1">Tidligere indlæg</option>');
+	for (var i = 0; i < 5; i++) {
+		a.append('<option value="' + i + '">' + localStorage['commentHistory' + i] + '</option>');
+	}
+	$('#commentStorage select option:first').attr('disabled', 'disabled');
 }
 
 // Sætter en ordentlig overskrift på tråden
