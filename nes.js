@@ -268,7 +268,7 @@ function NES_init() {
 	}, 5000);
 	*/
 	
-	$("#id_comment").bind('onkeyup', function() {
+	$("#id_comment").keyup(function() {
 		var a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
 			localStorage['commentHistory0'] = a;
