@@ -503,7 +503,6 @@ function NES_updateCommentList() {
 	for (var i = 0; i < 5; i++) {
 		a.append('<option value="' + i + '">' + localStorage['commentHistory' + i] + '</option>');
 	}
-	$('#commentStorage select option:first').attr('disabled', 'disabled');
 }
 
 // Sætter en ordentlig overskrift på tråden
