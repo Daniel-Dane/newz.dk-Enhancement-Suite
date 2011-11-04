@@ -262,7 +262,7 @@ function NES_init() {
 		a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
 			localStorage['commentHistory0'] = a;
-			NES_updateCommentList();
+			$('#commentStorage select option[value=0]').html(a);
 		}
 	});
 	
