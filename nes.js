@@ -258,6 +258,7 @@ function NES_init() {
 	});
 	
 	// Indholdet af kommentarfeltet gemmes løbende, så det kan gendannes (hvert 5. sekund)
+	/*
 	setInterval(function() {
 		var a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
@@ -265,6 +266,15 @@ function NES_init() {
 			NES_updateCommentList();
 		}
 	}, 5000);
+	*/
+	
+	$("#id_comment").bind('keyup', function() {
+		var a = $("#id_comment").val();
+		if ($.trim(a).length > 1) {
+			localStorage['commentHistory0'] = a;
+			NES_updateCommentList();
+		}
+	});
 	
 	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
 	NES_updateCommentList();
