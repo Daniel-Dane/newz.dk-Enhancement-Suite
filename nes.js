@@ -235,8 +235,10 @@ function NES_init() {
 	}
 	
 	// Gemmer de sidste fem indlæg
-	$("#id_commentpost").replaceWith('<input type="submit" value="Indsend" id="id_commentpost2" name="button_submit">');
-	$("#id_commentpost2").bind("click", function(e) {
+	// Da NES kører før resten af newz.dk's framework, startes dette event først, så vi når at gemme indholdet
+	$("#id_commentpost").bind("click", function(e) {
+		e.preventDefault();
+		
 		function getIt(v) {
 			var r = localStorage['commentHistory' + v];
 			return (r == null) ? '' : r;
@@ -244,16 +246,15 @@ function NES_init() {
 		
 		var a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
-			for (var i = 4; i > 0; i--) {
+			for (var i = 5; i > 1; i--) {
 				localStorage['commentHistory' + i] = getIt(i - 1);
 			}
-			localStorage['commentHistory0'] = a;
+			localStorage['commentHistory1'] = a;
 		}
 		
 		NES_updateCommentList();
 		
-		SubmitPost(true);
-		e.preventDefault();
+		return false;
 	});
 	
 	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
