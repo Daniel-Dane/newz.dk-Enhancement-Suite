@@ -2,8 +2,8 @@
  @name           newz.dk Enhancement Suite
  @url            https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js
 */
-var nesVersion = "2.0 alpha";
-var NES_loaded = NES_loaded || false;
+NES_version = "2.0 alpha";
+NES_loaded = NES_loaded || false;
 
 // Følgende indsættes i indstillinger -> stylesheet
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
@@ -15,15 +15,15 @@ if ((typeof localStorage == 'undefined') || (typeof window.history.pushState == 
 } else {
 	if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!NES_loaded)) {
 		NES_loaded = true;
-		var startHash = location.hash;  // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-		var postSortByRating = false;   // true, når der er trykket på "Sorter indlæg efter rating"
+		var NES_startHash = location.hash;  // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+		var NES_postSortByRating = false;   // true, når der er trykket på "Sorter indlæg efter rating"
 		$(document).ready(function() {
-			init();
+			NES_init();
 		});
 	}
 }
 
-function init() {
+function NES_init() {
 	// NES-indstillingsboksen
 	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0; width: 600px;" id="NES-menu" />').insertAfter('#nmTopBar')
 	.html(' \
@@ -44,7 +44,7 @@ function init() {
 		<input type="checkbox" id="applyTargetBlank" name="applyTargetBlank"><label for="applyTargetBlank"> Åbn alle links i ny fane</label> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
-			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk_Enhancement_Suite">kynz</a>! Version ' + nesVersion + '. \
+			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk_Enhancement_Suite">kynz</a>! Version ' + NES_version + '. \
 		</div> \
 	</div> \
 	').hide();
@@ -94,11 +94,11 @@ function init() {
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
-			updateSettingsSub();
+			NES_updateSettingsSub();
 		}).attr('checked', (localStorage[handlerList[i]] == 'true'));
 	}
 	$("#sortRating").bind("click", function() {
-		postSortByRating = true;
+		NES_postSortByRating = true;
 		$('.comments_new').remove();
 		$(this).attr('disabled', true).text('* POOF *');
 		
@@ -123,10 +123,10 @@ function init() {
 		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
 			href = NES_getUrl();
 			
-			if (startHash != '') {
-				$(window).scrollTop($('.comment h2:has(a[name=' + startHash.substr(1) + '])').offset().top);
-				history.replaceState({page: _pageId}, '', href + '/page' + _pageId + startHash);
-				startHash = '';
+			if (NES_startHash != '') {
+				$(window).scrollTop($('.comment h2:has(a[name=' + NES_startHash.substr(1) + '])').offset().top);
+				history.replaceState({page: _pageId}, '', href + '/page' + _pageId + NES_startHash);
+				NES_startHash = '';
 			}
 			
 			$(".loading").hide();
@@ -136,9 +136,9 @@ function init() {
 				$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
 			});
 			
-			fixTitle();
-			insertLoadingGif();
-			fixPosts();
+			NES_fixTitle();
+			NES_insertLoadingGif();
+			NES_fixPosts();
 			
 			$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 		}
@@ -149,17 +149,17 @@ function init() {
 		if ((options.data.match('class=Z4_Forum_Item&action=usersave') !== null) || (options.url.match('class=Z4_Forum_Item&action=new') !== null)) {
 			var a = $('#comments > div:last');
 			if (a.text().trim() != '')
-				fixPosts(a);
+				NES_fixPosts(a);
 		}
 		
 		// Preview (slået fra, når man opretter en tråd)
 		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1))
-			fixPosts($('#post_preview .content'))
+			NES_fixPosts($('#post_preview .content'))
 	});
 	
 	$(document).ajaxStop(function() {
-		if (postSortByRating) {
-			postSortByRating = false;
+		if (NES_postSortByRating) {
+			NES_postSortByRating = false;
 			var point = new Array();
 			point[1] = 2;
 			point[2] = 1;
@@ -202,7 +202,7 @@ function init() {
 			// Hopper til top, så brugeren ved, at der skiftes side
 			$(window).scrollTop(0);
 			
-			startHash = '';
+			NES_startHash = '';
 			var p = Math.ceil(a / _pageSize);
 			history.replaceState({page: p}, '', href + '/page' + p + '#' + a);
 			NES_fetchPage(p, 2, a);
@@ -234,40 +234,40 @@ function init() {
 		}
 	}
 	
-	fixTitle();
-	ajaxPageChange();
-	updateSettingsSub();
+	NES_fixTitle();
+	NES_ajaxPageChange();
+	NES_updateSettingsSub();
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage)
 		NES_fetchPage(_lastPage, 0);
 	else {
 		history.replaceState({page: _pageId}, '', location.href);
-		fixPosts();
+		NES_fixPosts();
 	}
 }
 
-function updateSettingsSub() {
+function NES_updateSettingsSub() {
 	$('#addLinkToPostReferenceSub > input').attr('disabled', !$('#addLinkToPostReference').attr('checked'));
 	$('#showPostOnMouseOverReferenceSub input').attr('disabled', (!$('#showPostOnMouseOverReference').attr('checked') || !$('#addLinkToPostReference').attr('checked')));
 }
 
 // Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg og ved den løbende AJAX-indhentning af nye indlæg
 // MANGLER: Efter endt redigering
-function fixPosts(object) {
+function NES_fixPosts(object) {
 	if (typeof object == "undefined")
 		object = document;
 	
-	improvedQuote(object);
-	addPermLink(object);
+	NES_improvedQuote(object);
+	NES_addPermLink(object);
 	if (applyTargetBlank)
 		$('a', object).attr('target', '_blank');
-	addMiniQuote(object);
-	addLinkToPostReferenceFunc(object);
+	NES_addMiniQuote(object);
+	NES_addLinkToPostReferenceFunc(object);
 }
 
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
-function addMiniQuote(object) {
+function NES_addMiniQuote(object) {
 	$('.quoteitemNES', object).after(' (<a href="#" class="miniquote">miniquote</a>)');
 	$('.miniquote', object).bind('click', function(e) {
 		e.preventDefault();
@@ -286,14 +286,16 @@ function addMiniQuote(object) {
 	});	
 }
 
-function addLinkToPostReferenceFunc(object) {
+function NES_addLinkToPostReferenceFunc(object) {
 	if (addLinkToPostReference) {
 		$('.comment .text_content p:contains("#")', object).each(function() {
 			$(this.childNodes).each(function() {
 				if (this.nodeType == 3) {
-					var p = $(this).parents('.comment').attr('id');
 					if ($(this).parents('#post_preview').length == 1)
-						p = 'post_preview';
+						var p = 'post_preview';
+					else
+						var p = $(this).parents('.comment').attr('id');
+					
 					// #tal efterfulgt af enten mellemrum, linjeknæk, kolon, komma eller punktum samt ved afsluttet afsnit eller linje
 					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|<\/p>|$)/gm, function(str, a, b) {
 						if (a < 100)
@@ -309,7 +311,7 @@ function addLinkToPostReferenceFunc(object) {
 	}
 }
 
-function addPermLink(object) {
+function NES_addPermLink(object) {
 	href = NES_getUrl();
 	
 	$('.comment h2', object).each(function() {
@@ -321,7 +323,7 @@ function addPermLink(object) {
 
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
 // Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk med vigtige ændringer. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
-function improvedQuote(object) {
+function NES_improvedQuote(object) {
 	// newz.dk unbinder selv efterfølgende, så vi bliver nødt til at omdøbe class (faktisk fjerne den pga. Chrome-bug)
 	$(".quoteitem", object).replaceWith('<a href="#" class="quoteitemNES">Citer indlæg</a>');
 	$(".quoteitemNES", object).bind("click", function(e) {
@@ -469,7 +471,7 @@ function improvedQuote(object) {
 
 // Sætter en ordentlig overskrift på tråden
 // newz.dk sætter normalt kun side-nr. ind i <h1>, når man skifter side, tsk tsk
-function fixTitle() {
+function NES_fixTitle() {
 	if (window._lastPage > 1) {
 		var regexMatch;
 		if (regexMatch = /(Side \d+ » )*([^»]+) ».+/.exec(document.title))
@@ -482,13 +484,13 @@ function fixTitle() {
 	}
 }
 
-function insertLoadingGif() {
+function NES_insertLoadingGif() {
 	// Indsætter en loading.gif
 	$('<span/>').insertAfter('.pagination').html('<div class="loading" style="float: left; margin: -2px 10px; padding: 5px; position: relative; width: 330px;"><p><img src="data:image/gif;base64,R0lGODlhEAAQAPYAAP///zMzM/r6+qenp5+fn/Hx8dLS0t/f37GxsTMzM6SkpNHR0VpaWnR0dO/v77e3t6mpqfT09JqamklJScHBwba2tq6urvb29vn5+bm5udfX12lpaTw8PH9/f+Tk5Ozs7MnJyVRUVF5eXmpqatzc3M/Pz2JiYnFxcWRkZGxsbNnZ2dTU1Hp6esLCwu7u7oyMjLy8vMbGxsfHx35+fnx8fIGBgZ6enubm5peXl/z8/LS0tEZGRlZWVnd3dzY2NnJyctbW1l9fX3l5eUdHR/Ly8t7e3q+vr+fn5+rq6mZmZrq6uk9PT0xMTL6+vo6Ojm5ublxcXIeHh9ra2szMzFFRUZaWlmdnZ3Z2djo6Ojk5Ob+/v+np6W9vb/f398TExISEhIaGhuLi4rKyskFBQU5OTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/h1CdWlsdCB3aXRoIEdJRiBNb3ZpZSBHZWFyIDQuMAAh/hVNYWRlIGJ5IEFqYXhMb2FkLmluZm8AIfkECQoAAAAsAAAAABAAEAAAB2iAAIKDICImJYOJAAsSGgAhCQkoioIGDAkbHpcJKYIRiQSRHBYLIycqABgZn4IHDRMdH5QYig4UBZSKAggPuZQDkRW+ACSIoQkWw8UABQoQF8PR0qm+tIkRGdaJqqyD3SQk3tEliNPRgQAh+QQJCgAAACwAAAAAEAAQAAAHa4AAgoMHNDU3g4mKMwkJLzk6PRk5gysvGhcvjTgQOwk7MIMsCQ0yLhI2BSGNCTWDLSkxBYkVPD48MoMuMLOKMD8gisLDACUkxIIkJYLGyADKztHSgxjE1YkRGdeJGBkRit/Jx4LhxCXL08iBACH5BAkKAAAALAAAAAAQABAAAAdogACCgwIID4OIiQADCQkVACUSKokRggSNFkBBCSZFgxEZGAAFChAXOD6NRoiiiR5CQzRHiooOFES0tCAiJiWQJLkAIY0ov8EMjSnBgwsjJ5PLua2K04Kg1YIYGZWI3AAkwNbLJb7R0YEAIfkECQoAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkAEQLTlKEERkYhQ9JCVGFmYVISk9Ti4UfMAWmhQc0NTcAJZCLMwkJL7Gzhy+2OKuCLhI2qqtGUA+fhhBLCUwwjJiFIbYJNZaOkBVMCVQyi4mCTVHev4aBACH5BAkKAAAALAAAAAAQABAAAAdogACCg4SFhoIlJYeDEYMkJIyFERkYhhgZjYSVh5uLnp+CAggPiJCLAwkJFQAlpocEqRagAAUKEBegC05FhZ2DK1ZYVryCk5UgIiYlVT6pRoSZIakoR1dZQluHDKkpAEdaH4sLIycqhoEAIfkECQoAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkjIURGRiGGBmNhJWHm4uen4clkJ4kigCin6WgixZQD4ZdIF2DRhMJIRmERFMsGoNcCcEpBzQ1Nw9JCWCDGUMJPDIzwS8fXl8LhE1RMgAvwTirLhI2BYaBACH5BAkKAAAALAAAAAAQABAAAAdngACCg4SFhoIlJYeDEYMkJIyFERkYhhgZjYSVh5uLniAiJoqegiEJCSieJIoMpymqigsjJyqkhCtOUrYABkEcT2GWhDanHBYCCA+Cl5kAYVxZMw4DpxWCzYJbWkgABKcWuwUKEBeGgQAh+QQJCgAAACwAAAAAEAAQAAAHaIAAgoOEhYICYj1KgiUlhoJGYwlMGQAkJIMRhFwJnU+FGBmaghlkPiIyhhiFMD8xj4QHNDU3sIQznS+2JI4vnTi7ji4SNgW2hREyAseDJUIrXaqFLAkNr4Sho4JTX1NElpiC2o+NzOaBADsAAAAAAAAAAAA=" /> Weeeeeeeeee.</p></div>');
 	$(".loading").hide();
 }
 
-function ajaxPageChange() {
+function NES_ajaxPageChange() {
 	if (
 		(location.pathname.indexOf('/om-os/statistik/') == 0) ||         // Slå fra under statistikker
 		(/^.*newz.dk(\/)?(page\d+)?$/.test(location.href)) ||            // Slå fra på forsiden
@@ -496,11 +498,11 @@ function ajaxPageChange() {
 	)
 		return;
 
-	insertLoadingGif();
+	NES_insertLoadingGif();
 	
 	$('.pagination a').live('click', function(e) {
 		e.preventDefault();
-		startHash = '';
+		NES_startHash = '';
 		var p = /page(\d+)$/.exec(this.href)[1];
 		history.pushState({page: p}, '', href + '/page' + p);
 		NES_fetchPage(p, 1);
