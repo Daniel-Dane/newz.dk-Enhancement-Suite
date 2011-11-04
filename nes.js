@@ -513,7 +513,7 @@ function NES_updateCommentList() {
 		var b = localStorage['commentHistory' + i];
 		var l = b.length;
 		if (l > 79)
-			b = b.substr(0, 40) + b.substr(l - 40, l - 40);
+			b = b.substr(0, 40) + '[...]' + b.substr(l - 40, l - 40);
 		a.append('<option value="' + i + '">' + b + '</option>');
 	}
 }
