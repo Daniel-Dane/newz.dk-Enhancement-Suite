@@ -235,7 +235,8 @@ function NES_init() {
 	}
 	
 	// Gemmer de sidste fem indlæg
-	$("#id_commentpost").unbind().bind("click", function(e) {
+	$("#id_commentpost").unbind();
+	$("#id_commentpost").bind("click", function(e) {
 		function getIt(v) {
 			var r = localStorage['commentHistory' + v];
 			return (r == null) ? '' : r;
