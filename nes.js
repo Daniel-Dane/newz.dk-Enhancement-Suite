@@ -262,6 +262,7 @@ function NES_init() {
 		var a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
 			localStorage['commentHistory0'] = a;
+			NES_updateCommentList();
 		}
 	}, 5000);
 	
