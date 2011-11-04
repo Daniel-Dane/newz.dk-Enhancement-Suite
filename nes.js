@@ -506,7 +506,7 @@ function NES_improvedQuote(object) {
 
 function NES_updateCommentList() {
 	$('#commentStorage').empty();
-	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()]); $(\'#id_comment\').keyup();" style="max-width: 150px">')
+	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()]).keyup();" style="max-width: 150px">')
 		.appendTo('#commentStorage');
 	a.append('<option value="-1">Tidligere indlæg</option>');
 	for (var i = 0; i < 6; i++) {
