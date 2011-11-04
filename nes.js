@@ -235,8 +235,8 @@ function NES_init() {
 	}
 	
 	// Gemmer de sidste fem indlæg
-	$("#id_commentpost").replaceWith('<input type="submit" value="Indsend" id="id_commentpost" name="button_submit">');
-	$("#id_commentpost").bind("click", function(e) {
+	$("#id_commentpost").replaceWith('<input type="submit" value="Indsend" id="id_commentpost2" name="button_submit">');
+	$("#id_commentpost2").bind("click", function(e) {
 		function getIt(v) {
 			var r = localStorage['commentHistory' + v];
 			return (r == null) ? '' : r;
