@@ -274,9 +274,10 @@ function NES_init() {
 	NES_updateSettingsSub();
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
-	if (window._pageId > window._lastPage)
+	if (window._pageId > window._lastPage) {
+		$('#postcontainer').prepend('Hopper lige til den rigtige side...')
 		NES_fetchPage(_lastPage, 0);
-	else if (window._pageId) {
+	} else if (window._pageId) {
 		history.replaceState({page: _pageId}, '', location.href);
 		NES_fixPosts();
 	}
