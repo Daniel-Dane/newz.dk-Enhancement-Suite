@@ -116,7 +116,7 @@ function NES_init() {
 	});
 	
 	// Fikser bredden af indlæg, så [list] ikke sniger sig ind over højresiden af indlæggene samt nyhedslisten, så teksten ikke går for langt og ikke kan læses
-	$("<style type='text/css'>.text_content{width: 381px;} .indexsection ul li {width: inherit !important;}</style>").appendTo("head");
+	$("<style type='text/css'>.text_content{width: 381px;} .indexsection ul li {width: inherit !important;}</style> .NES_postReferenceLink {color: DarkGreen;}").appendTo("head");
 	
 	$(document).ajaxSuccess(function(event, xhr, options) {
 		// Retter newz.dk's buggede AJAX
@@ -338,7 +338,7 @@ function NES_addLinkToPostReferenceFunc(object) {
 						else
 							c = a;
 						var him = $('.comment:has(a[name=' + c + '])').attr('id');
-						return '<a' + (((showPostOnMouseOverReference) && ((c > 50 * (_pageId - 1)) && (c <= 50 * (_pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost(\'' + him + '\')" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : ' onclick="return true;"') + ' href="#' + c + '">#' + a + '</a>' + b;
+						return '<a class="NES_postReferenceLink"' + (((showPostOnMouseOverReference) && ((c > 50 * (_pageId - 1)) && (c <= 50 * (_pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost(\'' + him + '\')" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : ' onclick="return true;"') + ' href="#' + c + '">#' + a + '</a>' + b;
 					}).replace(/&/gm, '&amp;'));
 				}
 			});
