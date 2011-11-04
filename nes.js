@@ -258,16 +258,6 @@ function NES_init() {
 	});
 	
 	// Indholdet af kommentarfeltet gemmes løbende, så det kan gendannes (hvert 5. sekund)
-	/*
-	setInterval(function() {
-		var a = $("#id_comment").val();
-		if ($.trim(a).length > 1) {
-			localStorage['commentHistory0'] = a;
-			NES_updateCommentList();
-		}
-	}, 5000);
-	*/
-	
 	$("#id_comment").keyup(function() {
 		a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
@@ -516,7 +506,7 @@ function NES_improvedQuote(object) {
 
 function NES_updateCommentList() {
 	$('#commentStorage').empty();
-	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()])" style="max-width: 150px">')
+	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()]); $(\'#id_comment\').keyup();" style="max-width: 150px">')
 		.appendTo('#commentStorage');
 	a.append('<option value="-1">Tidligere indlæg</option>');
 	for (var i = 0; i < 6; i++) {
