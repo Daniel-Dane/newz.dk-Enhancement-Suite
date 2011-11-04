@@ -2,8 +2,8 @@
  @name           newz.dk Enhancement Suite
  @url            https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js
 */
-NES_version = "2.0 alpha";
-NES_loaded = NES_loaded || false;
+var NES_version = "2.0 alpha";
+var NES_loaded = NES_loaded || false;
 
 // Følgende indsættes i indstillinger -> stylesheet
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
