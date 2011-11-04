@@ -257,6 +257,14 @@ function NES_init() {
 		return false;
 	});
 	
+	// Indholdet af kommentarfeltet gemmes løbende, så det kan gendannes (hvert 5. sekund)
+	setInterval(function() {
+		var a = $("#id_comment").val();
+		if ($.trim(a).length > 1) {
+			localStorage['commentHistory0'] = a;
+		}
+	}, 5000);
+	
 	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
 	NES_updateCommentList();
 	
