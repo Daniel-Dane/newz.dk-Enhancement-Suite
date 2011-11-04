@@ -235,7 +235,7 @@ function NES_init() {
 	}
 	
 	// Gemmer de sidste fem indlæg
-	$("#id_commentpost").unbind("click").bind("click", function(e) {
+	$("#id_commentpost").unbind().bind("click", function(e) {
 		function getIt(v) {
 			var r = localStorage['commentHistory' + v];
 			return (r == null) ? '' : r;
@@ -260,7 +260,7 @@ function NES_init() {
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage)
 		NES_fetchPage(_lastPage, 0);
-	else {
+	else if (window._pageId) {
 		history.replaceState({page: _pageId}, '', location.href);
 		NES_fixPosts();
 	}
