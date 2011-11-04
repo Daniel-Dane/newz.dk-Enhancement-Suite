@@ -116,7 +116,7 @@ function NES_init() {
 	});
 	
 	// Fikser bredden af indlæg, så [list] ikke sniger sig ind over højresiden af indlæggene samt nyhedslisten, så teksten ikke går for langt og ikke kan læses
-	$("<style type='text/css'>.text_content{width: 381px;} .indexsection ul li {width: inherit !important;}</style> .NES_postReferenceLink {color: DarkGreen;}").appendTo("head");
+	$("<style type='text/css'>.text_content{width: 381px;} .indexsection ul li {width: inherit !important;} .NES_postReferenceLink {color: DarkGreen;}</style>").appendTo("head");
 	
 	$(document).ajaxSuccess(function(event, xhr, options) {
 		// Retter newz.dk's buggede AJAX
