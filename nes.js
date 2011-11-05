@@ -335,10 +335,10 @@ function NES_addLinkToPostReferenceFunc(object) {
 	if (addLinkToPostReference) {
 		$('.comment .text_content p:contains("#")', object).each(function() {
 			if ($(this).parents('#post_preview').length == 1) {
-				var postId = $('h2 a:first', '.comment:not([id=]):last').attr('name');
+				var postNum = $('h2 a:first', '.comment:not([id=]):last').attr('name');
 				var p = 'post_preview';
 			} else {
-				var postId = $(this).parents('.comment').find('h2 a:first').attr('name');
+				var postNum = $(this).parents('.comment').find('h2 a:first').attr('name');
 				var p = $(this).parents('.comment').attr('id');
 			}
 			
@@ -346,9 +346,11 @@ function NES_addLinkToPostReferenceFunc(object) {
 				if (this.nodeType == 3) {
 					// #tal efterfulgt af enten mellemrum, linjeknæk, kolon, komma eller punktum samt ved afsluttet afsnit eller linje
 					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|\?|!|<\/p>|$)/gm, function(str, a, b) {
+						if (a == 0 || a == postNum)
+							return a + b;
 						if (a < 100 && _pageId > 20) { // Fra indlæg #1001 vil #99 betyder #999 osv.
 							c = Math.floor((50 * (_pageId - 1)) / 100) * 100 + +a;
-							if (c > postId)
+							if (c > postNum)
 								c -= 100;
 						} else
 							c = a;
