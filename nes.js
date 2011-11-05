@@ -334,6 +334,8 @@ function NES_addMiniQuote(object) {
 function NES_addLinkToPostReferenceFunc(object) {
 	if (addLinkToPostReference) {
 		$('.comment .text_content p:contains("#")', object).each(function() {
+			var postId = $(this).parents('.comment').find('h2 a:first').attr('name');
+			alert(postId);
 			$(this.childNodes).each(function() {
 				if (this.nodeType == 3) {
 					if ($(this).parents('#post_preview').length == 1)
@@ -343,7 +345,7 @@ function NES_addLinkToPostReferenceFunc(object) {
 					
 					// #tal efterfulgt af enten mellemrum, linjeknæk, kolon, komma eller punktum samt ved afsluttet afsnit eller linje
 					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|\?|!|<\/p>|$)/gm, function(str, a, b) {
-						if (a < 100)
+						if (a < 100 && _pageId > 20) // Fra indlæg #1001 vil #99 betyder #999 osv.
 							c = Math.floor((50 * (_pageId - 1)) / 100) * 100 + +a;
 						else
 							c = a;
