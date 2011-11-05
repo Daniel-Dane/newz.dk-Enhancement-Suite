@@ -8,18 +8,24 @@ var NES_loaded = NES_loaded || false;
 // Følgende indsættes i indstillinger -> stylesheet
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
 
-if ((typeof localStorage == 'undefined') || (typeof window.history.pushState == 'undefined')) {
-	$(document).ready(function() {
-		$('#nmSiteSelect').next().find('a:last').before('Failbrowser. NES kan ikke køre her. | ');
-	});
+if (!$) {
+	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
+	// Når jQuery er cached, burde det ikke være noget problem.
+	alert('Opdatér (F5, men IKKE Ctrl+F5) lige. Får du denne pop-up flere gange, skal du fjerne NES og fortælle os det.');
 } else {
-	if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!NES_loaded)) {
-		NES_loaded = true;
-		var NES_startHash = location.hash;  // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-		var NES_postSortByRating = false;   // true, når der er trykket på "Sorter indlæg efter rating"
+	if ((typeof localStorage == 'undefined') || (typeof window.history.pushState == 'undefined')) {
 		$(document).ready(function() {
-			NES_init();
+			$('#nmSiteSelect').next().find('a:last').before('Failbrowser. NES kan ikke køre her. | ');
 		});
+	} else {
+		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!NES_loaded)) {
+			NES_loaded = true;
+			var NES_startHash = location.hash;  // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+			var NES_postSortByRating = false;   // true, når der er trykket på "Sorter indlæg efter rating"
+			$(document).ready(function() {
+				NES_init();
+			});
+		}
 	}
 }
 
