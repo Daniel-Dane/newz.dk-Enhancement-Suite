@@ -241,15 +241,13 @@ function NES_init() {
 	$("#id_commentpost").bind("click", function(e) {
 		e.preventDefault();
 		
-		function getIt(v) {
-			var r = localStorage['commentHistory' + v];
-			return (r == null) ? '' : r;
-		}
-		
 		var a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
 			for (var i = 5; i > 1; i--) {
-				localStorage['commentHistory' + i] = getIt(i - 1);
+				localStorage['commentHistory' + i] = function(v) {
+					var r = localStorage['commentHistory' + v];
+					return (r == null) ? '' : r;
+				}(i - 1);
 			}
 			localStorage['commentHistory1'] = a;
 		}
