@@ -39,7 +39,7 @@ function NES_init() {
 			<button id="sortRating">Sorter indlæg efter rating</button><br> \
 			<br><span style="float: right">pewbe mode: &nbsp;</span><br><select id="pewbeMode" style="float: right;"><option value="1">informativ</option><option value="2">interessant</option><option value="4">relevant</option><option value="3">sjov</option><option selected="selected" value="0">neutral</option><option value="5">gentagelse</option><option value="6">irrelevant</option><option value="7">flamebait</option></select> \
 		</div> \
-		<input type="checkbox" id="addLinkToPostReference" name="addLinkToPostReference"><label for="addLinkToPostReference"> "#tal"-henvisninger får et link (understøtter ikke <a href="http://newz.dk/~chewy">Chewy</a>)</label><br> \
+		<input type="checkbox" id="addLinkToPostReference" name="addLinkToPostReference"><label for="addLinkToPostReference"> "#tal"-henvisninger får et link</label><br> \
 		<div id="addLinkToPostReferenceSub" style="padding-left: 16px;"> \
 			<input type="checkbox" id="showPostOnMouseOverReference" name="showPostOnMouseOverReference"><label for="showPostOnMouseOverReference"> Vis det refererede indlæg ved mouseover (beta)</label><br> \
 			<div id="showPostOnMouseOverReferenceSub" style="padding-left: 16px;"> \
