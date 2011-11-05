@@ -2,7 +2,7 @@
  @name           newz.dk Enhancement Suite
  @url            https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js
 */
-var NES_version = "2.0 alpha";
+var NES_version = "2.0 beta";
 var NES_loaded = NES_loaded || false;
 
 // Følgende indsættes i indstillinger -> stylesheet
@@ -381,7 +381,7 @@ function NES_improvedQuote(object) {
 		// Finder indlæggets nummer (ikke id)
 		var itemId = $post.find("h2 a").attr("name");
 		
-		// Finder indlæggets ejermand (den som prutten ikke lugte kan)
+		// Finder indlæggets ejermand
 		var username = $post.find("h2 a:last").html();
 		
 		// Hvis den ikke kunne findes, prøv et andet sted (dunno hvor)
