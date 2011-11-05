@@ -13,8 +13,8 @@ if (!$) {
 	// Når jQuery er cached, burde det ikke være noget problem.
 	alert('Opdatér (F5, men IKKE Ctrl+F5) lige. Får du denne pop-up flere gange, skal du fjerne NES og fortælle os det.');
 } else {
-	if ((typeof localStorage == 'undefined') || (typeof window.history.pushState == 'undefined')) {
-		$(document).ready(function() {
+	if ((typeof localStorage === 'undefined') || (typeof window.history.pushState === 'undefined')) {
+		$(document).ready(function () {
 			$('#nmSiteSelect').next().find('a:last').before('Failbrowser. NES kan ikke køre her. | ');
 		});
 	} else {
@@ -22,7 +22,7 @@ if (!$) {
 			NES_loaded = true;
 			var NES_startHash = location.hash;  // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 			var NES_postSortByRating = false;   // true, når der er trykket på "Sorter indlæg efter rating"
-			$(document).ready(function() {
+			$(document).ready(function () {
 				NES_init();
 			});
 		}
@@ -57,7 +57,7 @@ function NES_init() {
 	
 	// "NES-indstillinger"-knappen
 	$('#nmSiteSelect').next().find('a:last').before('<a href="#" id="NES-toggle">NES-indstillinger</a> | ');
-	$('#NES-toggle').click(function(e) {
+	$('#NES-toggle').click(function (e) {
 		e.preventDefault();
 		$('#NES-menu').toggle();
 		return false;
