@@ -335,7 +335,6 @@ function NES_addLinkToPostReferenceFunc(object) {
 	if (addLinkToPostReference) {
 		$('.comment .text_content p:contains("#")', object).each(function() {
 			var postId = $(this).parents('.comment').find('h2 a:first').attr('name');
-			alert(postId);
 			$(this.childNodes).each(function() {
 				if (this.nodeType == 3) {
 					if ($(this).parents('#post_preview').length == 1)
