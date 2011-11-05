@@ -237,8 +237,9 @@ function NES_init() {
 	}
 	
 	// Gemmer de sidste fem indlæg
-	// Da NES kører før resten af newz.dk's framework, startes dette event først, så vi når at gemme indholdet
-	$("#id_commentpost").bind("click", function(e) {
+	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
+	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
+	$("#id_commentpost").unbind().attr('id', 'id_commentpost2').bind("click", function(e) {
 		e.preventDefault();
 		
 		var a = $("#id_comment").val();
@@ -253,7 +254,7 @@ function NES_init() {
 		}
 		
 		NES_updateCommentList();
-		
+		SubmitPost(true);
 		return false;
 	});
 	
