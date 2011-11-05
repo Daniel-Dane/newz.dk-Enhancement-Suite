@@ -336,7 +336,7 @@ function NES_addLinkToPostReferenceFunc(object) {
 		var isInPreview = ($(this).parents('#post_preview').length == 1);
 		$('.comment .text_content p:contains("#")', object).each(function() {
 			if (isInPreview)
-				var postId = $('.comment:last').find('h2 a:first').attr('name');
+				var postId = $('h2 a:first', '.comment:not([id=]):last').attr('name');
 			else
 				var postId = $(this).parents('.comment').find('h2 a:first').attr('name');
 			
@@ -351,10 +351,8 @@ function NES_addLinkToPostReferenceFunc(object) {
 					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|\?|!|<\/p>|$)/gm, function(str, a, b) {
 						if (a < 100 && _pageId > 20) { // Fra indlæg #1001 vil #99 betyder #999 osv.
 							c = Math.floor((50 * (_pageId - 1)) / 100) * 100 + +a;
-							if (c > postId) {
+							if (c > postId)
 								c -= 100;
-								alert(postId);
-							}
 						} else
 							c = a;
 						var him = $('.comment:has(a[name=' + c + '])').attr('id');
