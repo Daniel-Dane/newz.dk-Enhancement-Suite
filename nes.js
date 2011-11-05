@@ -121,7 +121,7 @@ function NES_init() {
 	$(document).ajaxSuccess(function(event, xhr, options) {
 		// Retter newz.dk's buggede AJAX
 		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
-			href = NES_getUrl();
+			var href = NES_getUrl();
 			
 			if (NES_startHash != '') {
 				$(window).scrollTop($('.comment h2:has(a[name=' + NES_startHash.substr(1) + '])').offset().top);
@@ -203,6 +203,7 @@ function NES_init() {
 			// Hopper til top, så brugeren ved, at der skiftes side
 			$(window).scrollTop(0);
 			
+			var href = NES_getUrl();
 			NES_startHash = '';
 			var p = Math.ceil(a / _pageSize);
 			history.replaceState({page: p}, '', href + '/page' + p + '#' + a);
@@ -276,6 +277,7 @@ function NES_init() {
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
+		var href = NES_getUrl();
 		$('#postcontainer').prepend('Hopper lige til den rigtige side...');
 		history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
 		NES_fetchPage(_lastPage, 0);
@@ -556,6 +558,7 @@ function NES_ajaxPageChange() {
 		e.preventDefault();
 		NES_startHash = '';
 		var p = /page(\d+)$/.exec(this.href)[1];
+		var href = NES_getUrl();
 		history.pushState({page: p}, '', href + '/page' + p);
 		NES_fetchPage(p, 1);
 		return false;
