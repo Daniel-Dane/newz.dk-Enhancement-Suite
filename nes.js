@@ -348,7 +348,7 @@ function NES_addLinkToPostReferenceFunc(object) {
 							c = Math.floor((50 * (_pageId - 1)) / 100) * 100 + +a;
 							if (c > postId)
 								c -= 100;
-						}else
+						} else
 							c = a;
 						var him = $('.comment:has(a[name=' + c + '])').attr('id');
 						return '<a class="NES_postReferenceLink"' + (((showPostOnMouseOverReference) && ((c > 50 * (_pageId - 1)) && (c <= 50 * (_pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost(\'' + him + '\')" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : ' onclick="return true;"') + ' href="#' + c + '">#' + a + '</a>' + b;
