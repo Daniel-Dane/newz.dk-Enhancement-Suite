@@ -351,8 +351,10 @@ function NES_addLinkToPostReferenceFunc(object) {
 					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|\?|!|<\/p>|$)/gm, function(str, a, b) {
 						if (a < 100 && _pageId > 20) { // Fra indlæg #1001 vil #99 betyder #999 osv.
 							c = Math.floor((50 * (_pageId - 1)) / 100) * 100 + +a;
-							if (c > postId)
+							if (c > postId) {
 								c -= 100;
+								alert(postId);
+							}
 						} else
 							c = a;
 						var him = $('.comment:has(a[name=' + c + '])').attr('id');
