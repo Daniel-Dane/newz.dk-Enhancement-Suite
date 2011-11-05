@@ -333,11 +333,16 @@ function NES_addMiniQuote(object) {
 
 function NES_addLinkToPostReferenceFunc(object) {
 	if (addLinkToPostReference) {
+		var isInPreview = ($(this).parents('#post_preview').length == 1);
 		$('.comment .text_content p:contains("#")', object).each(function() {
-			var postId = $(this).parents('.comment').find('h2 a:first').attr('name');
+			if (isInPreview)
+				var postId = $('.comment:last').find('h2 a:first').attr('name');
+			else
+				var postId = $(this).parents('.comment').find('h2 a:first').attr('name');
+			
 			$(this.childNodes).each(function() {
 				if (this.nodeType == 3) {
-					if ($(this).parents('#post_preview').length == 1)
+					if (isInPreview)
 						var p = 'post_preview';
 					else
 						var p = $(this).parents('.comment').attr('id');
