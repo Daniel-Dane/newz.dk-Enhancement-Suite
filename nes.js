@@ -198,6 +198,7 @@ function NES_init() {
 	$(window).bind('hashchange', function() {
 		var a = +location.hash.substr(1);
 		
+		// Indlægget befinder sig på en anden side
 		if (!isNaN(a) && (a > 0) && (a <= 50 * (_lastPage - 1) + 50) && ((a <= 50 * (_pageId - 1)) || (a > 50 * (_pageId - 1) + 50))) {
 			// Hopper til top, så brugeren ved, at der skiftes side
 			$(window).scrollTop(0);
@@ -275,7 +276,8 @@ function NES_init() {
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
-		$('#postcontainer').prepend('Hopper lige til den rigtige side...')
+		$('#postcontainer').prepend('Hopper lige til den rigtige side...');
+		history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
 		NES_fetchPage(_lastPage, 0);
 	} else if (window._pageId) {
 		history.replaceState({page: _pageId}, '', location.href);
@@ -584,9 +586,7 @@ function NES_fetchPage(pageNo, state, hash) {
 			
 			href = NES_getUrl();
 			
-			if (state == 0)
-				history.replaceState({page: _pageId}, '', href + '/page' + _pageId);
-			else if (state == 1) {
+			if (state == 1) {
 				$(window).scrollTop(0);
 			} else if (state == 2) {
 				$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
