@@ -342,7 +342,7 @@ function NES_addLinkToPostReferenceFunc(object) {
 						var p = $(this).parents('.comment').attr('id');
 					
 					// #tal efterfulgt af enten mellemrum, linjeknæk, kolon, komma eller punktum samt ved afsluttet afsnit eller linje
-					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|<\/p>|$)/gm, function(str, a, b) {
+					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|\?|!|<\/p>|$)/gm, function(str, a, b) {
 						if (a < 100)
 							c = Math.floor((50 * (_pageId - 1)) / 100) * 100 + +a;
 						else
