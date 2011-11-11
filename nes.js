@@ -33,7 +33,7 @@ function NES_init() {
 	// NES-indstillingsboksen
 	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0; width: 600px;" id="NES-menu" />').insertAfter('#nmTopBar')
 	.html(' \
-	<h3 style=\'background: url("http://newz.dk.css.zfour.dk/gfx/default/bg_h3.png") repeat-x scroll 100% 0 transparent;\'><span>Super newz.dk Enhancement Suite (NES)</span></h3> \
+	<h3 style=\'background: url("http://newz.dk.css.zfour.dk/gfx/default/bg_h3.png") repeat-x scroll 100% 0 transparent;\'><span>Super newz.dk Enhancement Suite (SNES)</span></h3> \
 	<div style="text-align: left; padding-left: 12px;"> \
 		<div style="float: right;"> \
 			<button id="sortRating">Sorter indlæg efter rating</button><br> \
@@ -50,7 +50,7 @@ function NES_init() {
 		<input type="checkbox" id="applyTargetBlank" name="applyTargetBlank"><label for="applyTargetBlank"> Åbn alle links i ny fane</label> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
-			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om NES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk_Enhancement_Suite">kynz</a>! Version ' + NES_version + '. \
+			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om SNES på <a href="http://www.knowyournewz.dk/index.php?title=Newz.dk_Enhancement_Suite">kynz</a>! Version ' + NES_version + '. \
 		</div> \
 	</div> \
 	').hide();
