@@ -300,14 +300,14 @@ function NES_updateSettingsSub() {
 // Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg og ved den løbende AJAX-indhentning af nye indlæg
 // MANGLER: Efter endt redigering
 function NES_fixPosts(object) {
-	if (typeof object == "undefined")
-		object = document;
-	
-	NES_improvedQuote(object);
-	NES_addPermLink(object);
-	if (applyTargetBlank)
-		$('a', object).attr('target', '_blank');
-	NES_addMiniQuote(object);
+	//if (typeof object == "undefined")
+	//	object = document;
+	//
+	//NES_improvedQuote(object);
+	//NES_addPermLink(object);
+	//if (applyTargetBlank)
+	//	$('a', object).attr('target', '_blank');
+	//NES_addMiniQuote(object);
 	//NES_addLinkToPostReferenceFunc(object);
 }
 
