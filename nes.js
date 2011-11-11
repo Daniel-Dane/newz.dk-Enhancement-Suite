@@ -1,5 +1,5 @@
 ﻿/**
- @name           newz.dk Enhancement Suite
+ @name           Super newz.dk Enhancement Suite
  @url            https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js
 */
 var NES_version = "2.0 beta";
@@ -11,7 +11,7 @@ var NES_loaded = NES_loaded || false;
 if (!$) {
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
 	// Når jQuery er cached, burde det ikke være noget problem.
-	alert('Opdatér (F5, men IKKE Ctrl+F5) lige. Får du denne pop-up flere gange, skal du fjerne NES og fortælle os det.');
+	alert('Opdatér (F5, men IKKE Ctrl+F5) lige. Får du denne pop-up flere gange, skal du fjerne NES og fortælle om det.');
 } else {
 	if ((typeof localStorage === 'undefined') || (typeof window.history.pushState === 'undefined')) {
 		$(document).ready(function () {
