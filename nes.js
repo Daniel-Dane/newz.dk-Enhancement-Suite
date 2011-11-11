@@ -33,7 +33,7 @@ function NES_init() {
 	// NES-indstillingsboksen
 	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0; width: 600px;" id="NES-menu" />').insertAfter('#nmTopBar')
 	.html(' \
-	<h3 style=\'background: url("http://newz.dk.css.zfour.dk/gfx/default/bg_h3.png") repeat-x scroll 100% 0 transparent;\'><span>newz.dk Enhancement Suite (NES)</span></h3> \
+	<h3 style=\'background: url("http://newz.dk.css.zfour.dk/gfx/default/bg_h3.png") repeat-x scroll 100% 0 transparent;\'><span>Super newz.dk Enhancement Suite (NES)</span></h3> \
 	<div style="text-align: left; padding-left: 12px;"> \
 		<div style="float: right;"> \
 			<button id="sortRating">Sorter indlæg efter rating</button><br> \
