@@ -6,7 +6,7 @@
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
 // @exclude       http://*.newz.dk/banner/*
-// @version       1.1.4
+// @version       1.1.5
 // ==/UserScript==
 
 try {
@@ -27,8 +27,8 @@ if (/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) {
 		var startPage = newz._pageId; // Bruges af "Sideskift ved henvisning til indlæg på anden side"
 		var startScroll = 0;          // Bruges også af ovenstående
 		var postSortByRating = false;
-		var nesVersion = 114; // Ændres her, nedenunder, i @version og "version.info"
-		var nesVersionString = '1.1.4'; // Så doven er jeg...
+		var nesVersion = 115; // Ændres her, nedenunder, i @version og "version.info"
+		var nesVersionString = '1.1.5'; // Så doven er jeg...
 		var lastUpdateCheck = 0;
 		loadScripts();
 		$(document).ready(function() {
@@ -614,13 +614,8 @@ function insertLoadingGif() {
 }
 
 function ajaxPageChange() {
-	if (
-		(location.pathname.indexOf('/om-os/statistik/') == 0) ||            // Slå fra under statistikker
-		(/^.*newz.dk(\/)?(page\d+)?$/.test(location.href)) ||               // Slå fra på forsiden
-		(/\/rating(time|selftime|total|self)\//.test(location.pathname)) || // Slå fra under vurderingsfordelingslisterne
-		(location.pathname.indexOf('/news/queue') == 0) ||                  // Slå fra under nyhedskø
-		(location.pathname.indexOf('/news/deleted') == 0)                   // Slå fra under listen over slettede nyheder
-	)
+	// Hvis kommentarfeltet mangler, er man sikkert ikke i en tråd/nyhed (det eneste sted, hvor man kan skifte side med AJAX)
+	if ($('#id_comment').length == 0)
 		return;
 
 	insertLoadingGif();
