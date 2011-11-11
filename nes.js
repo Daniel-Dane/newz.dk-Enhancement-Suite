@@ -557,13 +557,8 @@ function NES_insertLoadingGif() {
 }
 
 function NES_ajaxPageChange() {
-	if (
-		(location.pathname.indexOf('/om-os/statistik/') == 0) ||            // Slå fra under statistikker
-		(/^.*newz.dk(\/)?(page\d+)?$/.test(location.href)) ||               // Slå fra på forsiden
-		(/\/rating(time|selftime|total|self)\//.test(location.pathname)) || // Slå fra under vurderingsfordelingslisterne
-		(location.pathname.indexOf('/news/queue') == 0) ||                  // Slå fra under nyhedskø
-		(location.pathname.indexOf('/news/deleted') == 0)                   // Slå fra under listen over slettede nyheder
-	)
+	// Hvis kommentarfeltet mangler, er man sikkert ikke i en tråd/nyhed (det eneste sted, hvor man kan skifte side med AJAX)
+	if ($('#id_comment').length == 0)
 		return;
 
 	NES_insertLoadingGif();
