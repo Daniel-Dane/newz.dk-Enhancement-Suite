@@ -56,7 +56,7 @@ function NES_init() {
 	').hide();
 	
 	// "NES-indstillinger"-knappen
-	$('#nmSiteSelect').next().find('a:last').before('<a href="#" id="NES-toggle">NES-indstillinger</a> | ');
+	$('#nmSiteSelect').next().find('a:last').before('<a href="#" id="NES-toggle">SNES-indstillinger</a> | ');
 	$('#NES-toggle').click(function (e) {
 		e.preventDefault();
 		$('#NES-menu').toggle();
