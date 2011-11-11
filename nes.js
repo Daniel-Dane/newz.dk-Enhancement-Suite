@@ -160,7 +160,7 @@ function NES_init() {
 		
 		// Preview (slået fra, når man opretter en tråd)
 		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1))
-			NES_fixPosts($('#post_preview .content'))
+			NES_fixPosts($('#post_preview .content'));
 	});
 	
 	$(document).ajaxStop(function() {
@@ -221,7 +221,7 @@ function NES_init() {
 		var a = e.state;
 		if (a == null || a.page == _pageId)
 			return;
-		console.log('onpopstate: page = ' + a.page);
+		//console.log('onpopstate: page = ' + a.page);
 		NES_fetchPage(a.page, 3);
 	};
 	
@@ -308,7 +308,7 @@ function NES_fixPosts(object) {
 	if (applyTargetBlank)
 		$('a', object).attr('target', '_blank');
 	NES_addMiniQuote(object);
-	NES_addLinkToPostReferenceFunc(object);
+	//NES_addLinkToPostReferenceFunc(object);
 }
 
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
