@@ -558,7 +558,7 @@ function NES_insertLoadingGif() {
 
 function NES_ajaxPageChange() {
 	// Hvis kommentarfeltet mangler, er man sikkert ikke i en tråd/nyhed (det eneste sted, hvor man kan skifte side med AJAX)
-	if ($('#id_comment').length == 0)
+	if (typeof _threadId == 'undefined')
 		return;
 
 	NES_insertLoadingGif();
