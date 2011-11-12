@@ -289,7 +289,8 @@ function NES_init() {
 	.bind('click', function(e) {
 		e.preventDefault();
 		var imgurl = prompt("URL til billedet:");
-		$('#id_comment').replaceSelection('[url=' + imgurl + ']' + imgurl + ' (billede)[/url]');
+		if (imgurl !== null)
+			$('#id_comment').replaceSelection('[url=' + imgurl + ']' + imgurl + ' (billede)[/url]');
 		return false;
 	});
 	
