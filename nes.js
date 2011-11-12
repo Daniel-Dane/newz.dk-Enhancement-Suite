@@ -11,7 +11,7 @@ var NES_loaded = NES_loaded || false;
 if (!$) {
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
 	// Når jQuery er cached, burde det ikke være noget problem.
-	alert('Opdatér (F5, men IKKE Ctrl+F5) lige. Får du denne pop-up flere gange, skal du fjerne NES og fortælle om det.');
+	alert('Opdatér (F5, men IKKE Ctrl+F5) lige. Får du denne pop-up flere gange, skal du fjerne SNES og fortælle om det.');
 } else {
 	if ((typeof localStorage === 'undefined') || (typeof window.history.pushState === 'undefined')) {
 		$(document).ready(function () {
@@ -37,6 +37,7 @@ function NES_init() {
 	 * Licence: GPL
 	 */
 	Encoder={EncodeType:"entity",isEmpty:function(val){if(val){return((val===null)||val.length==0||/^\s+$/.test(val))}else{return true}},arr1:new Array('&nbsp;','&iexcl;','&cent;','&pound;','&curren;','&yen;','&brvbar;','&sect;','&uml;','&copy;','&ordf;','&laquo;','&not;','&shy;','&reg;','&macr;','&deg;','&plusmn;','&sup2;','&sup3;','&acute;','&micro;','&para;','&middot;','&cedil;','&sup1;','&ordm;','&raquo;','&frac14;','&frac12;','&frac34;','&iquest;','&Agrave;','&Aacute;','&Acirc;','&Atilde;','&Auml;','&Aring;','&Aelig;','&Ccedil;','&Egrave;','&Eacute;','&Ecirc;','&Euml;','&Igrave;','&Iacute;','&Icirc;','&Iuml;','&ETH;','&Ntilde;','&Ograve;','&Oacute;','&Ocirc;','&Otilde;','&Ouml;','&times;','&Oslash;','&Ugrave;','&Uacute;','&Ucirc;','&Uuml;','&Yacute;','&THORN;','&szlig;','&agrave;','&aacute;','&acirc;','&atilde;','&auml;','&aring;','&aelig;','&ccedil;','&egrave;','&eacute;','&ecirc;','&euml;','&igrave;','&iacute;','&icirc;','&iuml;','&eth;','&ntilde;','&ograve;','&oacute;','&ocirc;','&otilde;','&ouml;','&divide;','&Oslash;','&ugrave;','&uacute;','&ucirc;','&uuml;','&yacute;','&thorn;','&yuml;','&quot;','&amp;','&lt;','&gt;','&oelig;','&oelig;','&scaron;','&scaron;','&yuml;','&circ;','&tilde;','&ensp;','&emsp;','&thinsp;','&zwnj;','&zwj;','&lrm;','&rlm;','&ndash;','&mdash;','&lsquo;','&rsquo;','&sbquo;','&ldquo;','&rdquo;','&bdquo;','&dagger;','&dagger;','&permil;','&lsaquo;','&rsaquo;','&euro;','&fnof;','&alpha;','&beta;','&gamma;','&delta;','&epsilon;','&zeta;','&eta;','&theta;','&iota;','&kappa;','&lambda;','&mu;','&nu;','&xi;','&omicron;','&pi;','&rho;','&sigma;','&tau;','&upsilon;','&phi;','&chi;','&psi;','&omega;','&alpha;','&beta;','&gamma;','&delta;','&epsilon;','&zeta;','&eta;','&theta;','&iota;','&kappa;','&lambda;','&mu;','&nu;','&xi;','&omicron;','&pi;','&rho;','&sigmaf;','&sigma;','&tau;','&upsilon;','&phi;','&chi;','&psi;','&omega;','&thetasym;','&upsih;','&piv;','&bull;','&hellip;','&prime;','&prime;','&oline;','&frasl;','&weierp;','&image;','&real;','&trade;','&alefsym;','&larr;','&uarr;','&rarr;','&darr;','&harr;','&crarr;','&larr;','&uarr;','&rarr;','&darr;','&harr;','&forall;','&part;','&exist;','&empty;','&nabla;','&isin;','&notin;','&ni;','&prod;','&sum;','&minus;','&lowast;','&radic;','&prop;','&infin;','&ang;','&and;','&or;','&cap;','&cup;','&int;','&there4;','&sim;','&cong;','&asymp;','&ne;','&equiv;','&le;','&ge;','&sub;','&sup;','&nsub;','&sube;','&supe;','&oplus;','&otimes;','&perp;','&sdot;','&lceil;','&rceil;','&lfloor;','&rfloor;','&lang;','&rang;','&loz;','&spades;','&clubs;','&hearts;','&diams;'),arr2:new Array('&#160;','&#161;','&#162;','&#163;','&#164;','&#165;','&#166;','&#167;','&#168;','&#169;','&#170;','&#171;','&#172;','&#173;','&#174;','&#175;','&#176;','&#177;','&#178;','&#179;','&#180;','&#181;','&#182;','&#183;','&#184;','&#185;','&#186;','&#187;','&#188;','&#189;','&#190;','&#191;','&#192;','&#193;','&#194;','&#195;','&#196;','&#197;','&#198;','&#199;','&#200;','&#201;','&#202;','&#203;','&#204;','&#205;','&#206;','&#207;','&#208;','&#209;','&#210;','&#211;','&#212;','&#213;','&#214;','&#215;','&#216;','&#217;','&#218;','&#219;','&#220;','&#221;','&#222;','&#223;','&#224;','&#225;','&#226;','&#227;','&#228;','&#229;','&#230;','&#231;','&#232;','&#233;','&#234;','&#235;','&#236;','&#237;','&#238;','&#239;','&#240;','&#241;','&#242;','&#243;','&#244;','&#245;','&#246;','&#247;','&#248;','&#249;','&#250;','&#251;','&#252;','&#253;','&#254;','&#255;','&#34;','&#38;','&#60;','&#62;','&#338;','&#339;','&#352;','&#353;','&#376;','&#710;','&#732;','&#8194;','&#8195;','&#8201;','&#8204;','&#8205;','&#8206;','&#8207;','&#8211;','&#8212;','&#8216;','&#8217;','&#8218;','&#8220;','&#8221;','&#8222;','&#8224;','&#8225;','&#8240;','&#8249;','&#8250;','&#8364;','&#402;','&#913;','&#914;','&#915;','&#916;','&#917;','&#918;','&#919;','&#920;','&#921;','&#922;','&#923;','&#924;','&#925;','&#926;','&#927;','&#928;','&#929;','&#931;','&#932;','&#933;','&#934;','&#935;','&#936;','&#937;','&#945;','&#946;','&#947;','&#948;','&#949;','&#950;','&#951;','&#952;','&#953;','&#954;','&#955;','&#956;','&#957;','&#958;','&#959;','&#960;','&#961;','&#962;','&#963;','&#964;','&#965;','&#966;','&#967;','&#968;','&#969;','&#977;','&#978;','&#982;','&#8226;','&#8230;','&#8242;','&#8243;','&#8254;','&#8260;','&#8472;','&#8465;','&#8476;','&#8482;','&#8501;','&#8592;','&#8593;','&#8594;','&#8595;','&#8596;','&#8629;','&#8656;','&#8657;','&#8658;','&#8659;','&#8660;','&#8704;','&#8706;','&#8707;','&#8709;','&#8711;','&#8712;','&#8713;','&#8715;','&#8719;','&#8721;','&#8722;','&#8727;','&#8730;','&#8733;','&#8734;','&#8736;','&#8743;','&#8744;','&#8745;','&#8746;','&#8747;','&#8756;','&#8764;','&#8773;','&#8776;','&#8800;','&#8801;','&#8804;','&#8805;','&#8834;','&#8835;','&#8836;','&#8838;','&#8839;','&#8853;','&#8855;','&#8869;','&#8901;','&#8968;','&#8969;','&#8970;','&#8971;','&#9001;','&#9002;','&#9674;','&#9824;','&#9827;','&#9829;','&#9830;'),HTML2Numerical:function(s){return this.swapArrayVals(s,this.arr1,this.arr2)},NumericalToHTML:function(s){return this.swapArrayVals(s,this.arr2,this.arr1)},numEncode:function(s){if(this.isEmpty(s))return"";var e="";for(var i=0;i<s.length;i++){var c=s.charAt(i);if(c<" "||c>"~"){c="&#"+c.charCodeAt()+";"}e+=c}return e},htmlDecode:function(s){var c,m,d=s;if(this.isEmpty(d))return"";d=this.HTML2Numerical(d);arr=d.match(/&#[0-9]{1,5};/g);if(arr!=null){for(var x=0;x<arr.length;x++){m=arr[x];c=m.substring(2,m.length-1);if(c>=-32768&&c<=65535){d=d.replace(m,String.fromCharCode(c))}else{d=d.replace(m,"")}}}return d},htmlEncode:function(s,dbl){if(this.isEmpty(s))return"";dbl=dbl||false;if(dbl){if(this.EncodeType=="numerical"){s=s.replace(/&/g,"&#38;")}else{s=s.replace(/&/g,"&amp;")}}s=this.XSSEncode(s,false);if(this.EncodeType=="numerical"||!dbl){s=this.HTML2Numerical(s)}s=this.numEncode(s);if(!dbl){s=s.replace(/&#/g,"##AMPHASH##");if(this.EncodeType=="numerical"){s=s.replace(/&/g,"&#38;")}else{s=s.replace(/&/g,"&amp;")}s=s.replace(/##AMPHASH##/g,"&#")}s=s.replace(/&#\d*([^\d;]|$)/g,"$1");if(!dbl){s=this.correctEncoding(s)}if(this.EncodeType=="entity"){s=this.NumericalToHTML(s)}return s},XSSEncode:function(s,en){if(!this.isEmpty(s)){en=en||true;if(en){s=s.replace(/\'/g,"&#39;");s=s.replace(/\"/g,"&quot;");s=s.replace(/</g,"&lt;");s=s.replace(/>/g,"&gt;")}else{s=s.replace(/\'/g,"&#39;");s=s.replace(/\"/g,"&#34;");s=s.replace(/</g,"&#60;");s=s.replace(/>/g,"&#62;")}return s}else{return""}},hasEncoded:function(s){if(/&#[0-9]{1,5};/g.test(s)){return true}else if(/&[A-Z]{2,6};/gi.test(s)){return true}else{return false}},stripUnicode:function(s){return s.replace(/[^\x20-\x7E]/g,"")},correctEncoding:function(s){return s.replace(/(&amp;)(amp;)+/,"$1")},swapArrayVals:function(s,arr1,arr2){if(this.isEmpty(s))return"";var re;if(arr1&&arr2){if(arr1.length==arr2.length){for(var x=0,i=arr1.length;x<i;x++){re=new RegExp(arr1[x],'g');s=s.replace(re,arr2[x])}}}return s},inArray:function(item,arr){for(var i=0,x=arr.length;i<x;i++){if(arr[i]===item){return i}}return-1}}
+	/**/
 	
 	// NES-indstillingsboksen
 	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0; width: 600px;" id="NES-menu" />').insertAfter('#nmTopBar')
@@ -120,9 +121,6 @@ function NES_init() {
 			$(this).change();
 		});
 	});
-	
-	// Fikser bredden af indlæg, så [list] ikke sniger sig ind over højresiden af indlæggene samt nyhedslisten, så teksten ikke går for langt og ikke kan læses
-	$("<style type='text/css'>.text_content{width: 381px;} .indexsection ul li {width: inherit !important;} .NES_postReferenceLink {color: green !important;}</style>").appendTo("head");
 	
 	$(document).ajaxSuccess(function(event, xhr, options) {
 		// Retter newz.dk's buggede AJAX
@@ -264,22 +262,38 @@ function NES_init() {
 		return false;
 	});
 	
-	// Indholdet af kommentarfeltet gemmes løbende, så det kan gendannes (hvert 5. sekund)
+	// Indholdet af kommentarfeltet gemmes løbende, så det kan gendannes.
 	$("#id_comment").keyup(function() {
 		a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
 			localStorage['commentHistory0'] = a;
 			a = Encoder.htmlEncode(a);
 			var l = a.length;
-			if (l > 199)
-				a = a.substr(0, 100) + ' [...] ' + a.substr(l - 100, l - 100);
+			if (l > 119)
+				a = a.substr(0, 60) + ' [...] ' + a.substr(l - 60, l - 60);
 			$('#commentStorage select option[value=0]').html(a);
 		}
 	});
 	
+	// Fikser bredden af indlæg, så [list] ikke sniger sig ind over højresiden af indlæggene samt nyhedslisten, så teksten ikke går for langt og ikke kan læses
+	$("<style type='text/css'>.text_content{width: 381px;} .indexsection ul li {width: inherit !important;} .NES_postReferenceLink {color: green !important;}</style>").appendTo("head");
+	
+	// Til gemning af kommentarfeltet
 	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
 	NES_updateCommentList();
 	
+	// Til URL-billeder
+	(function(){var a={getSelection:function(){var a=this.jquery?this[0]:this;return("selectionStart"in a&&function(){var b=a.selectionEnd-a.selectionStart;return{start:a.selectionStart,end:a.selectionEnd,length:b,text:a.value.substr(a.selectionStart,b)}}||document.selection&&function(){a.focus();var b=document.selection.createRange();if(b==null){return{start:0,end:a.value.length,length:0}}var c=a.createTextRange();var d=c.duplicate();c.moveToBookmark(b.getBookmark());d.setEndPoint("EndToStart",c);return{start:d.text.length,end:d.text.length+b.text.length,length:b.text.length,text:b.text}}||function(){return{start:0,end:a.value.length,length:0}})()},replaceSelection:function(){var a=this.jquery?this[0]:this;var b=arguments[0]||"";return("selectionStart"in a&&function(){a.value=a.value.substr(0,a.selectionStart)+b+a.value.substr(a.selectionEnd,a.value.length);return this}||document.selection&&function(){a.focus();document.selection.createRange().text=b;return this}||function(){a.value+=b;return this})()}};jQuery.each(a,function(a){jQuery.fn[a]=this})})()
+	$('li.url').after('<li><a class="img" title="[url=billede-url]billede-url (billede)[/url]" href="#"></a></li>');
+	$('.img').css('background-image', 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJWSURBVDhPY3j37t2tG9d379oGQju3ojMg4sgIrObWzevv379nAFJHDu37DQZ//vyBk5hciBoIOHxoH1AjA9CYX79+HTl3myQE1ALUiND8n2gQmN0N07xz68+fP4HWAvW27HoORA3bnkIQkN2170XN5ocQlL/8dsrCG0BlQM0/fvzYvRNsM5AF0Vy49VnNDnRUuPERBGWvvwtEEM1A+8DO3rkVrnn2+Y/TT7/vOf6u/9QHIFpz+eOu25+33/u2+Pw7oBOQNX///h1d8+HHX4EaDt37dOftNyC69uDNzM1XWlecX3766eaz9xYfug5EEJthmndt+/btG8TZQKWdSy6s2H113voLDXOPLdp+dtrGM+ktm+rnH5m+6SxQ5+RtV1E179z29u1biObcnr1AtGDrmc4F+4qm7s/u3uqYszKiYlFO4+LkmqXTt5xdceIORDNQC9TZcM35fXuzu3ZNXnW4Z8Gu5Po1RlFz9WNnOadM8c2cEls2v7Bnfd3MXTg1WybM9MiYW9S9zq98jm7IDJPwGcYxsy0iJ9hEd7plTM+sWxCQOwNV8y6EszV8Ok1Cuu1j+tQ821Q9Wg0DO4yDuwz8Go0C66wi211TJtjGdqNrBuYNiJ+lrUulrUrETAqlrEqkLIuBXEX7BhX7YgPfakP/WrvYbuuYTpyaiUygSAG2a9vr16+BNkcU9IcX9EcUglB4wQQgN6JwAohbMAEkDpQFioNEJgA1Ax0LCu3bN2/s3LEFqB8ZvHr1Ck0EjQvUAtTIAMzTwJyJmt2Rcj+keNiJLgLUCbQcACI7H25wevWgAAAAAElFTkSuQmCC")')
+	.bind('click', function(e) {
+		e.preventDefault();
+		var imgurl = prompt("URL til billedet:");
+		$('#id_comment').replaceSelection('[url=' + imgurl + ']' + imgurl + ' (billede)[/url]');
+		return false;
+	});
+	
+	//
 	NES_fixTitle();
 	NES_ajaxPageChange();
 	NES_updateSettingsSub();
@@ -304,15 +318,23 @@ function NES_updateSettingsSub() {
 // Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg og ved den løbende AJAX-indhentning af nye indlæg
 // MANGLER: Efter endt redigering
 function NES_fixPosts(object) {
-	if (typeof object == "undefined")
-		object = document;
-	
 	NES_improvedQuote(object);
 	NES_addPermLink(object);
 	if (applyTargetBlank)
 		$('a', object).attr('target', '_blank');
 	NES_addMiniQuote(object);
 	NES_addLinkToPostReferenceFunc(object);
+	NES_urlToImg(object);
+}
+
+function NES_urlToImg(object) {
+	$('.comment .text_content a', object).each(function() {
+		var e = $(this);
+		var b = this.href;
+		if (b + ' (billede)' == e.text()) {
+			e.html('<img style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" />');
+		}
+	});
 }
 
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
@@ -533,8 +555,8 @@ function NES_updateCommentList() {
 	for (var i = 0; i < 6; i++) {
 		var b = Encoder.htmlEncode(localStorage['commentHistory' + i]);
 		var l = b.length;
-		if (l > 199)
-			b = b.substr(0, 100) + ' [...] ' + b.substr(l - 100, l - 100);
+		if (l > 119)
+			b = b.substr(0, 60) + ' [...] ' + b.substr(l - 60, l - 60);
 		a.append('<option value="' + i + '">' + b + '</option>');
 	}
 }
