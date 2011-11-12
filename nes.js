@@ -269,6 +269,9 @@ function NES_init() {
 		a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
 			localStorage['commentHistory0'] = a;
+			var l = a.length;
+			if (l > 199)
+				a = a.substr(0, 100) + ' [...] ' + a.substr(l - 100, l - 100);
 			$('#commentStorage select option[value=0]').html(Encoder.htmlEncode(a));
 		}
 	});
@@ -529,8 +532,8 @@ function NES_updateCommentList() {
 	for (var i = 0; i < 6; i++) {
 		var b = Encoder.htmlEncode(localStorage['commentHistory' + i]);
 		var l = b.length;
-		if (l > 79)
-			b = b.substr(0, 40) + ' [...] ' + b.substr(l - 40, l - 40);
+		if (l > 199)
+			b = b.substr(0, 100) + ' [...] ' + b.substr(l - 100, l - 100);
 		a.append('<option value="' + i + '">' + b + '</option>');
 	}
 }
