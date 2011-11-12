@@ -269,10 +269,11 @@ function NES_init() {
 		a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
 			localStorage['commentHistory0'] = a;
+			a = Encoder.htmlEncode(a);
 			var l = a.length;
 			if (l > 199)
 				a = a.substr(0, 100) + ' [...] ' + a.substr(l - 100, l - 100);
-			$('#commentStorage select option[value=0]').html(Encoder.htmlEncode(a));
+			$('#commentStorage select option[value=0]').html(a);
 		}
 	});
 	
