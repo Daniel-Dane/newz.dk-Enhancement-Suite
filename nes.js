@@ -613,8 +613,6 @@ function NES_fetchPage(pageNo, state, hash) {
 			
 			$("#postcontainer").html($("Response", xml).text());
 			
-			$(window).scrollTop(pageOffset[pageNo]);
-			
 			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
 			$(".pagination a").each(function(i) {
 				// Sakset fra newz.dk's egen kode. _lastPage returneres ikke fra AJAX, så hmn kigger simpelthen alle <a>'erne igennem
@@ -629,10 +627,16 @@ function NES_fetchPage(pageNo, state, hash) {
 			} else
 				PauseAutoUpdate();
 			
-			if (state == 1) {
-				$(window).scrollTop(0);
-			} else if (state == 2) {
-				$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
+			switch (state) {
+				case 1:
+					$(window).scrollTop(0);
+					break;
+				case 2:
+					$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
+					break;
+				case 3:
+					$(window).scrollTop(pageOffset[pageNo]);
+					break;
 			}
 			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
