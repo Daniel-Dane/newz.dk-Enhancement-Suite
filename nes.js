@@ -75,7 +75,7 @@ function NES_init() {
 	// Henter indstillinger
 	addLinkToPostReference = (localStorage["addLinkToPostReference"] == "true");
 	if (showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true")) {
-		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'right: 680px;' : 'left: 400px') + "}</style>").appendTo("head");
+		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; position: absolute; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'right: 680px;' : 'left: 400px') + "}</style>").appendTo("head");
 	}
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
