@@ -299,6 +299,8 @@ function NES_init() {
 	NES_ajaxPageChange();
 	NES_updateSettingsSub();
 	
+	pageOffset = new Array();
+	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
 		var href = NES_getUrl();
@@ -605,9 +607,13 @@ function NES_ajaxPageChange() {
 //  state: 0 = replaceState (fikser nuværende side), 1 = pushState (skifter side), 2 = hopper til side, hvorpå indlægget ligger, 3 = ingen ændring i historien (skifter side pga. hop i historien)
 //   hash: Hvis der skal hoppes til et bestemt indlæg
 function NES_fetchPage(pageNo, state, hash) {
-	var successFunc = function(pageNo, state, hash) {
+	var successFunc = function(oldPage, pageNo, state, hash) {
 		return function (xml) {
+			scrollOffset[oldPage] = $(window).scrollTop();
+			
 			$("#postcontainer").html($("Response", xml).text());
+			
+			$(window).scrollTop(scrollOffset[pageNo]);
 			
 			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
 			$(".pagination a").each(function(i) {
@@ -643,7 +649,7 @@ function NES_fetchPage(pageNo, state, hash) {
 		dataType: 'xml',
 		url: "/z4/action.php",
 		data: {"class":"Z4_Forum_Item", "action":"page", "id":_threadId, "offset":pageNo},
-		success: successFunc(pageNo, state, hash)
+		success: successFunc(_pageId, pageNo, state, hash)
 	});
 }
 
