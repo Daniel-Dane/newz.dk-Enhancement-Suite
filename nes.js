@@ -389,7 +389,7 @@ function NES_hidePost() {
 }
 
 function NES_goToPost(him) {
-	//NES_hidePost(him);
+	NES_hidePost();
 	//var a = parseFloat($("#" + him).css("top"));
 	//if (isNaN(a))
 	//	a = 0;
