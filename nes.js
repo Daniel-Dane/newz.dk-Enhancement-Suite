@@ -147,6 +147,11 @@ function NES_init() {
 		// Preview (slået fra, når man opretter en tråd)
 		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1))
 			NES_fixPosts($('#post_preview .content'));
+			
+		if (options.data.match('class=Z4_Forum_Item&action=edit') !== null) {
+			console.log(/&id=(\d+)&/.exec(options.data)[1]);
+			NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
+		}
 	});
 	
 	$(document).ajaxStop(function() {
