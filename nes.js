@@ -122,29 +122,19 @@ function NES_init() {
 				history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
 				NES_fetchPage(_lastPage, 0);
 			} else {
-				console.log('test1');
 				if (NES_startHash != '') {
-					console.log('test1.1');
 					$(window).scrollTop($('.comment h2:has(a[name=' + NES_startHash.substr(1) + '])').offset().top);
-					console.log('test1.2');
 					history.replaceState({page: _pageId}, '', href + '/page' + _pageId + NES_startHash);
-					console.log('test1.3');
 					NES_startHash = '';
 				}
-				console.log('test2');
 				$(".loading").hide();
 				$('.pagination').show();
-				console.log('test3');
 				$(".pagination a").each(function() {
 					$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
 				});
-				console.log('test4');
 				NES_fixTitle();
-				console.log('test5');
 				NES_insertLoadingGif();
-				console.log('test6');
 				NES_fixPosts();
-				console.log('test7');
 				$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 			}
 		}
@@ -497,8 +487,8 @@ function NES_improvedQuote(object) {
 					// Denne del skal stadig forbedres
 					
 					// Skal være efter [quote]
-					html = html.replace(/\<a href="(.+?)"\>(.+?)(\.\.)?\<\/a\>/g, '[url=$1]$2[/url]'); // til url i [url]
-					html = html.replace(/<a onclick="return true;" href="(.+)"\>.+\<\/a\>/g, '[url=$1]$1 (billede)[/url]'); // til url i [url]
+					html = html.replace(/\<a href="(.+?)"\>(.+?)(\.\.)?\<\/a\>/g, '[url=$1]$2[/url]'); // Til url i [url]
+					html = html.replace(/<a onclick="return true;" href="(.+)"\>.+\<\/a\>/g, '[url=$1]$1 (billede)[/url]'); // Konverterer url-billeder tilbage til sin BB-form
 					// Ovenstående matcher også url uden [url] og giver dem en [url]. Det skal ændres. Jeg har prøvet.
 					
 					// Stripper resten af html'et
