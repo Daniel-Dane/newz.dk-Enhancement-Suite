@@ -371,13 +371,12 @@ function NES_addLinkToPostReferenceFunc(object) {
 				if (this.nodeType == 3) {
 					// #tal efterfulgt af enten mellemrum, linjeknæk, kolon, komma, punktum, spørgsmålstegn eller udråbstegn samt ved afsluttet afsnit eller linje
 					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|\?|!|<\/p>|$)/gm, function(str, a, b) {
-						a = +a;
 						if (a < 100 && _pageId > 20) { // Fra indlæg #1001 vil #99 betyder #999 osv.
 							c = Math.floor((50 * (_pageId - 1)) / 100) * 100 + +a;
 							if (c > postNum)
 								c -= 100;
 						} else
-							c = a;
+							c = +a;
 						if (a == 0 || (c == postNum && p != 'post_preview'))
 							return '#' + a + b;
 						var him = $('.comment:has(a[name=' + c + '])').attr('id');
