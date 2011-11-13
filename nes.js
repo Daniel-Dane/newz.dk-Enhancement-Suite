@@ -167,7 +167,6 @@ function NES_init() {
 		
 		// Efter tryk på "Ret indlæg" og indlægget er hentet og forberedt.
 		if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null) {
-			console.log('det virker');
 			NES_addToToolbar(true);
 		}
 	});
