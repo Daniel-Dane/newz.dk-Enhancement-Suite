@@ -84,7 +84,7 @@ function NES_init() {
 	// Henter indstillinger
 	addLinkToPostReference = (localStorage["addLinkToPostReference"] == "true");
 	showPostOnMouseOverReferenceMini = (localStorage["showPostOnMouseOverReferenceMini"] == "true");
-	showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true"));
+	showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true");
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
 	showUrlImages = (localStorage["showUrlImages"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
