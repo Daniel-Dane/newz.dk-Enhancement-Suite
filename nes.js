@@ -379,13 +379,13 @@ function NES_addLinkToPostReferenceFunc(object) {
 }
 
 function NES_showPost(me, him) {
-	var q = $("#" + him).clone().attr('id', 'NES_clone').addClass("NES_cite").prependTo('#comments');
+	var q = $("#" + him).clone().attr('id', '').addClass("NES_cite").prependTo('#comments');
 	//q.css("top", $("#" + me).offset().top - q.offset().top + "px");
 }
 
 function NES_hidePost() {
 	//$("#" + him).css("top", "").removeClass("NES_cite");
-	$('#NES_clone').remove();
+	$('.NES_cite').remove();
 }
 
 function NES_goToPost(him) {
