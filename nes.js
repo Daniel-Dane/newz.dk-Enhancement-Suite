@@ -333,7 +333,7 @@ function NES_urlToImg(object) {
 			var e = $(this);
 			var b = this.href;
 			if (b + ' (billede)' == e.text()) {
-				e.addClass('blablabla').html('<img style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" />');
+				e.replaceWith('<a onclick="return true;" href="'+b+'"><img style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
 			}
 		});
 	}
@@ -456,7 +456,7 @@ function NES_improvedQuote(object) {
 				sel = getSelection();
 				var container = document.createElement("div");
 				container.appendChild(sel.getRangeAt(0).cloneContents());
-				html = container.innerHTML;
+				var html = container.innerHTML;
 				
 				if (html != '') {
 					hentFraServer = false;
