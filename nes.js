@@ -123,8 +123,11 @@ function NES_init() {
 			} else {
 				console.log('test1');
 				if (NES_startHash != '') {
+					console.log('test1.1');
 					$(window).scrollTop($('.comment h2:has(a[name=' + NES_startHash.substr(1) + '])').offset().top);
+					console.log('test1.2');
 					history.replaceState({page: _pageId}, '', href + '/page' + _pageId + NES_startHash);
+					console.log('test1.3');
 					NES_startHash = '';
 				}
 				console.log('test2');
