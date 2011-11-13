@@ -206,7 +206,7 @@ function NES_init() {
 		else {
 			if (a.page == _pageId)
 				return;
-			console.log('onpopstate: page = ' + a.page);
+			//console.log('onpopstate: page = ' + a.page);
 			NES_fetchPage(a.page, 3);
 		}
 	};
@@ -538,11 +538,12 @@ function NES_improvedQuote(object) {
 
 function NES_showPost(me, him) {
 	var q = $("#" + him);
-	q.css("top", b = $("#" + me).offset().top - q.offset().top + "px").addClass("NES_cite");
+	q.clone().attr('id', 'NES_clone').css("top", $("#" + me).offset().top - q.offset().top + "px").addClass("NES_cite").prependTo('#comments');
 }
 
 function NES_hidePost(him) {
-	$("#" + him).css("top", "").removeClass("NES_cite");
+	//$("#" + him).css("top", "").removeClass("NES_cite");
+	$('#NES_clone').remove();
 }
 
 function NES_goToPost(him) {
