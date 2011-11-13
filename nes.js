@@ -203,10 +203,12 @@ function NES_init() {
 		var a = e.state;
 		if (a == null)
 			history.replaceState({page: _pageId}, '', location.href);
-		if (a.page == _pageId)
-			return;
-		console.log('onpopstate: page = ' + a.page);
-		NES_fetchPage(a.page, 3);
+		else {
+			if (a.page == _pageId)
+				return;
+			console.log('onpopstate: page = ' + a.page);
+			NES_fetchPage(a.page, 3);
+		}
 	};
 	
 	// Fix af "Sorter indlæg efter rating", så den finder det nyeste indlæg det rigtige sted.
