@@ -75,7 +75,7 @@ function NES_init() {
 	// Henter indstillinger
 	addLinkToPostReference = (localStorage["addLinkToPostReference"] == "true");
 	if (showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true")) {
-		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + "}</style>").appendTo("head");
+		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 381px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + "}</style>").appendTo("head");
 	}
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
@@ -379,7 +379,7 @@ function NES_addLinkToPostReferenceFunc(object) {
 }
 
 function NES_showPost(me, him) {
-	var q = $("#" + him).clone().attr('id', '').addClass("NES_cite").prependTo('#comments');
+	var q = $("#" + him).clone().attr('id', '').addClass("NES_cite").prependTo('#comments').find('.comment_right').remove();
 	//q.css("top", $("#" + me).offset().top - q.offset().top + "px");
 }
 
