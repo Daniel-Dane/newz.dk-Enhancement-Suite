@@ -76,22 +76,6 @@ function NES_init() {
 	addLinkToPostReference = (localStorage["addLinkToPostReference"] == "true");
 	if (showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true")) {
 		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'right: 680px;' : 'left: 400px') + "}</style>").appendTo("head");
-		$('head').append($('<script>').html(' \
-			function NES_showPost(me, him) { \
-				var q = $("#" + him); \
-				q.css("top", b = $("#" + me).offset().top - q.offset().top + "px").addClass("NES_cite"); \
-			} \
-			function NES_hidePost(him) { \
-				$("#" + him).css("top", "").removeClass("NES_cite"); \
-			} \
-			function NES_goToPost(him) { \
-				NES_hidePost(him); \
-				var a = parseFloat($("#" + him).css("top")); \
-				if (isNaN(a)) \
-					a = 0; \
-				$(window).scrollTop($("#" + him ).offset().top - a + 12); \
-			} \
-		'));
 	}
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
@@ -298,8 +282,6 @@ function NES_init() {
 	NES_fixTitle();
 	NES_ajaxPageChange();
 	NES_updateSettingsSub();
-	
-	pageOffset = new Array();
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
@@ -550,6 +532,23 @@ function NES_improvedQuote(object) {
 	});
 }
 
+function NES_showPost(me, him) {
+	var q = $("#" + him);
+	q.css("top", b = $("#" + me).offset().top - q.offset().top + "px").addClass("NES_cite");
+}
+
+function NES_hidePost(him) {
+	$("#" + him).css("top", "").removeClass("NES_cite");
+}
+
+function NES_goToPost(him) {
+	NES_hidePost(him);
+	//var a = parseFloat($("#" + him).css("top"));
+	//if (isNaN(a))
+	//	a = 0;
+	//$(window).scrollTop($("#" + him ).offset().top - a + 12);
+}
+
 function NES_updateCommentList() {
 	$('#commentStorage').empty();
 	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()]).keyup();" style="max-width: 150px">')
@@ -607,11 +606,8 @@ function NES_ajaxPageChange() {
 //  state: 0 = replaceState (fikser nuværende side), 1 = pushState (skifter side), 2 = hopper til side, hvorpå indlægget ligger, 3 = ingen ændring i historien (skifter side pga. hop i historien)
 //   hash: Hvis der skal hoppes til et bestemt indlæg
 function NES_fetchPage(pageNo, state, hash) {
-	var successFunc = function(oldPage, pageNo, state, hash) {
+	var successFunc = function(pageNo, state, hash) {
 		return function (xml) {
-			pageOffset[oldPage] = $(window).scrollTop();
-			console.log('oldPage: ' + oldPage + '\nnewpage: ' + pageNo + '\nold offset:' + pageOffset[oldPage] + '\nnew offset:' + pageOffset[pageNo]);
-			
 			$("#postcontainer").html($("Response", xml).text());
 			
 			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
@@ -635,9 +631,6 @@ function NES_fetchPage(pageNo, state, hash) {
 				case 2:
 					$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
 					break;
-				case 3:
-					$(window).scrollTop(pageOffset[pageNo]);
-					break;
 			}
 			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
@@ -652,7 +645,7 @@ function NES_fetchPage(pageNo, state, hash) {
 		dataType: 'xml',
 		url: "/z4/action.php",
 		data: {"class":"Z4_Forum_Item", "action":"page", "id":_threadId, "offset":pageNo},
-		success: successFunc(_pageId, pageNo, state, hash)
+		success: successFunc(pageNo, state, hash)
 	});
 }
 
