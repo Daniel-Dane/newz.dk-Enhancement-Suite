@@ -121,7 +121,6 @@ function NES_init() {
 				history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
 				NES_fetchPage(_lastPage, 0);
 			} else {
-				console.log('test');
 				if (NES_startHash != '') {
 					$(window).scrollTop($('.comment h2:has(a[name=' + NES_startHash.substr(1) + '])').offset().top);
 					history.replaceState({page: _pageId}, '', href + '/page' + _pageId + NES_startHash);
@@ -138,7 +137,7 @@ function NES_init() {
 				NES_fixTitle();
 				NES_insertLoadingGif();
 				NES_fixPosts();
-				
+				console.log('test');
 				$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 			}
 		}
