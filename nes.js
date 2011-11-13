@@ -277,7 +277,7 @@ function NES_init() {
 	
 	// Indholdet af kommentarfeltet gemmes løbende, så det kan gendannes. Feltet til skrivning af trådbrødtekst er også inkluderet.
 	$("#id_comment,#id_forumcontent").keyup(function() {
-		a = $("#id_comment").val();
+		a = $("#id_comment,#id_forumcontent").val();
 		if ($.trim(a).length > 1) {
 			localStorage['commentHistory0'] = a;
 			a = Encoder.htmlEncode(a);
