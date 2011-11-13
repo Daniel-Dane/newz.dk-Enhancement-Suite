@@ -609,7 +609,7 @@ function NES_ajaxPageChange() {
 function NES_fetchPage(pageNo, state, hash) {
 	var successFunc = function(oldPage, pageNo, state, hash) {
 		return function (xml) {
-			console.log(oldPage + '\n' + pageNo + '\n' + pageOffset[OldPage] + '\n' + pageOffset[pageNo]);
+			console.log(oldPage + '\n' + pageNo + '\n' + pageOffset[oldPage] + '\n' + pageOffset[pageNo]);
 			pageOffset[oldPage] = $(window).scrollTop();
 			
 			$("#postcontainer").html($("Response", xml).text());
