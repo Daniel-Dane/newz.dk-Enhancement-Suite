@@ -166,8 +166,8 @@ function NES_init() {
 			NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
 		
 		// Efter tryk på "Ret indlæg" og indlægget er hentet og forberedt.
-		//if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null)
-		//	NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
+		if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null)
+			NES_addToToolbar(true);
 	});
 	
 	$(document).ajaxStop(function() {
@@ -299,6 +299,7 @@ function NES_init() {
 	NES_fixTitle();
 	NES_ajaxPageChange();
 	NES_updateSettingsSub();
+	NES_addToToolbar();
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
