@@ -148,10 +148,8 @@ function NES_init() {
 		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1))
 			NES_fixPosts($('#post_preview .content'));
 			
-		if (options.data.match('class=Z4_Forum_Item&action=edit') !== null) {
-			console.log(/&id=(\d+)&/.exec(options.data)[1]);
+		if (options.data.match('class=Z4_Forum_Item&action=edit') !== null)
 			NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
-		}
 	});
 	
 	$(document).ajaxStop(function() {
@@ -313,15 +311,16 @@ function NES_updateSettingsSub() {
 	$('#showPostOnMouseOverReferenceSub input').attr('disabled', (!$('#showPostOnMouseOverReference').attr('checked') || !$('#addLinkToPostReference').attr('checked')));
 }
 
-// Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg og ved den løbende AJAX-indhentning af nye indlæg
-// MANGLER: Efter endt redigering
+// Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg, ved den løbende AJAX-indhentning af nye indlæg og ved rettelse af indlæg
 function NES_fixPosts(object, afterEdit) {
+	// Køres kun én per indlæg
 	if (afterEdit !== true) {
 		NES_improvedQuote(object);
 		NES_addPermLink(object);
 		NES_addMiniQuote(object);
 	}
 	
+	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
 	if (applyTargetBlank)
 		$('a', object).attr('target', '_blank');
 	NES_addLinkToPostReferenceFunc(object);
