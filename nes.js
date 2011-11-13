@@ -310,19 +310,22 @@ function NES_updateSettingsSub() {
 
 // Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg og ved den løbende AJAX-indhentning af nye indlæg
 // MANGLER: Efter endt redigering
-function NES_fixPosts(object) {
-	NES_improvedQuote(object);
-	NES_addPermLink(object);
+function NES_fixPosts(object, afterEdit) {
+	if (afterEdit !== true) {
+		NES_improvedQuote(object);
+		NES_addPermLink(object);
+		NES_addMiniQuote(object);
+	}
+	
 	if (applyTargetBlank)
 		$('a', object).attr('target', '_blank');
-	NES_addMiniQuote(object);
 	NES_addLinkToPostReferenceFunc(object);
 	NES_urlToImg(object);
 }
 
 function NES_urlToImg(object) {
 	if (showUrlImages) {
-		$('.comment .text_content a', object).each(function() {
+		$('.text_content a', object).each(function() {
 			var e = $(this);
 			var b = this.href;
 			if (b + ' (billede)' == e.text()) {
@@ -332,6 +335,7 @@ function NES_urlToImg(object) {
 	}
 }
 
+// Skal køres EFTER NES_improvedQuote().
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
 function NES_addMiniQuote(object) {
 	$('.quoteitemNES', object).after(' (<a href="#" class="miniquote">miniquote</a>)');
@@ -354,7 +358,7 @@ function NES_addMiniQuote(object) {
 
 function NES_addLinkToPostReferenceFunc(object) {
 	if (addLinkToPostReference) {
-		$('.comment .text_content p:contains("#")', object).each(function() {
+		$('.text_content p:contains("#")', object).each(function() {
 			if ($(this).parents('#post_preview').length == 1) {
 				var postNum = $('h2 a:first', '.comment:not([id=]):last').attr('name');
 				var p = 'post_preview';
@@ -407,7 +411,7 @@ function NES_goToPost(him) {
 function NES_addPermLink(object) {
 	href = NES_getUrl();
 	
-	$('.comment h2', object).each(function() {
+	$('h2', object).each(function() {
 		var a = $(this).html();
 		a = a.replace(/#(\d+):/, '<a href="' + href + '/page' + _pageId + '#$1">#$1:</a>')
 		$(this).html(a);
