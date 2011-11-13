@@ -668,10 +668,14 @@ function NES_ajaxPageChange() {
 //  state: 0 = replaceState (fikser nuværende side), 1 = pushState (skifter side), 2 = hopper til side, hvorpå indlægget ligger, 3 = ingen ændring i historien (skifter side pga. hop i historien)
 //   hash: Hvis der skal hoppes til et bestemt indlæg
 function NES_fetchPage(pageNo, state, hash) {
-	var nogettest = 'dsdasd';
-	var successFunc = function(pageNo, state, hash) {
-		return function (xml) {
-			console.log(nogettest);
+	$('.pagination').hide();
+	$(".loading").show();
+	
+	$.ajax({
+		dataType: 'xml',
+		url: "/z4/action.php",
+		data: {"class":"Z4_Forum_Item", "action":"page", "id":_threadId, "offset":pageNo},
+		success: function (xml) {
 			$("#postcontainer").html($("Response", xml).text());
 			
 			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
@@ -700,16 +704,6 @@ function NES_fetchPage(pageNo, state, hash) {
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
 			UpdatePosts();
 		}
-	}
-	
-	$('.pagination').hide();
-	$(".loading").show();
-	
-	$.ajax({
-		dataType: 'xml',
-		url: "/z4/action.php",
-		data: {"class":"Z4_Forum_Item", "action":"page", "id":_threadId, "offset":pageNo},
-		success: successFunc(pageNo, state, hash)
 	});
 }
 
