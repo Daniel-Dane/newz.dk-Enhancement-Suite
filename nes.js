@@ -538,7 +538,7 @@ function NES_improvedQuote(object) {
 
 function NES_showPost(me, him) {
 	var q = $("#" + him);
-	q.clone().attr('id', 'NES_clone').css("top", $("#" + me).offset().top - q.offset().top + "px").addClass("NES_cite").prependTo('#comments');
+	q.clone().attr('id', 'NES_clone').css("top", $("#" + me).offset().top + "px").addClass("NES_cite").prependTo('#comments');
 }
 
 function NES_hidePost(him) {
