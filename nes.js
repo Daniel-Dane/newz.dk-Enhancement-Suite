@@ -482,7 +482,8 @@ function NES_improvedQuote(object) {
 					// Denne del skal stadig forbedres
 					
 					// Skal være efter [quote]
-					html = html.replace(/\<a href="(.+?)"\>(.+?)(\.\.)?\<\/a\>/g, '[url=$1]$2[/url]') // til url i [url]
+					html = html.replace(/\<a href="(.+?)"\>(.+?)(\.\.)?\<\/a\>/g, '[url=$1]$2[/url]'); // til url i [url]
+					html = html.replace(/<a onclick="return true;" href="(.+)"\>.+\<\/a\>/g, '[url=$1]$1 (billede)[/url]'); // til url i [url]
 					// Ovenstående matcher også url uden [url] og giver dem en [url]. Det skal ændres. Jeg har prøvet.
 					
 					// Stripper resten af html'et
