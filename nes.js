@@ -166,8 +166,8 @@ function NES_init() {
 			NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
 		
 		// Efter tryk på "Ret indlæg" og indlægget er hentet og forberedt.
-		if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null)
-			NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
+		//if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null)
+		//	NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
 	});
 	
 	$(document).ajaxStop(function() {
