@@ -53,7 +53,7 @@ function NES_init() {
 			<input type="checkbox" id="showPostOnMouseOverReference" name="showPostOnMouseOverReference"><label for="showPostOnMouseOverReference"> Vis det refererede indlæg ved mouseover (beta)</label><br> \
 			<div id="showPostOnMouseOverReferenceSub" style="padding-left: 16px;"> \
 				<input type="checkbox" id="showPostOnMouseOverReferenceLeft" name="showPostOnMouseOverReferenceLeft"><label for="showPostOnMouseOverReferenceLeft"> Vis det refererede indlæg på venstre side i stedet</label><br> \
-				<input type="checkbox" id="showPostOnMouseOverReferenceLeft" name="showPostOnMouseOverReferenceLeft"><label for="showPostOnMouseOverReferenceLeft"> Vis det refererede indlæg på venstre side i stedet</label> \
+				<input type="checkbox" id="showPostOnMouseOverReferenceMini" name="showPostOnMouseOverReferenceMini"><label for="showPostOnMouseOverReferenceMini"> Vis kun brødtekst af indlægget</label> \
 			</div> \
 		</div> \
 		<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg (beta)</label><br> \
@@ -75,14 +75,15 @@ function NES_init() {
 	
 	// Henter indstillinger
 	addLinkToPostReference = (localStorage["addLinkToPostReference"] == "true");
+	showPostOnMouseOverReferenceMini = (localStorage["showPostOnMouseOverReferenceMini"] == "true");
 	if (showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true")) {
-		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + "}</style>").appendTo("head");
+		$("<style type='text/css'>.NES_cite{z-index: 9000; width: " + (showPostOnMouseOverReferenceMini ? '381' : '651') + "px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + "}</style>").appendTo("head");
 	}
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
 	
 	// Event handlers til knapperne
-	handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'improvedQuoteSetting', 'applyTargetBlank'];
+	handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting', 'applyTargetBlank'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
@@ -380,7 +381,9 @@ function NES_addLinkToPostReferenceFunc(object) {
 }
 
 function NES_showPost(me, him) {
-	var q = $("#" + him).clone().attr('id', '').addClass("NES_cite").prependTo('#comments').find('.comment_right').remove();
+	var q = $("#" + him).clone().attr('id', '').addClass("NES_cite").prependTo('#comments');
+	if (showPostOnMouseOverReferenceMini)
+		q.find('.comment_right').remove();
 	//q.css("top", $("#" + me).offset().top - q.offset().top + "px");
 }
 
