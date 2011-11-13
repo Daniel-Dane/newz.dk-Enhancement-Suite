@@ -300,7 +300,7 @@ function NES_init() {
 	$('.listtag').css('background-image', 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEQSURBVDhPlZTdUoMwEEbz6D6UZQyd6UX1HfrjtSA4wA0IKBcesu2axpTWbzJhs/Od3dDOYuq6Pu536zSZl12FgeT95TzHw65pGsPjZbv5dpqmSfe/R/GInrcbQEOZr7PGcdT4ZgB4ARvzIOsmicHBdkVDNAyDwsRkTExqXlvXGSvq+15h4qjEKaVPnTl8/kdSN4S183IpD04TrF3XtW2rMDGZ6DuTR9o5qaqqKIqyLBUmXhBmkNO1id6dyN6x53FYOy+W8OF0vjbuPM8VJnbHiMR5vnaaMBtZlvmwHNmvKYSv+aJVfuEPp7e7hZnLzr/262Fvnx6FV/E/BZngCAJomGkm83LcvemXz4MNM5A0/wEZ0k/kBadPrgAAAABJRU5ErkJggg==)')
 	.bind('click', function(e) {
 		e.preventDefault();
-		$('#id_comment').replaceSelection('[list]\n[li]liste1[/li]\n[li]liste2[/li]\n[li]liste3[/li]\n[/list]');
+		$('#id_comment,#id_forumcontent').replaceSelection('[list]\n[li]liste1[/li]\n[li]liste2[/li]\n[li]liste3[/li]\n[/list]');
 		return false;
 	});
 	
@@ -311,7 +311,7 @@ function NES_init() {
 		e.preventDefault();
 		var imgurl = prompt("URL til billedet:");
 		if (imgurl !== null)
-			$('#id_comment').replaceSelection('[url=' + imgurl + ']' + imgurl + ' (billede)[/url]');
+			$('#id_comment,#id_forumcontent').replaceSelection('[url=' + imgurl + ']' + imgurl + ' (billede)[/url]');
 		return false;
 	});
 	
