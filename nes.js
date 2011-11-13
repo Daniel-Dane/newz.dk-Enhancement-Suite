@@ -115,7 +115,7 @@ function NES_init() {
 	});
 	
 	$(document).ajaxSuccess(function(event, xhr, options) {
-		// Retter newz.dk's buggede AJAX
+		// Behandling af AJAX-sideskift
 		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
 			var href = NES_getUrl();
 			
@@ -131,11 +131,16 @@ function NES_init() {
 					history.replaceState({page: _pageId}, '', href + '/page' + _pageId + NES_startHash);
 					NES_startHash = '';
 				}
+				
 				$(".loading").hide();
 				$('.pagination').show();
+				
+				// Retter newz.dk's buggede AJAX.
 				$(".pagination a").each(function() {
 					$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
 				});
+				
+				//
 				NES_fixTitle();
 				NES_insertLoadingGif();
 				NES_fixPosts();
@@ -143,20 +148,25 @@ function NES_init() {
 			}
 		}
 		
-		// Sætter fix og such til det umiddelbart indsendte indlæg. Der _skal_ bruges options.data, da det er POST
+		// fixPosts() af det indsendte indlæg. (Der SKAL bruges options.data, da det er POST!)
 		// samt
-		// Efter den løbende AJAX-indhentning af nye indlæg
+		// fixPosts() efter den løbende AJAX-indhentning af nye indlæg.
 		if ((options.data.match('class=Z4_Forum_Item&action=usersave') !== null) || (options.url.match('class=Z4_Forum_Item&action=new') !== null)) {
 			var a = $('#comments > div:last');
 			if (a.text().trim() != '')
 				NES_fixPosts(a);
 		}
 		
-		// Preview (slået fra, når man opretter en tråd)
+		// fixPosts() af Preview. (Slået fra, når man opretter en tråd.)
 		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1))
 			NES_fixPosts($('#post_preview .content'));
-			
+		
+		// fixPosts() af indlæg efter endt redigering (rettelse)
 		if (options.data.match('class=Z4_Forum_Item&action=edit') !== null)
+			NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
+		
+		// Efter tryk på "Ret indlæg" og indlægget er hentet og forberedt.
+		if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null)
 			NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
 	});
 	
@@ -265,8 +275,8 @@ function NES_init() {
 		return false;
 	});
 	
-	// Indholdet af kommentarfeltet gemmes løbende, så det kan gendannes.
-	$("#id_comment").keyup(function() {
+	// Indholdet af kommentarfeltet gemmes løbende, så det kan gendannes. Feltet til skrivning af trådbrødtekst er også inkluderet.
+	$("#id_comment,#id_forumcontent").keyup(function() {
 		a = $("#id_comment").val();
 		if ($.trim(a).length > 1) {
 			localStorage['commentHistory0'] = a;
@@ -286,7 +296,7 @@ function NES_init() {
 	NES_updateCommentList();
 	
 	// Til [list]
-	$('li.strikethrough').after('<li><span><a class="listtag" title="[list][li]liste1[/li][li]liste2[/li][/list]" href="#"></a></span></li>');
+	$('li.strikethrough').after('<li><span><a class="listtag" title="[list][li]liste1[/li][li]liste2[/li][li]liste3[/li][/list]" href="#"></a></span></li>');
 	$('.listtag').css('background-image', 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEQSURBVDhPlZTdUoMwEEbz6D6UZQyd6UX1HfrjtSA4wA0IKBcesu2axpTWbzJhs/Od3dDOYuq6Pu536zSZl12FgeT95TzHw65pGsPjZbv5dpqmSfe/R/GInrcbQEOZr7PGcdT4ZgB4ARvzIOsmicHBdkVDNAyDwsRkTExqXlvXGSvq+15h4qjEKaVPnTl8/kdSN4S183IpD04TrF3XtW2rMDGZ6DuTR9o5qaqqKIqyLBUmXhBmkNO1id6dyN6x53FYOy+W8OF0vjbuPM8VJnbHiMR5vnaaMBtZlvmwHNmvKYSv+aJVfuEPp7e7hZnLzr/262Fvnx6FV/E/BZngCAJomGkm83LcvemXz4MNM5A0/wEZ0k/kBadPrgAAAABJRU5ErkJggg==)')
 	.bind('click', function(e) {
 		e.preventDefault();
