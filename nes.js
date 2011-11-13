@@ -75,7 +75,7 @@ function NES_init() {
 	// Henter indstillinger
 	addLinkToPostReference = (localStorage["addLinkToPostReference"] == "true");
 	if (showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true")) {
-		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 381px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + "}</style>").appendTo("head");
+		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + "}</style>").appendTo("head");
 	}
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
@@ -321,7 +321,7 @@ function NES_urlToImg(object) {
 		var e = $(this);
 		var b = this.href;
 		if (b + ' (billede)' == e.text()) {
-			e.html('<img style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" />');
+			e.addClass('blablabla').html('<img style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" />');
 		}
 	});
 }
