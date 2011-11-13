@@ -166,8 +166,10 @@ function NES_init() {
 			NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
 		
 		// Efter tryk på "Ret indlæg" og indlægget er hentet og forberedt.
-		if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null)
+		if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null) {
+			console.log('det virker');
 			NES_addToToolbar(true);
+		}
 	});
 	
 	$(document).ajaxStop(function() {
