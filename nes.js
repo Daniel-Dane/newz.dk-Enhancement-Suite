@@ -121,23 +121,26 @@ function NES_init() {
 				history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
 				NES_fetchPage(_lastPage, 0);
 			} else {
+				console.log('test1');
 				if (NES_startHash != '') {
 					$(window).scrollTop($('.comment h2:has(a[name=' + NES_startHash.substr(1) + '])').offset().top);
 					history.replaceState({page: _pageId}, '', href + '/page' + _pageId + NES_startHash);
 					NES_startHash = '';
 				}
-				
+				console.log('test2');
 				$(".loading").hide();
 				$('.pagination').show();
-				
+				console.log('test3');
 				$(".pagination a").each(function() {
 					$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
 				});
-				
+				console.log('test4');
 				NES_fixTitle();
+				console.log('test5');
 				NES_insertLoadingGif();
+				console.log('test6');
 				NES_fixPosts();
-				console.log('test');
+				console.log('test7');
 				$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 			}
 		}
