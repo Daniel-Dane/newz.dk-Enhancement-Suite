@@ -75,7 +75,7 @@ function NES_init() {
 	// Henter indstillinger
 	addLinkToPostReference = (localStorage["addLinkToPostReference"] == "true");
 	if (showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true")) {
-		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; position: absolute; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'right: 680px;' : 'left: 400px') + "}</style>").appendTo("head");
+		$("<style type='text/css'>.NES_cite{z-index: 9000; width: 651px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + "}</style>").appendTo("head");
 	}
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
@@ -370,12 +370,30 @@ function NES_addLinkToPostReferenceFunc(object) {
 						if (a == 0 || (c == postNum && p != 'post_preview'))
 							return '#' + a + b;
 						var him = $('.comment:has(a[name=' + c + '])').attr('id');
-						return '<a class="NES_postReferenceLink"' + (((showPostOnMouseOverReference) && ((c > 50 * (_pageId - 1)) && (c <= 50 * (_pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost(\'' + him + '\')" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : ' onclick="return true;"') + ' href="#' + c + '">#' + a + '</a>' + b;
+						return '<a class="NES_postReferenceLink"' + (((showPostOnMouseOverReference) && ((c > 50 * (_pageId - 1)) && (c <= 50 * (_pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost();" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : ' onclick="return true;"') + ' href="#' + c + '">#' + a + '</a>' + b;
 					}).replace(/&/gm, '&amp;'));
 				}
 			});
 		});
 	}
+}
+
+function NES_showPost(me, him) {
+	var q = $("#" + him).clone().attr('id', 'NES_clone').addClass("NES_cite").prependTo('#comments');
+	//q.css("top", $("#" + me).offset().top - q.offset().top + "px");
+}
+
+function NES_hidePost() {
+	//$("#" + him).css("top", "").removeClass("NES_cite");
+	$('#NES_clone').remove();
+}
+
+function NES_goToPost(him) {
+	//NES_hidePost(him);
+	//var a = parseFloat($("#" + him).css("top"));
+	//if (isNaN(a))
+	//	a = 0;
+	//$(window).scrollTop($("#" + him ).offset().top - a + 12);
 }
 
 function NES_addPermLink(object) {
@@ -534,24 +552,6 @@ function NES_improvedQuote(object) {
 		$('#id_comment').keyup();
 		return false;
 	});
-}
-
-function NES_showPost(me, him) {
-	var q = $("#" + him).clone().attr('id', 'NES_clone').prependTo('#comments');
-	q.css("top", $("#" + me).offset().top - q.offset().top + "px").addClass("NES_cite");
-}
-
-function NES_hidePost(him) {
-	//$("#" + him).css("top", "").removeClass("NES_cite");
-	$('#NES_clone').remove();
-}
-
-function NES_goToPost(him) {
-	NES_hidePost(him);
-	//var a = parseFloat($("#" + him).css("top"));
-	//if (isNaN(a))
-	//	a = 0;
-	//$(window).scrollTop($("#" + him ).offset().top - a + 12);
 }
 
 function NES_updateCommentList() {
