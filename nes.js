@@ -57,6 +57,7 @@ function NES_init() {
 			</div> \
 		</div> \
 		<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg (beta)</label><br> \
+		<input type="checkbox" id="showUrlImages" name="showUrlImages"><label for="showUrlImages"> Vis billeder i indlæg</label><br> \
 		<input type="checkbox" id="applyTargetBlank" name="applyTargetBlank"><label for="applyTargetBlank"> Åbn alle links i ny fane</label> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
@@ -80,10 +81,11 @@ function NES_init() {
 		$("<style type='text/css'>.NES_cite{z-index: 9000; width: " + (showPostOnMouseOverReferenceMini ? '381' : '651') + "px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + "}</style>").appendTo("head");
 	}
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
+	showUrlImages = (localStorage["showUrlImages"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
 	
 	// Event handlers til knapperne
-	handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting', 'applyTargetBlank'];
+	handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting', 'showUrlImages', 'applyTargetBlank'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
@@ -319,13 +321,15 @@ function NES_fixPosts(object) {
 }
 
 function NES_urlToImg(object) {
-	$('.comment .text_content a', object).each(function() {
-		var e = $(this);
-		var b = this.href;
-		if (b + ' (billede)' == e.text()) {
-			e.addClass('blablabla').html('<img style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" />');
-		}
-	});
+	if (showUrlImages) {
+		$('.comment .text_content a', object).each(function() {
+			var e = $(this);
+			var b = this.href;
+			if (b + ' (billede)' == e.text()) {
+				e.addClass('blablabla').html('<img style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" />');
+			}
+		});
+	}
 }
 
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
