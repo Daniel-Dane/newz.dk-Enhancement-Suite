@@ -201,12 +201,11 @@ function NES_init() {
 	
 	window.onpopstate = function(e) {
 		var a = e.state;
-		console.log('onpopstate: page = ' + a.page);
 		if (a == null)
 			history.replaceState({page: _pageId}, '', location.href);
 		if (a.page == _pageId)
 			return;
-		//console.log('onpopstate: page = ' + a.page);
+		console.log('onpopstate: page = ' + a.page);
 		NES_fetchPage(a.page, 3);
 	};
 	
