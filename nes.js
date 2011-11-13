@@ -115,24 +115,31 @@ function NES_init() {
 		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
 			var href = NES_getUrl();
 			
-			if (NES_startHash != '') {
-				$(window).scrollTop($('.comment h2:has(a[name=' + NES_startHash.substr(1) + '])').offset().top);
-				history.replaceState({page: _pageId}, '', href + '/page' + _pageId + NES_startHash);
-				NES_startHash = '';
+			if (window._pageId > window._lastPage) {
+				// Hvis man får et link med en henvisning til et indlæg, som ikke findes endnu
+				$('#postcontainer').prepend('Hopper lige til den rigtige side...');
+				history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
+				NES_fetchPage(_lastPage, 0);
+			} else {
+				if (NES_startHash != '') {
+					$(window).scrollTop($('.comment h2:has(a[name=' + NES_startHash.substr(1) + '])').offset().top);
+					history.replaceState({page: _pageId}, '', href + '/page' + _pageId + NES_startHash);
+					NES_startHash = '';
+				}
+				
+				$(".loading").hide();
+				$('.pagination').show();
+				
+				$(".pagination a").each(function() {
+					$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
+				});
+				
+				NES_fixTitle();
+				NES_insertLoadingGif();
+				NES_fixPosts();
+				
+				$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 			}
-			
-			$(".loading").hide();
-			$('.pagination').show();
-			
-			$(".pagination a").each(function() {
-				$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
-			});
-			
-			NES_fixTitle();
-			NES_insertLoadingGif();
-			NES_fixPosts();
-			
-			$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 		}
 		
 		// Sætter fix og such til det umiddelbart indsendte indlæg. Der _skal_ bruges options.data, da det er POST
