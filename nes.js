@@ -117,6 +117,7 @@ function NES_init() {
 			
 			if (window._pageId > window._lastPage) {
 				// Hvis man får et link med en henvisning til et indlæg, som ikke findes endnu
+				NES_startHash = '';
 				$('#postcontainer').prepend('Hopper lige til den rigtige side...');
 				history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
 				NES_fetchPage(_lastPage, 0);
@@ -310,6 +311,7 @@ function NES_init() {
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
 		var href = NES_getUrl();
+		NES_startHash = '';
 		$('#postcontainer').prepend('Hopper lige til den rigtige side...');
 		history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
 		NES_fetchPage(_lastPage, 0);
