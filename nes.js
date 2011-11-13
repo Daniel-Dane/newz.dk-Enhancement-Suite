@@ -311,7 +311,7 @@ function NES_updateSettingsSub() {
 	$('#showPostOnMouseOverReferenceSub input').attr('disabled', (!$('#showPostOnMouseOverReference').attr('checked') || !$('#addLinkToPostReference').attr('checked')));
 }
 
-// Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg, ved den løbende AJAX-indhentning af nye indlæg og ved rettelse af indlæg
+// Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg, ved den løbende AJAX-indhentning af nye indlæg, ved Preview og ved rettelse af indlæg
 function NES_fixPosts(object, afterEdit) {
 	// Køres kun én per indlæg
 	if (afterEdit !== true) {
