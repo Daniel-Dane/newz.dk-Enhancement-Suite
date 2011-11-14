@@ -391,6 +391,7 @@ function NES_fixPosts(object, afterEdit) {
 		$('a', object).attr('target', '_blank');
 	NES_addLinkToPostReferenceFunc(object);
 	NES_urlToImg(object);
+	NES_fixFailTags(object);
 }
 
 function NES_fixFailTags(object) {
@@ -398,7 +399,7 @@ function NES_fixFailTags(object) {
 		var a = ['b',            'u',       'i',        's'      ];
 		var b = {'b': 'strong>', 'u': 'u>', 'i': 'em>', 's': 's>'};
 
-		$('.text_content').each(function() {
+		$('.text_content', object).each(function() {
 			var e = $(this);
 			for (i in a) {
 				var x = e.html().indexOf('[' + a[i] + ']');
