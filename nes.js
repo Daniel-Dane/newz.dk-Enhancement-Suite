@@ -54,7 +54,7 @@ function NES_init() {
 		</div> \
 		<input type="checkbox" id="addLinkToPostReference" name="addLinkToPostReference"><label for="addLinkToPostReference"> "#tal"-henvisninger får et link</label><br> \
 		<div id="addLinkToPostReferenceSub" style="padding-left: 16px;"> \
-			<input type="checkbox" id="showPostOnMouseOverReference" name="showPostOnMouseOverReference"><label for="showPostOnMouseOverReference"> Vis det refererede indlæg ved mouseover (beta)</label><br> \
+			<input type="checkbox" id="showPostOnMouseOverReference" name="showPostOnMouseOverReference"><label for="showPostOnMouseOverReference"> Vis det refererede indlæg ved mouseover</label><br> \
 			<div id="showPostOnMouseOverReferenceSub" style="padding-left: 16px;"> \
 				<input type="checkbox" id="showPostOnMouseOverReferenceLeft" name="showPostOnMouseOverReferenceLeft"><label for="showPostOnMouseOverReferenceLeft"> Vis det refererede indlæg på venstre side i stedet</label><br> \
 				<input type="checkbox" id="showPostOnMouseOverReferenceMini" name="showPostOnMouseOverReferenceMini"><label for="showPostOnMouseOverReferenceMini"> Vis kun brødtekst af indlægget</label> \
