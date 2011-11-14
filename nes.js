@@ -43,9 +43,6 @@ function NES_init() {
 	 */
 	(function(){var a={getSelection:function(){var a=this.jquery?this[0]:this;return("selectionStart"in a&&function(){var b=a.selectionEnd-a.selectionStart;return{start:a.selectionStart,end:a.selectionEnd,length:b,text:a.value.substr(a.selectionStart,b)}}||document.selection&&function(){a.focus();var b=document.selection.createRange();if(b==null){return{start:0,end:a.value.length,length:0}}var c=a.createTextRange();var d=c.duplicate();c.moveToBookmark(b.getBookmark());d.setEndPoint("EndToStart",c);return{start:d.text.length,end:d.text.length+b.text.length,length:b.text.length,text:b.text}}||function(){return{start:0,end:a.value.length,length:0}})()},replaceSelection:function(){var a=this.jquery?this[0]:this;var b=arguments[0]||"";return("selectionStart"in a&&function(){a.value=a.value.substr(0,a.selectionStart)+b+a.value.substr(a.selectionEnd,a.value.length);return this}||document.selection&&function(){a.focus();document.selection.createRange().text=b;return this}||function(){a.value+=b;return this})()}};jQuery.each(a,function(a){jQuery.fn[a]=this})})();
 	
-	// Fikser bredden af indlæg, så [list] ikke sniger sig ind over højresiden af indlæggene samt nyhedslisten, så teksten ikke går for langt og ikke kan læses
-	$("<style type='text/css'>.text_content{width: 381px;} .indexsection ul li {width: inherit !important;} .NES_postReferenceLink {color: green !important;}</style>").appendTo("head");
-	
 	// NES-indstillingsboksen
 	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0; width: 600px;" id="NES-menu" />').insertAfter('#nmTopBar')
 	.html(' \
@@ -114,9 +111,19 @@ function NES_init() {
 			$(this).change();
 		});
 	});
-	
+	$("<style type='text/css'></style>").appendTo("head");
 	// style
 	$("<style type='text/css'> \
+	.text_content { \
+		width: 381px; /* Fikser bredden af indlæg, så [list] ikke sniger sig ind over højresiden af indlæggene */ \
+	} \
+	.indexsection ul li { \
+		width: inherit !important; /* Fikser nyhedslisten, så teksten ikke går for langt og ikke kan læses */ \
+	} \
+	.NES_postReferenceLink { \
+		color: green !important; \
+	} \
+	 \
 	" + (showPostOnMouseOverReference ? ".NES_cite{z-index: 9000; width: " + (showPostOnMouseOverReferenceMini ? '381' : '651') + "px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + '}' : '') + "\
 	.listtag { \
 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFuSURBVDhPlVTNToNAEGZJoAlX0y6esI1PoInUpL6O0RfwETTxBfR9PKgHvWrVSPCAgIZeALkAfjB2u/zU6GQzmZl+8/PNLmVRFH2GgfvmKJCyVBhrGJXTlBpjWePhyGRP84cweLf3DwBhjJVlSbrryjVurq8431Rd19mbzoCG5HkOXRQFuWQIl4Ik9nSGRFWuNxic6fopTnfY3ogKnqKPQFA3vU9W4FJRQVQMI5Jp2q+OZFlGYOxFYUiud0Ot0vSEjkxPtgETi0BWg7NhnNP5M2fG5GKURhGjT4gRwTC2AmpxHKdpKhrCTpIk7BPEBRhjV5ypXhAc+/4RtHzDHTsXPRqcOb8wzUvof3AmKJq3rso0Tc55S+OaJM71kxa+XMjrE2KxXNiyHUKed0hHHqR6D2uk4ozvQdO0Xx5G6yeAqSJ7nj++Oi87u7Zc/ecBrt/b/d3tZLzNFovFR+jj+1ohwUhMSn8PnciWNdkYjr4BVz/GG5kJW6UAAAAASUVORK5CYII=); \
@@ -124,14 +131,12 @@ function NES_init() {
 	.listtag:hover { \
 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF3SURBVDhPjVRNb4JAEGUJ4d74caJi4lkQSfwb/bj3t7WJSeupHz+htb00qSAmcrK2xl7U9k4i0gdDFuiqdbJZdl7mzczbDMvG4/HPajn/mkmwSJJY/M0OiVewJEbTaqVylT33H1fLhWV3EMEYi6KIdtHNpxi8vVYqVXk+nxETttls4qoJkx+4mye37Q6Ich6q1690/RJLbHYrIkMecsOoLG8BiL7NsuBIkqGe/Hx7lOtdsOl0SpG4FxDjyqQW0GRyQYun+3NAGEVSmwXNjUaX1sGaWVpW1NzYZvnbYb3rbtNsr9dryDCMW6rpeed7ioOvKMrIG6RtU77h8Mx1T7FzYYQX95DnLWg2zbtW6x77gZqVdJhzg0WzBbMsS8ziui66IZz1brqGaQdBAMeyHgh1nJP9xVVVzTRzDmj/MguawzDE7e0aDBFHcDxhaPul//Q5+2gaBXnpAO5ufeQ5eq3OfN//Xi3wf2WR/EmIry55HgTkWNOPSuVffwRjRQhoys0AAAAASUVORK5CYII=); \
 	} \
-	 \
 	.img { \
 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJtSURBVDhPjVTfT9NQFO6tHePHcOjGBiMRGT6gxsQAcTNBH/0b/KN89V/xQd/gASFBZc79wLGxYmDtura362277rb1lDtrgZh4c9Pcc3LOPd/3nXOLVFVVZKkrdjhYQcAhdO0QGtfXVczq6tpibgmdNOuydFl6+QpCEEJBELDvbTN+x+f9vXx+me92Oy/KOxANy/M8+Pq+z0x2iEzmZKtU3oFE/jau//cIwJOBhO+7XQ0OlPosXxD4KQEZZMTMoekS13v/do0FcwHHA9EIzGAcOH5AecQ2nA3XJz5im07zybsJFgy6cAiSr8oyYk8KcyuZmYX0dOb+LOznK3Ov1+ffPMtuPkgtz0+x+pEQIbQ4w42sIOn06RwqpEO/O7T2vvcUMi6u5x6nR8uCe0MOAWBHeta+nemY0nyiZY5F1SoWkp4fiK0L1yZLmZnUwqxuThrB86HSIBhn2zalFGhUmxK48vfSfWwYDjqoarWumU+NEiL+dcpvlzcWs2lCCBAUhBAaXDCRGurDdb7vDYl9h6NYHux/7akY9xWj28Ou6540xNpxG6YhAn+tz4eV1mn7vNPt79bFwx8K742FABFCNYNIhuMYuFJtx2mHrWI2gNEUXVHUo+OzRkV2zIHn6pytOQRbFjGx3rrQB/oQ2gQYWUpYGdgye6gplxdSvXFuYpVgVZYHqmKZ2PCpZ1vWaDT2w2ENNWPJ6NPHD1vbZcdxbrQhMqN3Eg9IJpNfjg7CyvAeEonJ6MSnP/484n4IDicMKv9sNtqd1uZWKX7xZAD/BYbjoGxx7RHSNK0v9+B9/Y0ERhMR//webnkerhYzi7nfHkPravic/L8AAAAASUVORK5CYII=); \
 	} \
 	.img:hover { \
 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJgSURBVDhPjVRtb9JQFObWwthgssmbY8jM9mVqNt0wi5/0m7/Kf2OM/g2HxkiyzQECKmOjQ4S2lN7Slrbctp7bko5l8eXkpj3n5Lw+59yL6vW6JArdn1wIyA2FEP1fMZ50jTybfL6QTGXQh9J7UeD3igdggRByXdf/3hTnQxwfldPpDNPtcr4nkOM4NKvnGTCBOO+8XzwAR+ZmXf+vYaE9PzZ83/yIAkMIzQ/EskyERYpm+uJYtTTLfvWC2lAXN8RA98D5NJy6huMSBvkHeMVyNAf5h0SZhdth3xJwAUeGAut1C6qHudh6cnElEU3eWYLzZD32fGv55U5qvxBfW44EuICljw473+F2ih3I5FEM5RJUb431UrUvatPNrcyDhLnGWp7xLIrnjGZpIV79y7mMCcmGW+qUk/TN3ILtuFyrZ020u8nF+MqSrNICgRiGIk0BMwyDEAJt1L4JoMquJgSsKAb6XBvVO2o2boY53D1jnj7bTqcSuq6DM8vS0maj8tuAcI5jj7XJrRDB/PDTSV/CWBCVTh9blvW9ydVP265rB51em3O50jprX553hMMGV/4qMvaUdZGmkZGiDRTDUHCl1p7HiI7KJ0g+EmVRlI5OL5oV3lCHtiWHJiNDw7quqVhu9eShPIYx+VDPyg6WeTwSf/UGjealiiUNSzw/lERdxYpD7Imum+bUcSlgQXL07u3r3cdF05yt0XxVf+EjkUi1ckx7tm0b0Av27J8MGNMNg1v4sXTY4S52dvfm88wW8M+pq5WTjcJ91Gg0hiIP9+vKMngSKIze83BDcy+/sZpM/QYQArdSDStcjQAAAABJRU5ErkJggg==); \
 	} \
-	 \
 	.NES_urlImg { \
 	max-height: 300px; \
 	} \
