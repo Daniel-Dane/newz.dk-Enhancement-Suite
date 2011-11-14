@@ -63,6 +63,7 @@ function NES_init() {
 		<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg (beta)</label><br> \
 		<input type="checkbox" id="showUrlImages" name="showUrlImages"><label for="showUrlImages"> Vis billeder i indlæg</label><br> \
 		<input type="checkbox" id="applyTargetBlank" name="applyTargetBlank"><label for="applyTargetBlank"> Åbn alle links i ny fane</label> \
+		<input type="checkbox" id="fixFailTagsSetting" name="fixFailTagsSetting"><label for="fixFailTagsSetting"> Ret overflødige BB-tags i indlæg (NB: Læs om funktion på kynz inden ibrugtagen)</label> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
 			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om SNES på <a href="http://www.knowyournewz.dk/index.php?title=Super_newz.dk_Enhancement_Suite">kynz</a>! Version ' + NES_version + '. \
@@ -85,9 +86,11 @@ function NES_init() {
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
 	showUrlImages = (localStorage["showUrlImages"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
+	fixFailTagsSetting = (localStorage["fixFailTagsSetting"] == "true");
 	
 	// Event handlers til knapperne
-	handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting', 'showUrlImages', 'applyTargetBlank'];
+	handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
+				   'showUrlImages', 'applyTargetBlank', 'fixFailTagsSetting'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
@@ -388,6 +391,28 @@ function NES_fixPosts(object, afterEdit) {
 		$('a', object).attr('target', '_blank');
 	NES_addLinkToPostReferenceFunc(object);
 	NES_urlToImg(object);
+}
+
+function NES_fixFailTags(object) {
+	if (fixFailTagsSetting) {
+		var a = ['b',            'u',       'i',        's'      ];
+		var b = {'b': 'strong>', 'u': 'u>', 'i': 'em>', 's': 's>'};
+
+		$('.text_content').each(function() {
+			var e = $(this);
+			for (i in a) {
+				var x = e.html().indexOf('[' + a[i] + ']');
+				
+				if (x !== -1) {
+					//console.log(e.html().substr(0, x));
+					//console.log(e.html().substr(x));
+					//console.log(a[i]);
+					//console.log(b[a[i]]);
+					e.html(e.html().substr(0, x) + e.html().substr(x).replace(new RegExp('<(\/)?' + b[a[i]], 'g'), '').replace(new RegExp('\\[' + a[i] + '\\]', 'g'), '</' + b[a[i]]));
+				}
+			}
+		});
+	}
 }
 
 function NES_urlToImg(object) {
