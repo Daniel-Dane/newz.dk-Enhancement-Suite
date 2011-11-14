@@ -111,8 +111,8 @@ function NES_init() {
 			$(this).change();
 		});
 	});
-	$("<style type='text/css'></style>").appendTo("head");
-	// style
+	
+	// Styles til fix af newz.dk samt til nogle af SNES' features.
 	$("<style type='text/css'> \
 	.text_content { \
 		width: 381px; /* Fikser bredden af indlæg, så [list] ikke sniger sig ind over højresiden af indlæggene */ \
