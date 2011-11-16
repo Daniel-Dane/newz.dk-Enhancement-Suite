@@ -439,7 +439,7 @@ function NES_fixPostTimes(object) {
 		var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
 		var d = new Date();
 		d.setHours(s[4], s[5]);
-		var v = round(((new Date()) - d)/(60000));
+		var v = Math.round(((new Date()) - d)/(60000));
 		e.html(e.attr('title') + ' (' + v + ' min siden)');
 	});
 	
