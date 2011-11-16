@@ -421,7 +421,7 @@ function NES_fixPostTimes(object) {
 	
 	b.each(function() {
 		var e = $(this);
-		var s = +.html().match(/(\d+) sek siden/)[1] + 1;
+		var s = +e.html().match(/(\d+) sek siden/)[1] + 1;
 		if (s >= 60)
 			$(this).html(e.attr('title') + ' (1 min siden)');
 		else
