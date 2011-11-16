@@ -22,6 +22,7 @@ if (!$) {
 			NES_loaded = true;
 			var NES_startHash = location.hash;  // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 			var NES_postSortByRating = false;   // true, når der er trykket på "Sorter indlæg efter rating"
+			var NES_fixPostTimesCounter = 0;    // setTimeout til NES_fixPostTimes()
 			$(document).ready(function () {
 				NES_init();
 			});
@@ -391,6 +392,7 @@ function NES_fixPosts(object, afterEdit) {
 		NES_improvedQuote(object);
 		NES_addPermLink(object);
 		NES_addMiniQuote(object);
+		NES_fixPostTimes(object);
 	}
 	
 	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
@@ -398,6 +400,45 @@ function NES_fixPosts(object, afterEdit) {
 	NES_addLinkToPostReferenceFunc(object);
 	NES_urlToImg(object);
 	NES_fixFailTags(object);
+}
+
+function NES_fixPostTimes(object) {
+	var a = $('.comment_date:contains("min siden")', object);
+	var b = $('.comment_date:contains("sek siden")', object);
+	var c = $('.comment_date:contains("nu")', object);
+	
+	if (a.length > 0 && b.length === 0 && c.length === 0) {
+		var l = 20000;
+	} else if (b.length > 0 || c.length > 0) {
+		var l = 1000;
+	} else
+		return;
+	
+	c.each(function() {
+		var e = $(this);
+		e.html(e.attr('title') + ' (1 sek siden)');
+	});
+	
+	b.each(function() {
+		var e = $(this);
+		var s = +.html().match(/(\d+) sek siden/)[1] + 1;
+		if (s >= 60)
+			$(this).html(e.attr('title') + ' (1 min siden)');
+		else
+			$(this).html(e.attr('title') + ' (' + s + ' sek siden)');
+	});
+	
+	a.each(function() {
+		var e = $(this);
+		var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.html());
+		var d = new Date();
+		d.setHours(s[4], s[5]);
+		var v = round(((new Date()) - d)/(60000));
+		e.html(e.attr('title') + ' ('v + ' min siden)');
+	});
+	
+	clearTimeout(NES_fixPostTimesCounter);
+	NES_fixPostTimesCounter = setTimeout("NES_fixPostTimes()", l);
 }
 
 function NES_applyTargetBlankFunc(object) {
