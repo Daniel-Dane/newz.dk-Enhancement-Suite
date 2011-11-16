@@ -376,7 +376,7 @@ function NES_addToToolbar(editArea) {
 		return false;
 	});
 	
-	$(domain).parent().parent().find('.toolbar a').click(function() {
+	$(domain).parent().parent().find('.toolbar a').live('click', function() {
 		$(domain).keyup();
 	});
 }
