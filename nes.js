@@ -440,7 +440,10 @@ function NES_fixPostTimes(object) {
 		var d = new Date();
 		d.setHours(s[4], s[5]);
 		var v = Math.round(((new Date()) - d)/(60000));
-		e.html(e.attr('title') + ' (' + v + ' min siden)');
+		if (v >= 60)
+			e.html(e.attr('title') + ' (i dag)');
+		else
+			e.html(e.attr('title') + ' (' + v + ' min siden)');
 	});
 	
 	clearTimeout(NES_fixPostTimesCounter);
