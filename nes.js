@@ -324,10 +324,12 @@ function NES_init() {
 	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
 	NES_updateCommentList();
 	
+	/*
 	// Kommentarfeltet resizes, når
 	$('.comment_left .toolbar').delegate('a', 'click', function() {
 		$(domain).keyup();
 	});
+	*/
 	
 	//
 	NES_fixTitle();
