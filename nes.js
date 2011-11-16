@@ -376,8 +376,6 @@ function NES_addToToolbar(editArea) {
 		return false;
 	});
 	
-	console.log(domain);
-	console.log(area);
 	$(domain).parent().parent().find('.toolbar a').click(function() {
 		$(domain).keyup();
 	});
