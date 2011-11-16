@@ -358,10 +358,6 @@ function NES_addToToolbar(editArea) {
 		var area   = undefined;
 	}
 	
-	$(domain).parent().parent().find('.toolbar a').click(function() {
-		$(domain).keyup();
-	});
-	
 	// Til [list]
 	$('li.strikethrough', area).after('<li><span><a class="listtag" title="[list][li]liste1[/li][li]liste2[/li][li]liste3[/li][/list]" href="#"></a></span></li>');
 	$('.listtag', area).bind('click', function(e) {
@@ -378,6 +374,12 @@ function NES_addToToolbar(editArea) {
 		if (imgurl !== null)
 			$(domain).replaceSelection('[url=' + imgurl + ']' + imgurl + ' (billede)[/url]');
 		return false;
+	});
+	
+	console.log(domain);
+	console.log(area);
+	$(domain).parent().parent().find('.toolbar a').click(function() {
+		$(domain).keyup();
 	});
 }
 
