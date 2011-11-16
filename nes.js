@@ -437,6 +437,7 @@ function NES_fixPostTimes(object) {
 		var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
 		var d = new Date();
 		d.setHours(s[4], s[5]);
+		d.setDate(s[1]);
 		var v = Math.round(((new Date()) - d)/(60000));
 		if (v >= 60)
 			e.html(e.attr('title') + ' (i dag)');
