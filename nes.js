@@ -164,9 +164,6 @@ function NES_init() {
 					NES_startHash = '';
 				}
 				
-				$(".loading").hide();
-				$('.pagination').show();
-				
 				// Retter newz.dk's buggede AJAX.
 				$(".pagination a").each(function() {
 					$(this).attr('href', href + '/page' + /#page(\d+)/.exec($(this).attr('href'))[1]);
@@ -813,6 +810,10 @@ function NES_fetchPage(pageNo, state, hash) {
 			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
 			UpdatePosts();
+		},
+		complete: function() {
+			$(".loading").hide();
+			$('.pagination').show();
 		}
 	});
 }
