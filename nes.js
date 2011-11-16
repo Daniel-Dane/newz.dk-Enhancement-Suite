@@ -406,12 +406,18 @@ function NES_fixPostTimes(object) {
 	var a = $('.comment_date:contains("min siden")', object);
 	var b = $('.comment_date:contains("sek siden")', object);
 	var c = $('.comment_date:contains("nu")', object);
+	var d = $('.comment_date:contains("i dag"):not(:contains("."))', object);
 	
-	if (a.length > 0 && b.length === 0 && c.length === 0) {
-		var l = 20000;
-	} else if (b.length > 0 || c.length > 0) {
+	d.each(function() {
+		var e = $(this);
+		e.html(e.attr('title') + ' (i dag)');
+	});
+	
+	if (b.length > 0 || c.length > 0)
 		var l = 1000;
-	} else
+	else if (a.length > 0)
+		var l = 20000;
+	else
 		return;
 	
 	c.each(function() {
@@ -434,7 +440,7 @@ function NES_fixPostTimes(object) {
 		var d = new Date();
 		d.setHours(s[4], s[5]);
 		var v = round(((new Date()) - d)/(60000));
-		e.html(e.attr('title') + ' ('v + ' min siden)');
+		e.html(e.attr('title') + ' (' + v + ' min siden)');
 	});
 	
 	clearTimeout(NES_fixPostTimesCounter);
