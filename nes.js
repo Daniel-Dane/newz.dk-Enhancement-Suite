@@ -387,11 +387,15 @@ function NES_fixPosts(object, afterEdit) {
 	}
 	
 	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
-	if (applyTargetBlank)
-		$('a', object).attr('target', '_blank');
+	NES_applyTargetBlankFunc(object);
 	NES_addLinkToPostReferenceFunc(object);
 	NES_urlToImg(object);
 	NES_fixFailTags(object);
+}
+
+function NES_applyTargetBlankFunc(object) {
+	if (applyTargetBlank)
+		$('a:not([href^="#"]):not([target=_blank])', object).attr('target', '_blank');
 }
 
 function NES_fixFailTags(object) {
