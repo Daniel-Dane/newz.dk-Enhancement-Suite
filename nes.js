@@ -323,6 +323,7 @@ function NES_init() {
 	NES_updateCommentList();
 	
 	/*
+	// Virker ikke, da den bindes FØR de andre funktioner, så kommentarfeltet resizes, INDEN indhold tilføjes.
 	// Kommentarfeltet resizes, når
 	$('.comment_left .toolbar').delegate('a', 'click', function() {
 		$(domain).keyup();
