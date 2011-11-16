@@ -436,7 +436,7 @@ function NES_fixPostTimes(object) {
 	
 	a.each(function() {
 		var e = $(this);
-		var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.html());
+		var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
 		var d = new Date();
 		d.setHours(s[4], s[5]);
 		var v = round(((new Date()) - d)/(60000));
