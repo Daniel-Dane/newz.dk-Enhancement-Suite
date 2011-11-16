@@ -323,7 +323,12 @@ function NES_init() {
 	// Til gemning af kommentarfeltet
 	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
 	NES_updateCommentList();
-		
+	
+	// Kommentarfeltet resizes, når
+	$('.comment_left .toolbar').delegate('a', 'click', function() {
+		$(domain).keyup();
+	});
+	
 	//
 	NES_fixTitle();
 	NES_ajaxPageChange();
@@ -374,10 +379,6 @@ function NES_addToToolbar(editArea) {
 		if (imgurl !== null)
 			$(domain).replaceSelection('[url=' + imgurl + ']' + imgurl + ' (billede)[/url]');
 		return false;
-	});
-	
-	$(domain).parent().parent().find('.toolbar a').live('click', function() {
-		$(domain).keyup();
 	});
 }
 
