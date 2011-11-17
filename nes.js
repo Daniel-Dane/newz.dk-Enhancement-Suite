@@ -401,7 +401,7 @@ function NES_fixPosts(object, afterEdit) {
 	NES_fixSpoilers(object);
 }
 
-NES_fixSpoilers(object) {
+function NES_fixSpoilers(object) {
 	$('.spoiler', object).remove();
 	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
