@@ -490,7 +490,7 @@ function NES_urlToImg(object) {
 // Skal køres EFTER NES_improvedQuote().
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
 function NES_addMiniQuote(object) {
-	$('.quoteitemNES', object).after(' (<a href="#" class="miniquote">miniquote</a>)');
+	$('.NES_quoteitem', object).after(' (<a href="#" class="miniquote">miniquote</a>)');
 	$('.miniquote', object).bind('click', function(e) {
 		e.preventDefault();
 		
@@ -574,8 +574,7 @@ function NES_addPermLink(object) {
 // Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk med vigtige ændringer. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
 function NES_improvedQuote(object) {
 	// newz.dk unbinder selv efterfølgende, så vi bliver nødt til at omdøbe class (faktisk fjerne den pga. Chrome-bug)
-	$(".quoteitem", object).replaceWith('<a href="#" class="quoteitemNES">Citer indlæg</a>');
-	$(".quoteitemNES", object).bind("click", function(e) {
+	$(".quoteitem", object).unbind().attr('class', 'NES_quoteitem').bind("click", function(e) {
 		e.preventDefault();
 		
 		// Finder indlæggets id (ikke nummer)
