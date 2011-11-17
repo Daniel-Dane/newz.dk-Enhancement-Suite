@@ -398,6 +398,7 @@ function NES_fixPosts(object, afterEdit) {
 	NES_addLinkToPostReferenceFunc(object);
 	NES_urlToImg(object);
 	NES_fixFailTags(object);
+	NES_fixSpoilers(object);
 }
 
 NES_fixSpoilers(object) {
