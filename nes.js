@@ -400,6 +400,15 @@ function NES_fixPosts(object, afterEdit) {
 	NES_fixFailTags(object);
 }
 
+NES_fixSpoilers(object) {
+	$('.spoiler', object).remove();
+	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
+	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
+	$('.open_spoiler', object).unbind().attr('class', 'NES_open_spoiler').click(function() {
+		$(this).replaceWith(this.id);
+	})
+}
+
 function NES_fixPostTimes(object) {
 	var a = $('.comment_date:contains("min siden")', object);
 	var b = $('.comment_date:contains("sek siden")', object);
@@ -573,7 +582,8 @@ function NES_addPermLink(object) {
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
 // Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk med vigtige ændringer. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
 function NES_improvedQuote(object) {
-	// newz.dk unbinder selv efterfølgende, så vi bliver nødt til at omdøbe class (faktisk fjerne den pga. Chrome-bug)
+	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
+	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
 	$(".quoteitem", object).unbind().attr('class', 'NES_quoteitem').bind("click", function(e) {
 		e.preventDefault();
 		
