@@ -434,10 +434,9 @@ function NES_fixPostTimes(object) {
 	
 	a.each(function() {
 		var e = $(this);
+		var m = {'jan':1,'feb':2,'mar':3,'apr':4,'maj':5,'jun':6,'jul':7,'aug':8,'sep':9,'okt':10,'nov':11,'dec':12};
 		var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
-		var d = new Date();
-		d.setHours(s[4], s[5]);
-		d.setDate(s[1]);
+		var d = new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0);
 		var v = Math.round(((new Date()) - d)/(60000));
 		if (v >= 60)
 			e.html(e.attr('title') + ' (i dag)');
