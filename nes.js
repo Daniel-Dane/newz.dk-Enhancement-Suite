@@ -426,7 +426,7 @@ function NES_fixPostTimes(object) {
 	if (b.length > 0 || c.length > 0)
 		var l = 1000;
 	else if (a.length > 0)
-		var l = 61 - (new Date()).getSeconds(); // Så starter den altid, når klokken slår et nyt minut. Tøhø.
+		var l = 1000 * (61 - (new Date()).getSeconds()); // Så starter den altid, når klokken slår et nyt minut. Tøhø.
 	else
 		return;
 	
