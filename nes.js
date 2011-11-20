@@ -327,7 +327,7 @@ function NES_init() {
 	// Resizer kommentarfeltet, når der trykkes på Rediger (inde i Preview)
 		// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
 		// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
-	$(".button_edit", object).unbind().attr('class', 'NES_button_edit').bind("click", function(e) {
+	$(".button_edit").unbind().attr('class', 'NES_button_edit').bind("click", function(e) {
 		$('#id_comment').keyup();
 		
 		// Original newz.dk-kode:
