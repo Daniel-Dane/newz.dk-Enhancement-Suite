@@ -495,11 +495,13 @@ function NES_fixFailTags(object) {
 				var x = e.html().indexOf('[' + a[i] + ']');
 				
 				if (x !== -1) {
-					//console.log(e.html().substr(0, x));
-					//console.log(e.html().substr(x));
-					//console.log(a[i]);
-					//console.log(b[a[i]]);
 					e.html(e.html().substr(0, x) + e.html().substr(x).replace(new RegExp('<(\/)?' + b[a[i]], 'g'), '').replace(new RegExp('\\[' + a[i] + '\\]', 'g'), '</' + b[a[i]]));
+				}
+				
+				var x = e.html().indexOf('[' + a[i].toUpperCase() + ']');
+				
+				if (x !== -1) {
+					e.html(e.html().substr(0, x) + e.html().substr(x).replace(new RegExp('<(\/)?' + b[a[i]], 'g'), '').replace(new RegExp('\\[' + a[i].toUpperCase() + '\\]', 'g'), '</' + b[a[i]]));
 				}
 			}
 		});
