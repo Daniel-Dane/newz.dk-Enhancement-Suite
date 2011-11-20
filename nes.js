@@ -643,7 +643,7 @@ function NES_improvedQuote(object) {
 					
 					// Skal være efter [quote]
 					html = html.replace(/\<a href="(.+?)"\>(.+?)(\.\.)?\<\/a\>/g, '[url=$1]$2[/url]'); // Til url i [url]
-					html = html.replace(/<a data="NES_img" href="(.+)"\>.+\<\/a\>/g, '[url=$1]$1 (billede)[/url]'); // Konverterer url-billeder tilbage til sin BB-form
+					html = html.replace(/<a data="NES_img" href="([^"]+)"\>.+\<\/a\>/g, '[url=$1]$1 (billede)[/url]'); // Konverterer url-billeder tilbage til sin BB-form
 					// Ovenstående matcher også url uden [url] og giver dem en [url]. Det skal ændres. Jeg har prøvet.
 					
 					// Stripper resten af html'et
