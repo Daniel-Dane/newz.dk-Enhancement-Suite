@@ -182,7 +182,7 @@ function NES_init() {
 		// fixPosts() efter den løbende AJAX-indhentning af nye indlæg.
 		if ((options.data.match('class=Z4_Forum_Item&action=usersave') !== null) || (options.url.match('class=Z4_Forum_Item&action=new') !== null)) {
 			var a = $('#comments > div:last');
-			if (a.text().trim() != '')
+			if ($.trim(a.text()) != '')
 				NES_fixPosts(a);
 		}
 		
@@ -812,7 +812,7 @@ function NES_improvedQuote(object) {
 					text = t;
 					
 					// Entity decode
-					text = Encoder.htmlDecode(text);
+					text = $.trim(Encoder.htmlDecode(text));
 					
 					// Finder kommentarfeltet og indsætter et linjeknæk før det citerede indlæg, hvis feltet ikke er tomt
 					var comment = $("#id_comment").val();
