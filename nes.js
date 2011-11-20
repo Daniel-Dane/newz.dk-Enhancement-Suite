@@ -632,45 +632,187 @@ function NES_improvedQuote(object) {
 		if (improvedQuoteSetting) {
 			if ((getSelection().rangeCount > 0) && ($(getSelection().getRangeAt(0).commonAncestorContainer).parents('#' + $post.attr("id")).length > 0)) {
 				// Dette kan sikkert reduceres til noget pænere...
-				sel = getSelection();
 				var container = document.createElement("div");
-				container.appendChild(sel.getRangeAt(0).cloneContents());
-				var html = container.innerHTML;
+				container.appendChild(getSelection().getRangeAt(0).cloneContents());
+				var text = container.innerHTML;
 				
-				if (html != '') {
+				if (text != '') {
 					hentFraServer = false;
 				
-					html = html.replace(/\<\/p\>\<p\>/g, "\n\n");
-					html = html.replace(/\<br\>/g, "\n");
+					function parse(givenQuotePos) {
+						function parseTag(tag) {
+							// tag = '<tag attr=value attr2=value2>' (u.s.w. med attr'erne)
+							// eller '<tag>'
+							var tagmatch = /^<([a-z]+)>/.exec(tag);
+							// Har attr, else har ikke
+							if (tagmatch == null) {
+								var tag2 = tag.substr(tag.indexOf(' ') + 1).substr(0, tag.length - 1),
+									regmatch, tagattrs = {},
+									tagreg = /([^= ]+)="([^"]+)"/g;
+								while (regmatch = tagreg.exec(tag2)) {
+									tagattrs[regmatch[1]] = regmatch[2];
+								}
+								return {
+									tag: /^<([a-z]+) /.exec(tag)[1],
+									attr: tagattrs
+								}
+							} else {
+								return {
+									tag: tagmatch[1],
+									attr: null
+								}
+							}
+						}
+						
+						if (typeof givenQuotePos === 'undefined')
+							givenQuotePos = -1;
+						
+						while (true) {
+							// Hvis nået slutningen
+							if (i >= len)
+								return;
+							
+							s = text.substr(i);
+							l = s.indexOf('<');
+							
+							// Hvis løbet tør for HTML
+							if (l === -1) {
+								t += s;
+								return;
+							}
+							
+							t += text.substr(i, l);
+							i += s.indexOf('>') + 1;
+							
+							// Hvis nået et end-tag, else hvis nået et start-tag
+							if (s.substr(l + 1, 1) === '/') {
+								if (givenQuotePos === -1)
+									return;
+								else
+									return false;
+							} else {
+								var obj = parseTag(s.substr(l, s.indexOf('>') + 1));
+								switch (obj.tag) {
+									case 'strong':
+										t += '[b]';
+										parse();
+										t += '[/b]'
+										break;
+									case 'u':
+										t += '[u]';
+										parse();
+										t += '[/u]'
+										break;
+									case 'em':
+										t += '[i]';
+										parse();
+										t += '[/i]'
+										break;
+									case 's':
+										t += '[s]';
+										parse();
+										t += '[/s]'
+										break;
+									case 'code':
+										t += '[code]';
+										parse();
+										t += '[/code]'
+										break;
+									case 'ul':
+										t += '[list]';
+										parse();
+										t += '[/list]'
+										break;
+									case 'li':
+										t += '[li]';
+										parse();
+										t += '[/li]'
+										break;
+									case 'a':
+										switch (obj.attr.data) {
+											case 'NES_img':
+												t += '[url=' + obj.attr.href + ']' + obj.attr.href + ' (billede)[/url]';
+												i += 4;
+												break;
+											case 'NES_ref':
+												t += obj.attr.href;
+												i += text.substr(i).indexOf('>') + 1;
+												break;
+											default:
+												// Normal a, enten som [url] eller en url uden [url]
+												// url uden [url] bliver konverteret til en [url], men det er ikke svært at lave den rigtigt
+												t += '[url=' + obj.attr.href + ']';
+												parse();
+												t += '[/url]';
+												break;
+										}
+										break;
+									case 'blockquote':
+										t += '[quote';
+										var quotePos = t.length;
+										if (parse(t.length) === false) {
+											t = t.substr(0, quotePos) + ']' + t.substr(quotePos);
+										}
+										t += '[/quote]';
+										break;
+									case 'cite':
+										if (givenQuotePos === -1) {
+											i += text.substr(i).indexOf('</cite>') + 7;
+											break;
+										}
+										
+										s = text.substr(i);
+										var rem = s.match(/^<a href="([^"]+)">([^<]+)<\/a><\/cite>/);
+										
+										// Ingen kilde, else kilde/#-reference
+										if (rem === null) {
+											s = /([^<]+)</.exec(s)[1];
+										} else {
+											switch (rem[2]) {
+												// URL
+												case 'Kilde':
+													s = rem[1];
+													break;
+												// #1-reference
+												case rem[1]:
+													s = rem[1].substr(1);
+													break;
+												// Brugernavn (#1)-reference
+												default:
+													s = rem[2].lastIndexOf('#');
+													s = rem[2].substr(0, s) + rem[2].substr(s + 1);
+													break;
+											}
+										}
+										t = t.substr(0, givenQuotePos) + '=' + s + ']' + t.substr(givenQuotePos);
+										i += text.substr(i).indexOf('</cite>') + 7;
+										givenQuotePos = -1;
+										break;
+									default:
+										console.log('NES: Parse fejlede. Data:');
+										console.log(obj);
+										return;
+								}
+							}
+						}
+					}
 					
-					html = html.replace(/\<strong\>/g, "[b]");
-					html = html.replace(/\<\/strong\>/g, "[/b]");
-					
-					html = html.replace(/\<em\>/g, "[i]");
-					html = html.replace(/\<\/em\>/g, "[/i]");
-					
-					html = html.replace(/\<u\>/g, "[u]");
-					html = html.replace(/\<\/u\>/g, "[/u]");
-					
-					html = html.replace(/\<s\>/g, "[s]");
-					html = html.replace(/\<\/s\>/g, "[/s]");
-					
-					// Denne del skal stadig forbedres
-					html = html.replace(/\<code\>/g, "\n"); // Skal laves om til en ordentlig [code]
-					html = html.replace(/\<blockquote\>/g, "\n"); // Skal laves om til en ordentlig [quote] -- Stort arbejde. Jeg har prøvet.
-					// Denne del skal stadig forbedres
-					
-					// Skal være efter [quote]
-					html = html.replace(/\<a href="(.+?)"\>(.+?)(\.\.)?\<\/a\>/g, '[url=$1]$2[/url]'); // Til url i [url]
-					html = html.replace(/<a data="NES_img" href="([^"]+)"\>.+\<\/a\>/g, '[url=$1]$1 (billede)[/url]'); // Konverterer url-billeder tilbage til sin BB-form
-					// Ovenstående matcher også url uden [url] og giver dem en [url]. Det skal ændres. Jeg har prøvet.
-					
-					// Stripper resten af html'et
-					html = html.replace(/\<(.*?)\>/g, "");
-					html = html.replace(/\<\/(.*?)\>/g, "");
+					text = text.replace(/<\/p><p>/g, '\n\n').replace(/<p><\/p>/g, '\n').replace(/<\/p>|<p>/g, '').replace(/<img [^>]+>/g, '').replace(/<br>/g, '\n');
+					var t = '',
+						s = '',
+						i = 0,
+						l = 0,
+						len = text.length;
+					if (text.indexOf('<li>') == 0) {
+						t = '[list]';
+						parse();
+						t += '[/list]';
+					} else
+						parse();
+					text = t;
 					
 					// Entity decode
-					html = Encoder.htmlDecode(html);
+					text = Encoder.htmlDecode(text);
 					
 					// Finder kommentarfeltet og indsætter et linjeknæk før det citerede indlæg, hvis feltet ikke er tomt
 					var comment = $("#id_comment").val();
@@ -679,7 +821,7 @@ function NES_improvedQuote(object) {
 					}
 					
 					// Sætter indlægget ind i en quote, som vi kender den
-					comment += "[quote=" + username + " (" + itemId + ")]" + html + "[/quote]" + "\n\n";
+					comment += "[quote=" + username + " (" + itemId + ")]" + text + "[/quote]" + "\n\n";
 					$("#id_comment").val(comment);
 				}
 			}
