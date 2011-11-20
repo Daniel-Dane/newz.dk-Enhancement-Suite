@@ -493,7 +493,7 @@ function NES_urlToImg(object) {
 			var e = $(this);
 			var b = this.href;
 			if (b + ' (billede)' == e.text()) {
-				e.replaceWith('<a onclick="return true;" href="'+b+'"><img class="NES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
+				e.replaceWith('<a data="NES_img" href="'+b+'"><img class="NES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
 			}
 		});
 	}
@@ -544,7 +544,7 @@ function NES_addLinkToPostReferenceFunc(object) {
 						if (a == 0 || (c == postNum && p != 'post_preview'))
 							return '#' + a + b;
 						var him = $('.comment:has(a[name=' + c + '])').attr('id');
-						return '<a class="NES_postReferenceLink"' + (((showPostOnMouseOverReference) && ((c > 50 * (_pageId - 1)) && (c <= 50 * (_pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost();" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : ' onclick="return true;"') + ' href="#' + c + '">#' + a + '</a>' + b;
+						return '<a data="NES_ref" class="NES_postReferenceLink"' + (((showPostOnMouseOverReference) && ((c > 50 * (_pageId - 1)) && (c <= 50 * (_pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost();" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : '') + ' href="#' + c + '">#' + a + '</a>' + b;
 					}).replace(/&/gm, '&amp;'));
 				}
 			});
@@ -643,7 +643,7 @@ function NES_improvedQuote(object) {
 					
 					// Skal være efter [quote]
 					html = html.replace(/\<a href="(.+?)"\>(.+?)(\.\.)?\<\/a\>/g, '[url=$1]$2[/url]'); // Til url i [url]
-					html = html.replace(/<a onclick="return true;" href="(.+)"\>.+\<\/a\>/g, '[url=$1]$1 (billede)[/url]'); // Konverterer url-billeder tilbage til sin BB-form
+					html = html.replace(/<a data="NES_img" href="(.+)"\>.+\<\/a\>/g, '[url=$1]$1 (billede)[/url]'); // Konverterer url-billeder tilbage til sin BB-form
 					// Ovenstående matcher også url uden [url] og giver dem en [url]. Det skal ændres. Jeg har prøvet.
 					
 					// Stripper resten af html'et
