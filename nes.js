@@ -336,7 +336,7 @@ function NES_init() {
 		StartAutoUpdate();
 		e.preventDefault();
 		return false;
-	}
+	});
 	
 	/*
 	// Virker ikke, da den bindes FØR de andre funktioner, så kommentarfeltet resizes, INDEN indhold tilføjes.
