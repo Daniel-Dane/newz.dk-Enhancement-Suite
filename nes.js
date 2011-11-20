@@ -498,10 +498,10 @@ function NES_fixFailTags(object) {
 					e.html(e.html().substr(0, x) + e.html().substr(x).replace(new RegExp('<(\/)?' + b[a[i]], 'g'), '').replace(new RegExp('\\[' + a[i] + '\\]', 'g'), '</' + b[a[i]]));
 				}
 				
-				var x = e.html().indexOf('[' + a[i].toUpperCase() + ']');
+				var x = e.html().indexOf('[/' + a[i].toUpperCase() + ']');
 				
 				if (x !== -1) {
-					e.html(e.html().substr(0, x) + e.html().substr(x).replace(new RegExp('<(\/)?' + b[a[i]], 'g'), '').replace(new RegExp('\\[' + a[i].toUpperCase() + '\\]', 'g'), '</' + b[a[i]]));
+					e.html(e.html().substr(0, x) + e.html().substr(x).replace(new RegExp('<(\/)?' + b[a[i]], 'g'), '').replace(new RegExp('\\[/' + a[i].toUpperCase() + '\\]', 'g'), '</' + b[a[i]]));
 				}
 			}
 		});
