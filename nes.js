@@ -328,12 +328,15 @@ function NES_init() {
 		// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
 		// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
 	$(".button_edit").unbind().attr('class', 'NES_button_edit').bind("click", function(e) {
+		// Original newz.dk-kode
+		$("#post_preview").hide();
+		$("#post_form").show();
+		StartAutoUpdate();
+		
+		// SNES' tilføjelse
 		$('#id_comment').keyup();
 		
-		// Original newz.dk-kode:
-		$("#post_preview").hide(); // Preview-div
-		$("#post_form").show();    // Kommentarfelt-div
-		StartAutoUpdate();
+		// Original newz.dk-kode
 		e.preventDefault();
 		return false;
 	});
