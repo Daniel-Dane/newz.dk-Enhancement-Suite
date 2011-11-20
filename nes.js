@@ -187,8 +187,10 @@ function NES_init() {
 		}
 		
 		// fixPosts() af Preview. (Slået fra, når man opretter en tråd.)
-		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1))
+		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1)) {
 			NES_fixPosts($('#post_preview .content'));
+			$("#NES_button_edit").focus(); // Hører til fiks af resize af kommentarfeltet efter Preview
+		}
 		
 		// fixPosts() af indlæg efter endt redigering (rettelse)
 		if (options.data.match('class=Z4_Forum_Item&action=edit') !== null)
@@ -321,6 +323,20 @@ function NES_init() {
 	// Til gemning af kommentarfeltet
 	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
 	NES_updateCommentList();
+	
+	// Resizer kommentarfeltet, når der trykkes på Rediger (inde i Preview)
+		// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
+		// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
+	$(".button_edit", object).unbind().attr('class', 'NES_button_edit').bind("click", function(e) {
+		$('#id_comment').keyup();
+		
+		// Original newz.dk-kode:
+		$("#post_preview").hide(); // Preview-div
+		$("#post_form").show();    // Kommentarfelt-div
+		StartAutoUpdate();
+		e.preventDefault();
+		return false;
+	}
 	
 	/*
 	// Virker ikke, da den bindes FØR de andre funktioner, så kommentarfeltet resizes, INDEN indhold tilføjes.
