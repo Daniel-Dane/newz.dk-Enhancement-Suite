@@ -748,14 +748,16 @@ function NES_improvedQuote(object) {
 												i += text.substr(i).indexOf('>') + 1;
 												break;
 											default:
-												// Normal a, enten som [url] eller en url uden [url]
 												l = s.indexOf('</');
-												console.log(s);
-												console.log(s.substr(l, 4));
-												console.log(s.substring(s.indexOf('>') + 1, l));
-												t += '[url=' + obj.attr.href + ']';
-												parse();
-												t += '[/url]';
+												// a uden [url], else a med [url]
+												if (console.log(s.substr(l, 4)) === '</a>' && $('<div><a href="'+obj.attr.href+'">'+obj.attr.href+'</a></div>').linkShorten().find('a').text() === s.substring(s.indexOf('>') + 1, l)) {
+													t += obj.attr.href;
+													i += s.indexOf('</a>') + 4;
+												} else {
+													t += '[url=' + obj.attr.href + ']';
+													parse();
+													t += '[/url]';
+												}
 												break;
 										}
 										break;
