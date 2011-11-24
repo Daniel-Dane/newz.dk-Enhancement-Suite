@@ -754,8 +754,10 @@ function NES_improvedQuote(object) {
 												// a uden [url], else a med [url]
 												if (s.substr(l, 4) === '</a>' && (tmp1 === tmp2 || tmp1.substr(7) === tmp2)) {
 													t += obj.attr.href;
-													i += s.indexOf('</a>') + 4;
 													console.log(text.substr(i));
+													console.log(i);
+													i += s.indexOf('</a>') + 4;
+													console.log(i);
 												} else {
 													t += '[url=' + obj.attr.href + ']';
 													parse();
