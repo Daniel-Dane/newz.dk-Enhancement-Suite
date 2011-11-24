@@ -739,7 +739,7 @@ function NES_improvedQuote(object) {
 												s = $('<div><a href="'+obj.attr.href+'">'+obj.attr.href+'</a></div>').linkShorten().find('a').text();
 												console.log(s);
 												console.log(obj.attr.title);
-												if (s === obj.attr.title)
+												if (s === obj.attr.title || s.substr(7) === obj.attr.title)
 													t += obj.attr.href;
 												else
 													t += '[url=' + obj.attr.href + ']' + obj.attr.title + '[/url]';
