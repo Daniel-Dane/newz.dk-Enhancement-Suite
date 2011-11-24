@@ -517,7 +517,7 @@ function NES_urlToImg(object) {
 			var b = this.href;
 			var c = e.text();
 			if (b == c)
-				var c = $('<div><a href="'+obj.attr.href+'">'+obj.attr.href+'</a></div>').linkShorten().find('a').text();
+				var c = $('<div><a href="'+b+'">'+b+'</a></div>').linkShorten().find('a').text();
 			e.replaceWith('<a data="NES_img" title="'+c+'" alt="'+b+'" href="'+b+'"><img class="NES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
 		});
 	}
