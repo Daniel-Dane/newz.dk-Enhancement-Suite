@@ -481,7 +481,7 @@ function NES_fixPostTimes(object) {
 
 function NES_applyTargetBlankFunc(object) {
 	if (applyTargetBlank)
-		$('a:not([href^="#"]):not([target=_blank])', object).attr('target', '_blank');
+		$('a:not([href^="#"])', object).attr('target', '_blank');
 }
 
 function NES_fixFailTags(object) {
@@ -510,12 +510,12 @@ function NES_fixFailTags(object) {
 
 function NES_urlToImg(object) {
 	if (showUrlImages) {
-		$('.text_content a', object).each(function() {
+		$('.text_content a:not([href^="#"])', object).filter(function() {
+			return (/\.(png|gif|jp(e)?g)$/i.test(this.href) && $(this).attr('data') === undefined);
+		}).each(function() {
 			var e = $(this);
 			var b = this.href;
-			if (b + ' (billede)' == e.text()) {
-				e.replaceWith('<a data="NES_img" href="'+b+'"><img class="NES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
-			}
+			e.replaceWith('<a data="NES_img" title="'+e.text()+'" alt="'+b+'" href="'+b+'"><img class="NES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
 		});
 	}
 }
