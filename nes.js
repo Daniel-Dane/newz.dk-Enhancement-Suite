@@ -515,7 +515,10 @@ function NES_urlToImg(object) {
 		}).each(function() {
 			var e = $(this);
 			var b = this.href;
-			e.replaceWith('<a data="NES_img" title="'+e.text()+'" alt="'+b+'" href="'+b+'"><img class="NES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
+			var c = e.text();
+			if (b == c)
+				var c = $('<div><a href="'+obj.attr.href+'">'+obj.attr.href+'</a></div>').linkShorten().find('a').text();
+			e.replaceWith('<a data="NES_img" title="'+c+'" alt="'+b+'" href="'+b+'"><img class="NES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
 		});
 	}
 }
@@ -734,9 +737,6 @@ function NES_improvedQuote(object) {
 										switch (obj.attr.data) {
 											case 'NES_img':
 												s = $('<div><a href="'+obj.attr.href+'">'+obj.attr.href+'</a></div>').linkShorten().find('a').text();
-												console.log(obj.attr.href);
-												console.log(obj.attr.title);
-												console.log(s);
 												if (s === obj.attr.title)
 													t += obj.attr.href;
 												else
