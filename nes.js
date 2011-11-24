@@ -733,7 +733,11 @@ function NES_improvedQuote(object) {
 									case 'a':
 										switch (obj.attr.data) {
 											case 'NES_img':
-												t += '[url=' + obj.attr.href + ']' + obj.attr.title + '[/url]';
+												s = $('<div><a href="'+obj.attr.href+'">'+obj.attr.href+'</a></div>').linkShorten().find('a').text();
+												if (s === obj.attr.title)
+													t += obj.attr.href;
+												else
+													t += '[url=' + obj.attr.href + ']' + obj.attr.title + '[/url]';
 												i += 4;
 												break;
 											case 'NES_ref':
@@ -742,7 +746,7 @@ function NES_improvedQuote(object) {
 												break;
 											default:
 												// Normal a, enten som [url] eller en url uden [url]
-												// url uden [url] bliver konverteret til en [url], men det er ikke svært at lave den rigtigt
+												// url uden [url] bliver konverteret til en [url]
 												t += '[url=' + obj.attr.href + ']';
 												parse();
 												t += '[/url]';
