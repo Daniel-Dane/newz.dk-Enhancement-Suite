@@ -756,7 +756,7 @@ function NES_improvedQuote(object) {
 													t += obj.attr.href;
 													console.log(text.substr(i));
 													console.log(i);
-													i += s.indexOf('</a>') + 4;
+													i += text.substr(i).indexOf('</a>') + 4;
 													console.log(i);
 												} else {
 													t += '[url=' + obj.attr.href + ']';
