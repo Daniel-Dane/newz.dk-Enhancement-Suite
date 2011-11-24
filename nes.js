@@ -752,7 +752,7 @@ function NES_improvedQuote(object) {
 												l = s.indexOf('</');
 												console.log(s);
 												console.log(s.substr(l, 4));
-												console.log(s.substr(s.indexOf('>'), l));
+												console.log(s.substring(s.indexOf('>') + 1, l));
 												t += '[url=' + obj.attr.href + ']';
 												parse();
 												t += '[/url]';
