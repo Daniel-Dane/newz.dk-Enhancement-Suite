@@ -738,7 +738,7 @@ function NES_improvedQuote(object) {
 											case 'NES_img':
 												s = $('<div><a href="'+obj.attr.href+'">'+obj.attr.href+'</a></div>').linkShorten().find('a').text();
 												console.log(s);
-												console.log(obj.attr.href);
+												console.log(obj.attr.title);
 												if (s === obj.attr.title)
 													t += obj.attr.href;
 												else
