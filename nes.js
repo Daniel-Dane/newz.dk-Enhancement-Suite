@@ -750,7 +750,7 @@ function NES_improvedQuote(object) {
 											default:
 												l = s.indexOf('</');
 												// a uden [url], else a med [url]
-												if (console.log(s.substr(l, 4)) === '</a>' && $('<div><a href="'+obj.attr.href+'">'+obj.attr.href+'</a></div>').linkShorten().find('a').text() === s.substring(s.indexOf('>') + 1, l)) {
+												if (s.substr(l, 4) === '</a>' && $('<div><a href="'+obj.attr.href+'">'+obj.attr.href+'</a></div>').linkShorten().find('a').text() === s.substring(s.indexOf('>') + 1, l)) {
 													t += obj.attr.href;
 													i += s.indexOf('</a>') + 4;
 												} else {
