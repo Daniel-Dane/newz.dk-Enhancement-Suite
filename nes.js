@@ -749,9 +749,10 @@ function NES_improvedQuote(object) {
 												break;
 											default:
 												// Normal a, enten som [url] eller en url uden [url]
-												l = s.indexOf('<');
+												l = s.indexOf('</');
 												console.log(s);
 												console.log(s.substr(l, 4));
+												console.log(s.substr(s.indexOf('>'), l));
 												t += '[url=' + obj.attr.href + ']';
 												parse();
 												t += '[/url]';
