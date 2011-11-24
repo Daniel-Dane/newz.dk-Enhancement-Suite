@@ -749,7 +749,9 @@ function NES_improvedQuote(object) {
 												break;
 											default:
 												// Normal a, enten som [url] eller en url uden [url]
-												// url uden [url] bliver konverteret til en [url]
+												l = s.indexOf('<');
+												console.log(s);
+												console.log(s.substr(l, 4));
 												t += '[url=' + obj.attr.href + ']';
 												parse();
 												t += '[/url]';
@@ -812,7 +814,7 @@ function NES_improvedQuote(object) {
 						i = 0,
 						l = 0,
 						len = text.length;
-					if (text.indexOf('<li>') == 0) {
+					if (text.indexOf('<li>') === 0) {
 						t = '[list]';
 						parse();
 						t += '[/list]';
