@@ -755,6 +755,7 @@ function NES_improvedQuote(object) {
 												if (s.substr(l, 4) === '</a>' && (tmp1 === tmp2 || tmp1.substr(7) === tmp2)) {
 													t += obj.attr.href;
 													i += s.indexOf('</a>') + 4;
+													console.log(text.substr(i));
 												} else {
 													t += '[url=' + obj.attr.href + ']';
 													parse();
