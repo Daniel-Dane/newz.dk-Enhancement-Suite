@@ -188,7 +188,7 @@ function NES_init() {
 		
 		// fixPosts() af Preview. (Slået fra, når man opretter en tråd.)
 		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1)) {
-			NES_fixPosts($('#post_preview .content'));
+			NES_fixPosts($('#post_preview .content'), false, true);
 			$("#NES_button_edit").focus(); // Hører til fiks af resize af kommentarfeltet efter Preview
 		}
 		
@@ -405,7 +405,7 @@ function NES_addToToolbar(editArea) {
 }
 
 // Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg, ved den løbende AJAX-indhentning af nye indlæg, ved Preview og ved rettelse af indlæg
-function NES_fixPosts(object, afterEdit) {
+function NES_fixPosts(object, afterEdit, isPreview) {
 	// Køres kun én per indlæg
 	if (afterEdit !== true) {
 		NES_improvedQuote(object);
@@ -414,9 +414,11 @@ function NES_fixPosts(object, afterEdit) {
 		NES_fixPostTimes(object);
 	}
 	
+	isPreview = (isPreview === true);
+	
 	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
 	NES_applyTargetBlankFunc(object);
-	NES_addLinkToPostReferenceFunc(object);
+	NES_addLinkToPostReferenceFunc(object, isPreview);
 	NES_urlToImg(object);
 	NES_fixFailTags(object);
 	NES_fixSpoilers(object);
@@ -546,10 +548,11 @@ function NES_addMiniQuote(object) {
 	});	
 }
 
-function NES_addLinkToPostReferenceFunc(object) {
+function NES_addLinkToPostReferenceFunc(object, isPreview) {
 	if (addLinkToPostReference) {
 		$('.text_content p:contains("#")', object).each(function() {
-			if ($(this).parents('#post_preview').length == 1) {
+			//if ($(this).parents('#post_preview').length == 1) {
+			if (isPreview) {
 				var postNum = $('h2 a:first', '.comment:not([id=]):last').attr('name');
 				var p = 'post_preview';
 			} else {
