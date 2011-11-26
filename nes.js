@@ -188,6 +188,7 @@ function NES_init() {
 		
 		// fixPosts() af Preview. (Også slået til, når man opretter en tråd, selvom den ikke altid vil give mening.)
 		if (options.data.match('class=Z4_Forum_Item&action=preview') !== null) {
+			console.log('ja');
 			NES_fixPosts($('#post_preview .content'), false, true);
 			$("#NES_button_edit").focus(); // Hører til fiks af resize af kommentarfeltet efter Preview
 		}
