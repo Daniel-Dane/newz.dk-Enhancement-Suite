@@ -259,7 +259,7 @@ function NES_init() {
 	window.onpopstate = function(e) {
 		var a = e.state;
 		if (a == null)
-			history.replaceState({page: _pageId}, '', location.href);
+			history.replaceState({page: window._pageId}, '', location.href);
 		else {
 			if (a.page == _pageId)
 				return;
