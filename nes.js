@@ -2,7 +2,7 @@
  @name           Super newz.dk Enhancement Suite
  @url            https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js
 */
-var NES_version = "2.0 RC1";
+var NES_version = "2.0";
 var NES_loaded = NES_loaded || false;
 
 // Følgende indsættes i indstillinger -> stylesheet
