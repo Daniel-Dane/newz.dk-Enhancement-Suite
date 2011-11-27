@@ -2,6 +2,9 @@
  @name           Super newz.dk Enhancement Suite
  @url            https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js
 */
+
+console.log('SNES: Åbner');
+
 var NES_version = "2.0";
 var NES_loaded = NES_loaded || false;
 
@@ -9,16 +12,20 @@ var NES_loaded = NES_loaded || false;
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
 
 if (!$) {
+	console.log('SNES: $-fail');
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
 	// Når jQuery er cached, burde det ikke være noget problem.
 	alert('Opdatér (F5, men IKKE Ctrl+F5) lige. Får du denne pop-up flere gange, skal du fjerne SNES og fortælle om det.');
 } else {
 	if ((typeof localStorage === 'undefined') || (typeof window.history.pushState === 'undefined')) {
+		console.log('SNES: Old browser fail');
 		$(document).ready(function () {
 			$('#nmSiteSelect').next().find('a:last').before('Failbrowser. NES kan ikke køre her. | ');
 		});
 	} else {
+		console.log('SNES: Starter');
 		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!NES_loaded)) {
+			console.log('SNES: Godkendt');
 			NES_loaded = true;
 			var NES_startHash = location.hash;  // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 			var NES_postSortByRating = false;   // true, når der er trykket på "Sorter indlæg efter rating"
@@ -31,6 +38,7 @@ if (!$) {
 }
 
 function NES_init() {
+	console.log('SNES: Kører');
 	/**
 	* A Javascript object to encode and/or decode html characters
 	 * @Author R Reid
@@ -366,6 +374,7 @@ function NES_init() {
 		history.replaceState({page: _pageId}, '', location.href);
 		NES_fixPosts();
 	}
+	console.log('SNES: Klar');
 }
 
 function NES_updateSettingsSub() {
