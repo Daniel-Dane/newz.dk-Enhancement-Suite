@@ -837,6 +837,8 @@ function NES_improvedQuote(object) {
 										i += text.substr(i).indexOf('</cite>') + 7;
 										givenQuotePos = -1;
 										break;
+									case 'iframe':
+										parse();
 									default:
 										console.log('NES: Parse fejlede. Data:');
 										console.log(obj);
