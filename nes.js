@@ -839,6 +839,7 @@ function NES_improvedQuote(object) {
 										break;
 									case 'iframe':
 										parse();
+										break;
 									default:
 										console.log('NES: Parse fejlede. Data:');
 										console.log(obj);
