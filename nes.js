@@ -444,7 +444,7 @@ function NES_embedYouTubeUrlsFunc(object) {
 					var a = this.href;
 				if (typeof a !== 'undefined' && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381))) {
 					$(this).replaceWith(a.replace(/(?:http:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})[^ .,\?!:]*/gmi, function(str, a) {
-						return '<iframe width="'+w+'" height="'+w+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + a + '"></iframe>';
+						return '<iframe data="'+str+'" width="'+w+'" height="'+w+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + a + '"></iframe>';
 					}).replace(/&/gm, '&amp;'));
 				}
 			});
