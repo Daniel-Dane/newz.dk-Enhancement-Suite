@@ -63,9 +63,13 @@ function NES_init() {
 			</div> \
 		</div> \
 		<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg</label><br> \
-		<input type="checkbox" id="showUrlImages" name="showUrlImages"><label for="showUrlImages"> Vis billeder i indlæg</label><br> \
 		<input type="checkbox" id="applyTargetBlank" name="applyTargetBlank"><label for="applyTargetBlank"> Åbn alle links i ny fane</label><br> \
 		<input type="checkbox" id="fixFailTagsSetting" name="fixFailTagsSetting"><label for="fixFailTagsSetting"> Ret overflødige BB-tags i indlæg (NB: Læs om funktionen på kynz inden ibrugtagen)</label> \
+		<input type="checkbox" id="showUrlImages" name="showUrlImages"><label for="showUrlImages"> Vis billeder i indlæg</label><br> \
+		<input type="checkbox" id="embedYouTubeUrls" name="embedYouTubeUrls"><label for="embedYouTubeUrls"> Omdan YouTube-links til embedded video</label><br> \
+		<div id="embedYouTubeUrlsSub" style="padding-left: 16px;"> \
+			<input type="checkbox" id="embedYouTubeUrlsNotInQuote" name="embedYouTubeUrlsNotInQuote"><label for="embedYouTubeUrlsNotInQuote"> ... bare ikke i citater.</label><br> \
+		</div> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
 			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om SNES på <a href="http://www.knowyournewz.dk/index.php?title=Super_newz.dk_Enhancement_Suite">kynz</a>! Version ' + NES_version + '. \
@@ -86,13 +90,15 @@ function NES_init() {
 	showPostOnMouseOverReferenceMini = (localStorage["showPostOnMouseOverReferenceMini"] == "true");
 	showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true");
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
-	showUrlImages = (localStorage["showUrlImages"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
 	fixFailTagsSetting = (localStorage["fixFailTagsSetting"] == "true");
+	showUrlImages = (localStorage["showUrlImages"] == "true");
+	embedYouTubeUrls = (localStorage["embedYouTubeUrls"] == "true");
+	embedYouTubeUrlsNotInQuote = (localStorage["embedYouTubeUrlsNotInQuote"] == "true");
 	
 	// Event handlers til knapperne
-	handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
-				   'showUrlImages', 'applyTargetBlank', 'fixFailTagsSetting'];
+	var handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
+					   'applyTargetBlank', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
@@ -423,6 +429,26 @@ function NES_fixPosts(object, afterEdit, isPreview) {
 	NES_urlToImg(object);
 	NES_fixFailTags(object);
 	NES_fixSpoilers(object);
+	NES_embedYouTubeUrlsFunc(object);
+}
+
+function NES_embedYouTubeUrlsFunc(object) {
+	if (embedYouTubeUrls) {
+		$('.text_content p:contains("youtu")').each(function() {
+			$(this.childNodes).each(function() {
+				var w = parseInt($(this).parent().css('width'));
+				if (this.nodeType == 3)
+					var a = this.nodeValue;
+				else if (this.nodeType == 1)
+					var a = this.href;
+				if (typeof a !== 'undefined' && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381))) {
+					$(this).replaceWith(a.replace(/(?:http:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})[^ .,\?!:]*/gmi, function(str, a) {
+						return '<iframe width="'+w+'" height="'+w+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + a + '"></iframe>';
+					}).replace(/&/gm, '&amp;'));
+				}
+			});
+		});
+	}
 }
 
 function NES_fixSpoilers(object) {
