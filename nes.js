@@ -378,6 +378,7 @@ function NES_init() {
 function NES_updateSettingsSub() {
 	$('#addLinkToPostReferenceSub > input').attr('disabled', !$('#addLinkToPostReference').attr('checked'));
 	$('#showPostOnMouseOverReferenceSub input').attr('disabled', (!$('#showPostOnMouseOverReference').attr('checked') || !$('#addLinkToPostReference').attr('checked')));
+	$('#embedYouTubeUrlsSub > input').attr('disabled', !$('#embedYouTubeUrls').attr('checked'));
 }
 
 //
