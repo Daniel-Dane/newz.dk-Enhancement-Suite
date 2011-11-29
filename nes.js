@@ -435,7 +435,7 @@ function NES_fixPosts(object, afterEdit, isPreview) {
 
 function NES_embedYouTubeUrlsFunc(object) {
 	if (embedYouTubeUrls) {
-		$('.text_content p:contains("youtu")').each(function() {
+		$('.text_content p:contains("youtu")', object).each(function() {
 			$(this.childNodes).each(function() {
 				var w = parseInt($(this).parent().css('width'));
 				if (this.nodeType == 3)
