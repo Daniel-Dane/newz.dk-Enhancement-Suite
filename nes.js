@@ -442,7 +442,7 @@ function NES_embedYouTubeUrlsFunc(object) {
 					var a = this.nodeValue;
 				else if (this.nodeType == 1)
 					var a = this.href;
-				if (typeof a !== 'undefined' && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381))) {
+				if (typeof a !== 'undefined' && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381)) && a.indexOf('youtu') !== -1) {
 					$(this).replaceWith(a.replace(/(?:http:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})[^ .,\?!:]*/gmi, function(str, a) {
 						return '<iframe data="'+str+'" width="'+w+'" height="'+w+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + a + '"></iframe>';
 					}).replace(/&/gm, '&amp;'));
