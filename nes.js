@@ -3,7 +3,7 @@
  @url            https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js
 */
 
-var NES_version = "2.1";
+var NES_version = "2.1.1";
 var NES_loaded = NES_loaded || false;
 
 // Følgende indsættes i indstillinger -> stylesheet
@@ -64,11 +64,14 @@ function NES_init() {
 		</div> \
 		<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg</label><br> \
 		<input type="checkbox" id="applyTargetBlank" name="applyTargetBlank"><label for="applyTargetBlank"> Åbn alle links i ny fane</label><br> \
+		<div id="applyTargetBlankSub" style="padding-left: 16px;"> \
+			<input type="checkbox" id="applyTargetBlankOnlyOutgoing" name="applyTargetBlankOnlyOutgoing"><label for="applyTargetBlankOnlyOutgoing"> ... men kun udgående</label><br> \
+		</div> \
 		<input type="checkbox" id="fixFailTagsSetting" name="fixFailTagsSetting"><label for="fixFailTagsSetting"> Ret overflødige BB-tags i indlæg (NB: Læs om funktionen på kynz inden ibrugtagen)</label><br> \
 		<input type="checkbox" id="showUrlImages" name="showUrlImages"><label for="showUrlImages"> Vis billeder i indlæg</label><br> \
 		<input type="checkbox" id="embedYouTubeUrls" name="embedYouTubeUrls"><label for="embedYouTubeUrls"> Omdan YouTube-links til embedded video</label><br> \
 		<div id="embedYouTubeUrlsSub" style="padding-left: 16px;"> \
-			<input type="checkbox" id="embedYouTubeUrlsNotInQuote" name="embedYouTubeUrlsNotInQuote"><label for="embedYouTubeUrlsNotInQuote"> ... bare ikke i citater.</label><br> \
+			<input type="checkbox" id="embedYouTubeUrlsNotInQuote" name="embedYouTubeUrlsNotInQuote"><label for="embedYouTubeUrlsNotInQuote"> ... bare ikke i citater</label><br> \
 		</div> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
@@ -91,6 +94,7 @@ function NES_init() {
 	showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true");
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
+	applyTargetBlankOnlyOutgoing = (localStorage["applyTargetBlankOnlyOutgoing"] == "true");
 	fixFailTagsSetting = (localStorage["fixFailTagsSetting"] == "true");
 	showUrlImages = (localStorage["showUrlImages"] == "true");
 	embedYouTubeUrls = (localStorage["embedYouTubeUrls"] == "true");
@@ -98,7 +102,7 @@ function NES_init() {
 	
 	// Event handlers til knapperne
 	var handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
-					   'applyTargetBlank', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote'];
+					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
@@ -512,8 +516,16 @@ function NES_fixPostTimes(object) {
 }
 
 function NES_applyTargetBlankFunc(object) {
-	if (applyTargetBlank)
-		$('a:not([href^="#"])', object).attr('target', '_blank');
+	if (applyTargetBlank) {
+		if (applyTargetBlankOnlyOutgoing) {
+			var href = location.protocol + "//" + location.hostname + "/";
+			$('a:not([href^="#"])', object).filter(function() {
+				return (this.href.substring(0, href.length) != href);
+			}).attr('target', '_blank');
+		} else {
+			$('a:not([href^="#"])', object).attr('target', '_blank');
+		}
+	}
 }
 
 function NES_fixFailTags(object) {
