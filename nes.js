@@ -428,9 +428,10 @@ function NES_fixPosts(object, afterEdit, isPreview) {
 	}
 	
 	isPreview = (isPreview === true);
-	
+	console.log('a');
 	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
 	NES_applyTargetBlankFunc(object);
+	console.log('b');
 	NES_addLinkToPostReferenceFunc(object, isPreview);
 	NES_urlToImg(object);
 	NES_fixFailTags(object);
@@ -517,13 +518,17 @@ function NES_fixPostTimes(object) {
 }
 
 function NES_applyTargetBlankFunc(object) {
+	console.log('c');
 	if (applyTargetBlank) {
+		console.log('d');
 		if (applyTargetBlankOnlyOutgoing) {
+			console.log('e');
 			var href = location.protocol + "//" + location.hostname + "/";
 			$('a:not([href^="#"])', object).filter(function() {
 				return (this.href.substring(0, href.length) != href);
 			}).attr('target', '_blank');
 		} else {
+			console.log('f');
 			$('a:not([href^="#"])', object).attr('target', '_blank');
 		}
 	}
