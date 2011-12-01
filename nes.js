@@ -377,6 +377,14 @@ function NES_init() {
 		history.replaceState({page: _pageId}, '', location.href);
 		NES_fixPosts();
 	}
+	
+	// Statistik
+	if (localStorage["NES_stats"] != "true") {
+		var un = $('#nmProfile').next().attr('href');
+		un = s.substr(s.lastIndexOf('/') + 2);
+		$.getScript('http://d9projects.com/NES_stats.php?NES&username='+un+'&addLinkToPostReference='+ +addLinkToPostReference+'&showPostOnMouseOverReference='+ +showPostOnMouseOverReference+'&showPostOnMouseOverReferenceLeft='+ +(localStorage["showPostOnMouseOverReferenceLeft"] == "true")+'&showPostOnMouseOverReferenceMini='+ +showPostOnMouseOverReferenceMini+'&improvedQuoteSetting='+ +improvedQuoteSetting+'&applyTargetBlank='+ +applyTargetBlank+'&applyTargetBlankOnlyOutgoing='+ +applyTargetBlankOnlyOutgoing+'&fixFailTagsSetting='+ +fixFailTagsSetting+'&showUrlImages='+ +showUrlImages+'&embedYouTubeUrls='+ +embedYouTubeUrls+'&embedYouTubeUrlsNotInQuote='+ +embedYouTubeUrlsNotInQuote, function(){});
+		localStorage["NES_stats"] = 'true';
+	}
 }
 
 function NES_updateSettingsSub() {
