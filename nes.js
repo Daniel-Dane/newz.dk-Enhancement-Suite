@@ -448,6 +448,7 @@ function NES_fixPosts(object, afterEdit, isPreview) {
 
 function NES_embedYouTubeUrlsFunc(object) {
 	if (embedYouTubeUrls) {
+		var re = /(?:http:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})[^ .,\?!:]*/gmi;
 		$('.text_content p:contains("youtu"),.text_content p:has(a[href*="youtu"])', object).each(function() {
 			$(this.childNodes).each(function() {
 				var w = parseInt($(this).parent().css('width'));
@@ -455,8 +456,8 @@ function NES_embedYouTubeUrlsFunc(object) {
 					var a = this.nodeValue;
 				else if (this.nodeType == 1)
 					var a = this.href;
-				if (typeof a !== 'undefined' && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381)) && a.indexOf('youtu') !== -1) {
-					$(this).replaceWith(a.replace(/(?:http:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})[^ .,\?!:]*/gmi, function(str, a) {
+				if (typeof a !== 'undefined' && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381)) && re.test(a)) {
+					$(this).replaceWith(a.replace(re, function(str, a) {
 						return '<iframe data="'+str+'" width="'+w+'" height="'+w+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + a + '"></iframe>';
 					}).replace(/&/gm, '&amp;'));
 				}
