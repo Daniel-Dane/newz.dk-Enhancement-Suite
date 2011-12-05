@@ -107,7 +107,7 @@ function NES_init() {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
 			NES_updateSettingsSub();
-			localStorage["NES_stats"] = 'false';
+			localStorage["NES_statistik"] = 'false';
 		}).attr('checked', (localStorage[handlerList[i]] == 'true'));
 	}
 	$("#sortRating").bind("click", function() {
@@ -380,7 +380,7 @@ function NES_init() {
 	}
 	
 	// Statistik
-	if (localStorage["NES_stats"] != "true") {
+	if (localStorage["NES_statistik"] != "true") {
 		uploadStatistik();
 	}
 }
