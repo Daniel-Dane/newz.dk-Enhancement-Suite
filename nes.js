@@ -381,6 +381,7 @@ function NES_init() {
 	
 	// Statistik
 	if (localStorage["NES_statistik"] != "true") {
+		localStorage["NES_statistik"] = 'true';
 		uploadStatistik();
 	}
 }
