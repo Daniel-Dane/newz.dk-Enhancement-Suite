@@ -3,7 +3,7 @@
  @url            https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js
 */
 
-var NES_version = "2.1.1";
+var NES_version = "2.1.2";
 var NES_loaded = NES_loaded || false;
 
 // Følgende indsættes i indstillinger -> stylesheet
