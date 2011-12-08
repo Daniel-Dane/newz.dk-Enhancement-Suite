@@ -73,6 +73,7 @@ function NES_init() {
 		<div id="embedYouTubeUrlsSub" style="padding-left: 16px;"> \
 			<input type="checkbox" id="embedYouTubeUrlsNotInQuote" name="embedYouTubeUrlsNotInQuote"><label for="embedYouTubeUrlsNotInQuote"> ... bare ikke i citater</label><br> \
 		</div> \
+		<input type="checkbox" id="narrowSite" name="narrowSite"><label for="narrowSite"> Gør newz.dk lidt smallere (til opløsninger med 1024 i bredde)</label> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
 			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om SNES på <a href="http://www.knowyournewz.dk/index.php?title=Super_newz.dk_Enhancement_Suite">kynz</a>! Version ' + NES_version + '. \
@@ -99,10 +100,13 @@ function NES_init() {
 	showUrlImages = (localStorage["showUrlImages"] == "true");
 	embedYouTubeUrls = (localStorage["embedYouTubeUrls"] == "true");
 	embedYouTubeUrlsNotInQuote = (localStorage["embedYouTubeUrlsNotInQuote"] == "true");
+	if (narrowSite = (localStorage["narrowSite"] == "true")) {
+		$('body,#center,#nmContainer').css('width',1000+'px');
+	}
 	
 	// Event handlers til knapperne
 	var handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
-					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote'];
+					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote', 'narrowSite'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
@@ -389,7 +393,7 @@ function NES_init() {
 function uploadStatistik() {
 	var un = $('#nmProfile').next().attr('href');
 	un = un.substr(un.lastIndexOf('/') + 2);
-	$.getScript('http://d9projects.com/NES_stats.php?NES&hash='+localStorage["NES_statHash"]+'&username='+un+'&addLinkToPostReference='+ +addLinkToPostReference+'&showPostOnMouseOverReference='+ +showPostOnMouseOverReference+'&showPostOnMouseOverReferenceLeft='+ +(localStorage["showPostOnMouseOverReferenceLeft"] == "true")+'&showPostOnMouseOverReferenceMini='+ +showPostOnMouseOverReferenceMini+'&improvedQuoteSetting='+ +improvedQuoteSetting+'&applyTargetBlank='+ +applyTargetBlank+'&applyTargetBlankOnlyOutgoing='+ +applyTargetBlankOnlyOutgoing+'&fixFailTagsSetting='+ +fixFailTagsSetting+'&showUrlImages='+ +showUrlImages+'&embedYouTubeUrls='+ +embedYouTubeUrls+'&embedYouTubeUrlsNotInQuote='+ +embedYouTubeUrlsNotInQuote, function(){});
+	$.getScript('http://d9projects.com/NES_stats.php?NES&hash='+localStorage["NES_statHash"]+'&username='+un+'&addLinkToPostReference='+ +addLinkToPostReference+'&showPostOnMouseOverReference='+ +showPostOnMouseOverReference+'&showPostOnMouseOverReferenceLeft='+ +(localStorage["showPostOnMouseOverReferenceLeft"] == "true")+'&showPostOnMouseOverReferenceMini='+ +showPostOnMouseOverReferenceMini+'&improvedQuoteSetting='+ +improvedQuoteSetting+'&applyTargetBlank='+ +applyTargetBlank+'&applyTargetBlankOnlyOutgoing='+ +applyTargetBlankOnlyOutgoing+'&fixFailTagsSetting='+ +fixFailTagsSetting+'&showUrlImages='+ +showUrlImages+'&embedYouTubeUrls='+ +embedYouTubeUrls+'&embedYouTubeUrlsNotInQuote='+ +embedYouTubeUrlsNotInQuote+'&narrowSite='+ +narrowSite, function(){});
 }
 
 function NES_updateSettingsSub() {
