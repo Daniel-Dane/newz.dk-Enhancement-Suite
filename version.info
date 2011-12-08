@@ -1,3 +1,3 @@
 ﻿var nes_version = 117;
-alert('Du vil nu få denne irriterende pop-up, fordi du stadig bruger NES 1.x.');
+alert('NES 1.1.7 VIL SLETTE SIG SELV SNART. SÅ FÅ DOG FAT I SNES FOR HELVEDE! Du vil nu få denne irriterende pop-up, fordi du stadig bruger NES 1.x.');
 // Skal være på formen XXYZ, hvor XX = major, Y = minor, Z = maintenance (ie. bugfixes). Ex: (00)51 (=0.5.1), (0)100 (=1.0.0), 1234 (=12.3.4). Begrænsningen er så, at Y og Z ikke må overstige 9.
