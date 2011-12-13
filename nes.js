@@ -391,7 +391,7 @@ function NES_init() {
 }
 
 function uploadStatistik() {
-	$.getScript('http://d9projects.com/NES_stats.php?NES&hash='+localStorage["NES_statHash2"]+'&addLinkToPostReference='+ +addLinkToPostReference+'&showPostOnMouseOverReference='+ +showPostOnMouseOverReference+'&showPostOnMouseOverReferenceLeft='+ +(localStorage["showPostOnMouseOverReferenceLeft"] == "true")+'&showPostOnMouseOverReferenceMini='+ +showPostOnMouseOverReferenceMini+'&improvedQuoteSetting='+ +improvedQuoteSetting+'&applyTargetBlank='+ +applyTargetBlank+'&applyTargetBlankOnlyOutgoing='+ +applyTargetBlankOnlyOutgoing+'&fixFailTagsSetting='+ +fixFailTagsSetting+'&showUrlImages='+ +showUrlImages+'&embedYouTubeUrls='+ +embedYouTubeUrls+'&embedYouTubeUrlsNotInQuote='+ +embedYouTubeUrlsNotInQuote+'&narrowSite='+ +narrowSite, function(){});
+	//$.getScript('http://d9projects.com/NES_stats.php?NES&hash='+localStorage["NES_statHash2"]+'&addLinkToPostReference='+ +addLinkToPostReference+'&showPostOnMouseOverReference='+ +showPostOnMouseOverReference+'&showPostOnMouseOverReferenceLeft='+ +(localStorage["showPostOnMouseOverReferenceLeft"] == "true")+'&showPostOnMouseOverReferenceMini='+ +showPostOnMouseOverReferenceMini+'&improvedQuoteSetting='+ +improvedQuoteSetting+'&applyTargetBlank='+ +applyTargetBlank+'&applyTargetBlankOnlyOutgoing='+ +applyTargetBlankOnlyOutgoing+'&fixFailTagsSetting='+ +fixFailTagsSetting+'&showUrlImages='+ +showUrlImages+'&embedYouTubeUrls='+ +embedYouTubeUrls+'&embedYouTubeUrlsNotInQuote='+ +embedYouTubeUrlsNotInQuote+'&narrowSite='+ +narrowSite, function(){});
 }
 
 function NES_updateSettingsSub() {
