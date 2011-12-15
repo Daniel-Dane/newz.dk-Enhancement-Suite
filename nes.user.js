@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          newz.dk Enhancement Suite
 // @namespace     https://github.com/Daniel-Dane/newz.dk-Enhancement-Suite/raw/master/nes.user.js
-// @description   newz.dk er nu endnu mere perfekt!
+// @description   NES 1.x SLETTES!
 // @include       http://newz.dk/*
 // @include       http://*.newz.dk/*
 // @exclude       http://newz.dk/banner/*
