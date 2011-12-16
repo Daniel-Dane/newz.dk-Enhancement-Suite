@@ -440,6 +440,7 @@ function NES_fixPosts(object, afterEdit, isPreview) {
 		NES_addPermLink(object);
 		NES_addMiniQuote(object);
 		NES_fixPostTimes(object);
+		NES_reportSpam(object);
 	}
 	
 	isPreview = (isPreview === true);
@@ -451,6 +452,37 @@ function NES_fixPosts(object, afterEdit, isPreview) {
 	NES_embedYouTubeUrlsFunc(object);
 	
 	NES_applyTargetBlankFunc(object);
+}
+
+// Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
+function NES_reportSpam(object) {
+	$('.comment_rating li:first-child', object).before('<li><a title="Rapportér spam" class="reportSpam" href="#"><span></span>Rapportér spam</a></li>');
+	$('.reportSpam', object).bind('click', function(e) {
+		e.preventDefault();
+		
+		if (confirm("Er du sikker på, at dette er spam, som skal rapporteres? Du ender med selv at spamme, hvis dette ikke er spam.")) {
+			var $this = $(this);
+			$this.html('Rolling...').removeAttr("href").unbind();
+			
+			var postParent = $this.parents('.comment').find('h2');
+			var userLink   = $('a:last', postParent)[0].href.replace('%7E', '~');
+			var userName   = $('a:last', postParent).text();
+			var postId     = $('a:nth-child(2)', postParent).attr('name').substr(2);
+			var postLink   = $('a:nth-child(3)', postParent).attr('href');
+			
+			$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
+				var text = encodeURIComponent("Automatisk spamrapport.\nBrugernavn: [url=" + userLink + "]" + userName + "[/url]\nURL: " + postLink + "\n\nEksempel på spam:\n[quote]" + $.trim($("Response", xml).text().replace("\n\n\n\n", "\n\n")) + "[/quote]");
+				
+				// Jeg har byttet om på action og class, så fixPosts() ikke køres. Skide smart, Daniel.
+				$.get("/z4/action.php", {"action":"usersave", "class":"Z4_Forum_Item", "thread_id":119686, "lastId":99999999999999999, "comment":text}, function(xml) {
+					$this.html('Succes!');
+				}, "xml");
+				
+			}, "xml");
+		}
+		
+		return false;
+	});
 }
 
 function NES_embedYouTubeUrlsFunc(object) {
@@ -1074,7 +1106,7 @@ function NES_fetchPage(pageNo, state, hash) {
 	});
 }
 
-// URL uden /page samt #
+// URL uden /page eller #
 function NES_getUrl() {
 	var a = 0;
 	
