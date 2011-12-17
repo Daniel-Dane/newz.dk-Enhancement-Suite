@@ -603,7 +603,6 @@ function NES_fixFailTags(object) {
 
 function NES_urlToImg(object) {
 	if (showUrlImages) {
-		var a = $(document).scrollTop();
 		$('.text_content a:not([href^="#"])', object).filter(function() {
 			return (/\.(png|gif|jp(e)?g)$/i.test(this.href) && $(this).attr('data') === undefined);
 		}).each(function() {
@@ -614,7 +613,6 @@ function NES_urlToImg(object) {
 				var c = $('<div><a href="'+b+'">'+b+'</a></div>').linkShorten().find('a').text();
 			e.replaceWith('<a data="NES_img" title="'+c+'" href="'+b+'"><img title="'+c+'" alt="'+c+'" class="NES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
 		});
-		$(document).scrollTop(a);
 	}
 }
 
