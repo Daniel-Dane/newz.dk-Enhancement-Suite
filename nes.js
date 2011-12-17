@@ -613,6 +613,7 @@ function NES_urlToImg(object) {
 				var c = $('<div><a href="'+b+'">'+b+'</a></div>').linkShorten().find('a').text();
 			e.replaceWith('<a data="NES_img" title="'+c+'" href="'+b+'"><img title="'+c+'" alt="'+c+'" class="NES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
 		});
+		location.hash = location.hash; // Skide smart, Daniel!
 	}
 }
 
