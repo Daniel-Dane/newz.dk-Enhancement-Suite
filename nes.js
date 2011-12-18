@@ -471,7 +471,7 @@ function NES_reportSpam(object) {
 			var postLink   = $('a:nth-child(3)', postParent).attr('href');
 			
 			$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
-				var text = encodeURIComponent("Automatisk spamrapport.\nBrugernavn: [url=" + userLink + "]" + userName + "[/url]\nURL: " + postLink + "\n\nEksempel på spam:\n[quote]" + $.trim($("Response", xml).text().replace("\n\n\n\n", "\n\n").replace('www.', '').replace('http://', '').replace(/\[url=.+?\]/g, '').replace('[/url]', '')) + "[/quote]");
+				var text = encodeURIComponent("Automatisk spamrapport.\nBrugernavn: [url=" + userLink + "]" + userName + "[/url]\nURL: " + postLink + "\n\nEksempel på spam:\n[quote]" + $.trim($("Response", xml).text().replace("\n\n\n\n", "\n\n").replace('www.', '').replace('http://', '').replace(/\[url=.+?\]/gm, '').replace(/\[\/url\]/gm, '')) + "[/quote]");
 				
 				// Jeg har byttet om på action og class, så fixPosts() ikke køres. Skide smart, Daniel.
 				$.get("/z4/action.php", {"action":"usersave", "class":"Z4_Forum_Item", "thread_id":119686, "lastId":99999999999999999, "comment":text}, function(xml) {
