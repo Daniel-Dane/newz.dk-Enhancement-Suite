@@ -460,7 +460,7 @@ function NES_reportSpam(object) {
 	$('.reportSpam', object).bind('click', function(e) {
 		e.preventDefault();
 		
-		if (confirm("Er du sikker på, at dette er spam, som skal rapporteres? Du ender med selv at spamme, hvis dette ikke er spam.")) {
+		if (confirm("Er du sikker på, at dette er spam, som skal rapporteres? Du ender med selv at spamme, hvis dette ikke er spam.\n\nDet er forresten ikke nødvendigt at rapportere samtlige indlæg i en tråd, hvis de er efter hindanden følgende.")) {
 			var $this = $(this);
 			$this.html('Rolling...').removeAttr("href").unbind();
 			
@@ -471,7 +471,7 @@ function NES_reportSpam(object) {
 			var postLink   = $('a:nth-child(3)', postParent).attr('href');
 			
 			$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
-				var text = encodeURIComponent("Automatisk spamrapport.\nBrugernavn: [url=" + userLink + "]" + userName + "[/url]\nURL: " + postLink + "\n\nEksempel på spam:\n[quote]" + $.trim($("Response", xml).text().replace("\n\n\n\n", "\n\n")) + "[/quote]");
+				var text = encodeURIComponent("Automatisk spamrapport.\nBrugernavn: [url=" + userLink + "]" + userName + "[/url]\nURL: " + postLink + "\n\nEksempel på spam:\n[quote]" + $.trim($("Response", xml).text().replace("\n\n\n\n", "\n\n").replace('www.', '').replace('http://', '').replace(/\[url=.+?\]/g, '').replace('[url]', '')) + "[/quote]");
 				
 				// Jeg har byttet om på action og class, så fixPosts() ikke køres. Skide smart, Daniel.
 				$.get("/z4/action.php", {"action":"usersave", "class":"Z4_Forum_Item", "thread_id":119686, "lastId":99999999999999999, "comment":text}, function(xml) {
