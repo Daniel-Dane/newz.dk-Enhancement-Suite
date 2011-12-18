@@ -460,7 +460,7 @@ function NES_reportSpam(object) {
 	$('.reportSpam', object).bind('click', function(e) {
 		e.preventDefault();
 		
-		if (confirm("Er du sikker på, at dette er spam, som skal rapporteres? Du ender med selv at spamme, hvis dette ikke er spam.\n\nDet er forresten ikke nødvendigt at rapportere samtlige indlæg i en tråd, hvis de er efter hindanden følgende.")) {
+		if (confirm("Er du sikker på, at dette er spam, som skal rapporteres? Du ender med selv at spamme, hvis dette ikke er spam.\n\nDet er forresten ikke nødvendigt at rapportere samtlige indlæg i en tråd, hvis de er efter hinanden følgende.")) {
 			var $this = $(this);
 			$this.html('Rolling...').removeAttr("href").unbind();
 			
