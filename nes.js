@@ -1115,3 +1115,12 @@ function NES_getUrl() {
 	
 	return href;
 }
+
+/*
+	Til d. 1. april:
+	$('.comment h2 a:last-child').text('terracide')
+	$('.comment_image img').attr('src', 'http://www.gravatar.com/avatar/b4b68a783c9565679f8cd6e6d8a2a828?s=47&d=retro&r=pg')
+	$('.comment_signiture').text('Linux is only free if your sparetime has no value & AMD is only cheaper if your (spare)time has no value...')
+	
+	http://dagobah.net/flashswf/rickroll.swf
+*/
