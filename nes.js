@@ -467,7 +467,7 @@ function NES_reportSpam(object) {
 			$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
 				var text = encodeURIComponent("Automatisk spamrapport.\nBrugernavn: [url=" + userLink + "]" + userName + "[/url]\nURL: " + postLink + "\n\nEksempel på spam:\n[quote]" + $.trim($("Response", xml).text().replace("\n\n\n\n", "\n\n").replace(/www\./gmi, '').replace(/http:\/\//gmi, '').replace(/\[url=.+?\]/gm, '').replace(/\[\/url\]/gm, '')) + "[/quote]");
 				
-				// Jeg har byttet om på action og class, så fixPosts() ikke køres. Skide smart, Daniel.
+				// Jeg har byttet om på action og class (rækkefølgen), så fixPosts() ikke køres. Skide smart, Daniel.
 				$.get("/z4/action.php", {"action":"usersave", "class":"Z4_Forum_Item", "thread_id":119686, "lastId":99999999999999999, "comment":text}, function(xml) {
 					$this.html('Succes!');
 				}, "xml");
@@ -479,19 +479,44 @@ function NES_reportSpam(object) {
 	});
 }
 
+function splitquery(q) {
+	q = q.substr(1).split('&');
+	var u = {};
+	for (var i = 0; i < q.length; i++) {
+		var t = q[i].split('=');
+		u[t[0]] = t[1];
+	};
+	return u;
+}
+
 function NES_embedYouTubeUrlsFunc(object) {
+	function ttotime(s) {
+		s = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)(?:s)?)?$/.exec(s);
+		return (typeof s[1] === "undefined" ? 0 : +s[1])*3600 + (typeof s[2] === "undefined" ? 0 : +s[2])*60 + (typeof s[3] === "undefined" ? 0 : +s[3]);
+	}
+	
 	if (embedYouTubeUrls) {
 		var re = /(?:http:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})[^ .,\?!:]*/gmi;
 		$('.text_content p:contains("youtu"),.text_content p:has(a[href*="youtu"])', object).each(function() {
 			$(this.childNodes).each(function() {
 				var w = parseInt($(this).parent().css('width'));
-				if (this.nodeType == 3)
+				if (this.nodeType == 3) {
 					var a = this.nodeValue;
-				else if (this.nodeType == 1)
+					var node = document.createElement('a');
+					node.href = a;
+				} else if (this.nodeType == 1) {
 					var a = this.href;
+					var node = this;
+				}
 				if (typeof a !== 'undefined' && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381)) && re.test(a)) {
 					$(this).replaceWith(a.replace(re, function(str, a) {
-						return '<iframe data="'+str+'" width="'+(w-1)+'" height="'+((w-1)*(3/4))+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + a + '"></iframe>';
+						var q = '';
+						var t = 0;
+						if (node.hash.length > 1 && (q = splitquery(node.hash)) && (typeof q.t !== "undefined"))
+							t = ttotime(q.t);
+						else if (node.search.length > 1 && (q = splitquery(node.search)) && (typeof q.t !== "undefined"))
+							t = ttotime(q.t);
+						return '<iframe data="'+str+'" width="'+(w-1)+'" height="'+((w-1)*(3/4))+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + a + '?rel=0&start=' + t + '"></iframe>';
 					}).replace(/&/gm, '&amp;'));
 				}
 			});
@@ -522,9 +547,9 @@ function NES_fixPostTimes(object) {
 	});
 	
 	if (b.length > 0 || c.length > 0)
-		var l = 1000;
+		var l = 980;
 	else if (a.length > 0)
-		var l = 1000 * (61 - (new Date()).getSeconds()); // Så starter den altid, når klokken slår et nyt minut. Tøhø.
+		var l = 1000 * (61 - (new Date()).getSeconds()); // Så starter den altid, når klokken slår et nyt minut.
 	else
 		return;
 	
@@ -585,6 +610,7 @@ function NES_fixFailTags(object) {
 					e.html(e.html().substr(0, x) + e.html().substr(x).replace(new RegExp('<(\/)?' + b[a[i]], 'g'), '').replace(new RegExp('\\[' + a[i] + '\\]', 'g'), '</' + b[a[i]]));
 				}
 				
+				// Til store BB-tags ([B], etc.), hvis nogen nogensinde lyster det.
 				/*var x = e.html().indexOf('[/' + a[i].toUpperCase() + ']');
 				
 				if (x !== -1) {
@@ -611,7 +637,7 @@ function NES_urlToImg(object) {
 	}
 }
 
-// Skal køres EFTER NES_improvedQuote().
+// SKAL køres EFTER NES_improvedQuote().
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
 function NES_addMiniQuote(object) {
 	$('.NES_quoteitem', object).after(' (<a href="#" class="miniquote">miniquote</a>)');
@@ -635,7 +661,6 @@ function NES_addMiniQuote(object) {
 function NES_addLinkToPostReferenceFunc(object, isPreview) {
 	if (addLinkToPostReference) {
 		$('.text_content p:contains("#")', object).each(function() {
-			//if ($(this).parents('#post_preview').length == 1) {
 			if (isPreview) {
 				var postNum = $('h2 a:first', '.comment:not([id=]):last').attr('name');
 				var p = 'post_preview';
@@ -669,20 +694,14 @@ function NES_showPost(me, him) {
 	var q = $("#" + him).clone().attr('id', '').addClass("NES_cite").prependTo('#comments');
 	if (showPostOnMouseOverReferenceMini)
 		q.find('.comment_right').remove();
-	//q.css("top", $("#" + me).offset().top - q.offset().top + "px");
 }
 
 function NES_hidePost() {
-	//$("#" + him).css("top", "").removeClass("NES_cite");
 	$('.NES_cite').remove();
 }
 
 function NES_goToPost(him) {
 	NES_hidePost();
-	//var a = parseFloat($("#" + him).css("top"));
-	//if (isNaN(a))
-	//	a = 0;
-	//$(window).scrollTop($("#" + him ).offset().top - a + 12);
 }
 
 function NES_addPermLink(object) {
@@ -1030,14 +1049,14 @@ function NES_fixTitle() {
 	}
 }
 
+// Indsætter en loading.gif til AJAX-sideskift
 function NES_insertLoadingGif() {
-	// Indsætter en loading.gif
 	$('<span/>').insertAfter('.pagination').html('<div class="loading" style="float: left; margin: -2px 10px; padding: 5px; position: relative; width: 330px;"><p><img src="data:image/gif;base64,R0lGODlhEAAQAPYAAP///zMzM/r6+qenp5+fn/Hx8dLS0t/f37GxsTMzM6SkpNHR0VpaWnR0dO/v77e3t6mpqfT09JqamklJScHBwba2tq6urvb29vn5+bm5udfX12lpaTw8PH9/f+Tk5Ozs7MnJyVRUVF5eXmpqatzc3M/Pz2JiYnFxcWRkZGxsbNnZ2dTU1Hp6esLCwu7u7oyMjLy8vMbGxsfHx35+fnx8fIGBgZ6enubm5peXl/z8/LS0tEZGRlZWVnd3dzY2NnJyctbW1l9fX3l5eUdHR/Ly8t7e3q+vr+fn5+rq6mZmZrq6uk9PT0xMTL6+vo6Ojm5ublxcXIeHh9ra2szMzFFRUZaWlmdnZ3Z2djo6Ojk5Ob+/v+np6W9vb/f398TExISEhIaGhuLi4rKyskFBQU5OTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/h1CdWlsdCB3aXRoIEdJRiBNb3ZpZSBHZWFyIDQuMAAh/hVNYWRlIGJ5IEFqYXhMb2FkLmluZm8AIfkECQoAAAAsAAAAABAAEAAAB2iAAIKDICImJYOJAAsSGgAhCQkoioIGDAkbHpcJKYIRiQSRHBYLIycqABgZn4IHDRMdH5QYig4UBZSKAggPuZQDkRW+ACSIoQkWw8UABQoQF8PR0qm+tIkRGdaJqqyD3SQk3tEliNPRgQAh+QQJCgAAACwAAAAAEAAQAAAHa4AAgoMHNDU3g4mKMwkJLzk6PRk5gysvGhcvjTgQOwk7MIMsCQ0yLhI2BSGNCTWDLSkxBYkVPD48MoMuMLOKMD8gisLDACUkxIIkJYLGyADKztHSgxjE1YkRGdeJGBkRit/Jx4LhxCXL08iBACH5BAkKAAAALAAAAAAQABAAAAdogACCgwIID4OIiQADCQkVACUSKokRggSNFkBBCSZFgxEZGAAFChAXOD6NRoiiiR5CQzRHiooOFES0tCAiJiWQJLkAIY0ov8EMjSnBgwsjJ5PLua2K04Kg1YIYGZWI3AAkwNbLJb7R0YEAIfkECQoAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkAEQLTlKEERkYhQ9JCVGFmYVISk9Ti4UfMAWmhQc0NTcAJZCLMwkJL7Gzhy+2OKuCLhI2qqtGUA+fhhBLCUwwjJiFIbYJNZaOkBVMCVQyi4mCTVHev4aBACH5BAkKAAAALAAAAAAQABAAAAdogACCg4SFhoIlJYeDEYMkJIyFERkYhhgZjYSVh5uLnp+CAggPiJCLAwkJFQAlpocEqRagAAUKEBegC05FhZ2DK1ZYVryCk5UgIiYlVT6pRoSZIakoR1dZQluHDKkpAEdaH4sLIycqhoEAIfkECQoAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkjIURGRiGGBmNhJWHm4uen4clkJ4kigCin6WgixZQD4ZdIF2DRhMJIRmERFMsGoNcCcEpBzQ1Nw9JCWCDGUMJPDIzwS8fXl8LhE1RMgAvwTirLhI2BYaBACH5BAkKAAAALAAAAAAQABAAAAdngACCg4SFhoIlJYeDEYMkJIyFERkYhhgZjYSVh5uLniAiJoqegiEJCSieJIoMpymqigsjJyqkhCtOUrYABkEcT2GWhDanHBYCCA+Cl5kAYVxZMw4DpxWCzYJbWkgABKcWuwUKEBeGgQAh+QQJCgAAACwAAAAAEAAQAAAHaIAAgoOEhYICYj1KgiUlhoJGYwlMGQAkJIMRhFwJnU+FGBmaghlkPiIyhhiFMD8xj4QHNDU3sIQznS+2JI4vnTi7ji4SNgW2hREyAseDJUIrXaqFLAkNr4Sho4JTX1NElpiC2o+NzOaBADsAAAAAAAAAAAA=" /> Weeeeeeeeee.</p></div>');
 	$(".loading").hide();
 }
 
+// Forbereder AJAX-sideskift
 function NES_ajaxPageChange() {
-	// Hvis kommentarfeltet mangler, er man sikkert ikke i en tråd/nyhed (det eneste sted, hvor man kan skifte side med AJAX)
 	if (typeof _threadId == 'undefined' || _threadId == 0)
 		return;
 
@@ -1114,6 +1133,17 @@ function NES_getUrl() {
 		var href = href.substr(0, a);
 	
 	return href;
+}
+
+// Splitter en '?hest=ko&ged=larve'
+function splitquery(q) {
+	q = q.substr(1).split('&');
+	var u = {};
+	for (var i = 0; i < q.length; i++) {
+		var t = q[i].split('=');
+		u[t[0]] = t[1];
+	};
+	return u;
 }
 
 /*
