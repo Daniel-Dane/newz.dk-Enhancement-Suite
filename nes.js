@@ -65,13 +65,14 @@ function NES_init() {
 		<input type="checkbox" id="improvedQuoteSetting" name="improvedQuoteSetting"><label for="improvedQuoteSetting"> Forbedret citering af indlæg</label><br> \
 		<input type="checkbox" id="applyTargetBlank" name="applyTargetBlank"><label for="applyTargetBlank"> Åbn alle links i ny fane</label><br> \
 		<div id="applyTargetBlankSub" style="padding-left: 16px;"> \
-			<input type="checkbox" id="applyTargetBlankOnlyOutgoing" name="applyTargetBlankOnlyOutgoing"><label for="applyTargetBlankOnlyOutgoing"> ... men kun udgående</label><br> \
+			<input type="checkbox" id="applyTargetBlankOnlyOutgoing" name="applyTargetBlankOnlyOutgoing"><label for="applyTargetBlankOnlyOutgoing"> Men kun udgående (inkl. newz.dk\'s subdomæner)</label><br> \
 		</div> \
 		<input type="checkbox" id="fixFailTagsSetting" name="fixFailTagsSetting"><label for="fixFailTagsSetting"> Ret overflødige BB-tags i indlæg (NB: Læs om funktionen på kynz inden ibrugtagen)</label><br> \
 		<input type="checkbox" id="showUrlImages" name="showUrlImages"><label for="showUrlImages"> Vis billeder i indlæg</label><br> \
 		<input type="checkbox" id="embedYouTubeUrls" name="embedYouTubeUrls"><label for="embedYouTubeUrls"> Omdan YouTube-links til embedded video</label><br> \
 		<div id="embedYouTubeUrlsSub" style="padding-left: 16px;"> \
-			<input type="checkbox" id="embedYouTubeUrlsNotInQuote" name="embedYouTubeUrlsNotInQuote"><label for="embedYouTubeUrlsNotInQuote"> ... bare ikke i citater</label><br> \
+			<input type="checkbox" id="embedYouTubeUrlsNotInQuote" name="embedYouTubeUrlsNotInQuote"><label for="embedYouTubeUrlsNotInQuote"> Men ikke i citater</label><br> \
+			<input type="checkbox" id="embedYouTubeUrlsNewOnly" name="embedYouTubeUrlsNewOnly"><label for="embedYouTubeUrlsNewOnly"> Kun i ulæste indlæg (indlæg efter "Indlæg skrevet siden sidste besøg i denne tråd."-bjælken)</label><br> \
 		</div> \
 		<input type="checkbox" id="narrowSite" name="narrowSite"><label for="narrowSite"> Gør newz.dk lidt smallere (til opløsninger med 1024 i bredde)</label> \
 		<div style="margin-top: 12px;"> \
@@ -100,13 +101,14 @@ function NES_init() {
 	showUrlImages = (localStorage["showUrlImages"] == "true");
 	embedYouTubeUrls = (localStorage["embedYouTubeUrls"] == "true");
 	embedYouTubeUrlsNotInQuote = (localStorage["embedYouTubeUrlsNotInQuote"] == "true");
+	embedYouTubeUrlsNewOnly = (localStorage["embedYouTubeUrlsNewOnly"] == "true");
 	if (narrowSite = (localStorage["narrowSite"] == "true")) {
-		$('body,#center,#nmContainer').css('width',1000+'px');
+		$('body,#center,#nmContainer').css('width','1000px');
 	}
 	
 	// Event handlers til knapperne
 	var handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
-					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote', 'narrowSite'];
+					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote', 'embedYouTubeUrlsNewOnly', 'narrowSite'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
@@ -496,6 +498,9 @@ function NES_embedYouTubeUrlsFunc(object) {
 	}
 	
 	if (embedYouTubeUrls) {
+		if (embedYouTubeUrlsNewOnly && object == undefined)
+			object = $('.comments_new').nextAll();
+		
 		$('.text_content a[href*="youtu"]', object).each(function() {
 			var w = parseInt($(this).parent().css('width'));
 			var res = /(?:http:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})[^ .,\?!:]*/gmi.exec(this.href);
