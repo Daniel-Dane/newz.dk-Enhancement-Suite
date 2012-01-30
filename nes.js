@@ -496,30 +496,18 @@ function NES_embedYouTubeUrlsFunc(object) {
 	}
 	
 	if (embedYouTubeUrls) {
-		var re = /(?:http:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})[^ .,\?!:]*/gmi;
-		$('.text_content p:contains("youtu"),.text_content p:has(a[href*="youtu"])', object).each(function() {
-			$(this.childNodes).each(function() {
-				var w = parseInt($(this).parent().css('width'));
-				if (this.nodeType == 3) {
-					var a = this.nodeValue;
-					var node = document.createElement('a');
-					node.href = a;
-				} else if (this.nodeType == 1) {
-					var a = this.href;
-					var node = this;
-				}
-				if (typeof a !== 'undefined' && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381)) && re.test(a)) {
-					$(this).replaceWith(a.replace(re, function(str, a) {
-						var q = '';
-						var t = 0;
-						if (node.hash.length > 1 && (q = splitquery(node.hash)) && (typeof q.t !== "undefined"))
-							t = ttotime(q.t);
-						else if (node.search.length > 1 && (q = splitquery(node.search)) && (typeof q.t !== "undefined"))
-							t = ttotime(q.t);
-						return '<iframe data="'+str+'" width="'+(w-1)+'" height="'+((w-1)*(3/4))+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + a + '?rel=0&start=' + t + '"></iframe>';
-					}).replace(/&/gm, '&amp;'));
-				}
-			});
+		$('.text_content a[href*="youtu"]', object).each(function() {
+			var w = parseInt($(this).parent().css('width'));
+			var res = /(?:http:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})[^ .,\?!:]*/gmi.exec(this.href);
+			if (typeof this.href !== 'undefined' && res != null && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381))) {
+				var q = '';
+				var t = 0;
+				if (this.hash.length > 1 && (q = splitquery(this.hash)) && (typeof q.t !== "undefined"))
+					t = ttotime(q.t);
+				else if (this.search.length > 1 && (q = splitquery(this.search)) && (typeof q.t !== "undefined"))
+					t = ttotime(q.t);
+				$(this).replaceWith('<iframe data="'+this.href+'" width="'+(w-1)+'" height="'+((w-1)*(3/4))+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + res[1] + '?rel=0&start=' + t + '"></iframe>'.replace(/&/gm, '&amp;'));
+			}
 		});
 	}
 }
