@@ -21,9 +21,11 @@ if (!$) {
 	} else {
 		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!NES_loaded)) {
 			NES_loaded = true;
-			var NES_startHash = location.hash;  // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-			var NES_postSortByRating = false;   // true, når der er trykket på "Sorter indlæg efter rating"
-			var NES_fixPostTimesCounter = 0;    // setTimeout til NES_fixPostTimes()
+			var NES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+			var NES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
+			var NES_fixPostTimesCounter = 0;     // setTimeout til NES_fixPostTimes()
+			var NES_flashFaviconCounter = 0;     //setInterval til NES_flashFavicon(), som startes fra "NES_flashFavicon() #2" (TAG)
+			var NES_flashFaviconBoolean = false; // Hører også til NES_flashFavicon()
 			$(document).ready(function () {
 				NES_init();
 			});
@@ -212,6 +214,19 @@ function NES_init() {
 		if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null) {
 			NES_addToToolbar(true);
 		}
+		
+		// TAG: "NES_flashFavicon() #2"
+		// Starter NES_flashFavicon(), som blinker favicon, når der er ulæste tråde i /forum efter den 30-sekunders opdatering
+		if (options.data.match('class=Z4_Forum_Thread&action=mine') !== null) {
+			if ($('.unread', $('<div>').html($("Response", xhr.responseXML).text())).length > 0) {
+				clearInterval(NES_flashFaviconCounter);
+				NES_flashFaviconCounter = setInterval('NES_flashFavicon()', 1000);
+			} else {
+				clearInterval(NES_flashFaviconCounter);
+				$('link[type="image/x-icon"]').remove();
+				$('head').append($('<link rel="icon" type="image/x-icon" href="/gfx/newz.dk.favicon.ico">'));
+			}
+		}
 	});
 	
 	$(document).ajaxStop(function() {
@@ -337,8 +352,8 @@ function NES_init() {
 	NES_updateCommentList();
 	
 	// Resizer kommentarfeltet, når der trykkes på Rediger (inde i Preview)
-		// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
-		// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
+	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
+	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
 	$("#button_edit").unbind().attr('id', 'NES_button_edit').bind("click", function(e) {
 		// Original newz.dk-kode
 		$("#post_preview").hide();
@@ -379,17 +394,11 @@ function NES_init() {
 		NES_fixPosts();
 	}
 	
-	// Statistik
-	if (localStorage["NES_statistik2"] != "true") {
-		localStorage["NES_statistik2"] = 'true';
-		uploadStatistik();
-	}
+	// Smider genveje til underdomænernes fora ind.
+	$('.links:first').before('<div style="float: left; padding: 3px;">Genveje: <a href="http://newz.dk/forum">newz.dk-forum</a> | <a href="http://railgun.newz.dk/forum">Railgun-forum</a> | <a href="http://macnation.newz.dk/forum">MacNation-forum</a> | <a href="http://raid1.newz.dk/forum">RAID1-forum</a></div>');
 }
 
-function uploadStatistik() {
-	//$.getScript('http://d9projects.com/NES_stats.php?NES&hash='+localStorage["NES_statHash2"]+'&addLinkToPostReference='+ +addLinkToPostReference+'&showPostOnMouseOverReference='+ +showPostOnMouseOverReference+'&showPostOnMouseOverReferenceLeft='+ +(localStorage["showPostOnMouseOverReferenceLeft"] == "true")+'&showPostOnMouseOverReferenceMini='+ +showPostOnMouseOverReferenceMini+'&improvedQuoteSetting='+ +improvedQuoteSetting+'&applyTargetBlank='+ +applyTargetBlank+'&applyTargetBlankOnlyOutgoing='+ +applyTargetBlankOnlyOutgoing+'&fixFailTagsSetting='+ +fixFailTagsSetting+'&showUrlImages='+ +showUrlImages+'&embedYouTubeUrls='+ +embedYouTubeUrls+'&embedYouTubeUrlsNotInQuote='+ +embedYouTubeUrlsNotInQuote+'&narrowSite='+ +narrowSite, function(){});
-}
-
+// Sørger for, at underindstillingerne bliver grå, når featuren er slået fra.
 function NES_updateSettingsSub() {
 	$('#addLinkToPostReferenceSub > input').attr('disabled', !$('#addLinkToPostReference').attr('checked'));
 	$('#showPostOnMouseOverReferenceSub input').attr('disabled', (!$('#showPostOnMouseOverReference').attr('checked') || !$('#addLinkToPostReference').attr('checked')));
@@ -397,7 +406,7 @@ function NES_updateSettingsSub() {
 	$('#applyTargetBlankSub input').attr('disabled', !$('#applyTargetBlank').attr('checked'));
 }
 
-//
+// Tilføjer ekstra BB-knapper til toolbaren vedhæftet kommentarfeltet.
 function NES_addToToolbar(editArea) {
 	if (editArea === true) {
 		var domain = '#edit_area';
@@ -448,6 +457,16 @@ function NES_fixPosts(object, afterEdit, isPreview) {
 	NES_embedYouTubeUrlsFunc(object);
 	
 	NES_applyTargetBlankFunc(object);
+}
+
+// Blinker favicon, når der er ulæste tråde i /forum efter den 30-sekunders opdatering
+// Startes fra "NES_flashFavicon() #2" (TAG)
+function NES_flashFavicon() {
+	$('link[type="image/x-icon"]').remove();
+	
+	(NES_flashFaviconBoolean = !NES_flashFaviconBoolean)
+		? $('head').append($('<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARASURBVEhLjZbLUhNREIbPs7jXKheKQpBADATIlYSEEAIKGhUUwUsChItIgSCIoOVdC0XwVqArn0JXWiULF16q3OMT6DfTMMLM5JTUX1Pn9Pzdf5/uPhNUeVV0G5Eda4xsbRZhWnZZCMd67nI5WFGvPNWxLXhjHm/UWBuLbaO8NS0Vlt1cE/TwEUPAsAtnVyjDcsjTqCprmoC8K/OEnDhQHiSQ0IgF4VBluOpooi7YVh9u51nlS4gXEXZGY324MqiO+OJi9fqbz/WPXMiP918e24ni6Exz6xnqgExNXUt3b7EwNDk9u3j7ziMB64Hha525S3DQIKDE5GkIVPkTgE1dMLN4+97E1MxOjFyZePl6Df/9ZYF4S+7m4h2AcXD4SmFoND84Aljj8nR5dXR81gjti0tMUOENq+raJCD9QKhtenYhPzSCp4WL+aEnT5c5UGt7D/KEvjwwPFAcswH+pULx7v3HnIauSEzgqY5uCaAWCGURsHmK290Hz67fWJSsndEtC+THS8u57gFatS0QU5QVeP1JOmZUc3d2RBy7OjU3f0vOpInOK8o1NT33ZOkFI1BTlyIsnVC+QBqwaYwecwrgJrVmQXHIkbU8XcXg0LNUpoeMCUtL1NH6NGATjHW4CkgggtJenMHy6iu66toMjPcfLjFRNJWwHEX5G1oBm2DsOAKudcCNTnB2PKPNJ6gyXUHDeQ6YzAIEBAjLU3FTQG1jJhzvchUgyszsPIlTRlqHG3kl0qfJtJQAd4UeEJanTWCBFGS6LTCpzAZ3kHQkG0BJmfri6LiTTCV3CTCdgFsWSXTxjpmxgdlHIJ7KcUohA07DfWZmnGSKaQq0QPMFkqo+nAUI0OQvG183N3878enzBllzExll4VOlB49WXMkY+d5QHMiGQDjeCegw3fvx89cftz+ECSpMASV6trLmSsbI4cgYGjkpKhNJnAg1dcaSJ0sJcALSMZlboNUaAb5d1AcyaSkSB4xQU0on0BDpEKbA35jRC5AQtIZIVpE4QI2PpeYE3HNhCmi4XoCEoOGlSBygxmhrBBgBHIQMKLFGgJ8QQkPDS5E4wJlfFY1AqMlwEDKgxM9X10s1GQFCQ8NLkThgk8x0awRokjAFVGDlxVuNAKGhMUiKxAECqbYejQBNEiYgFSqgEeCSExomXgo2YNOSLSnAPaBJwhRwb/QChCZjvBRxWeGTbj+ruWg0ABoQPvdGL0BTYcaSXYq4AJ+2Y+e55aVuMt8iYQpoyZv196V6MD65gAA00lKtHecAGwT4ypOXE/xvQgYms1eelJRCu5Ix8rEz+b20VhEXZI/38TTGKZWzYMyluW1OnxKCBbaEsAg2F9IVPo6KVbazz3hqAEHDKf2Kg6p3ed//ovAfTBun4FMfCvs+5PcKPrKW7bbRafn31nK0vMSxsA8vw9GMqb4X9oBvJmRtg9htBItcyssK8hcq2z9GxOB6tAAAAABJRU5ErkJggg==">'))
+		: $('head').append($('<link rel="icon" type="image/x-icon" href="/gfx/newz.dk.favicon.ico">'));
 }
 
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
