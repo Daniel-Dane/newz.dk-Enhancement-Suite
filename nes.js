@@ -570,7 +570,7 @@ function SNES_init() {
 	SNES_fixToolbar();
 	
 	// Til gemning af kommentarfeltet
-	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
+	$('.markItUpHeader').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
 	SNES_updateCommentList();
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
