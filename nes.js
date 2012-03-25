@@ -1,13 +1,13 @@
 ﻿/**
- @name           Super newz.dk Enhancement Suite
+ @name           Super newz.dk Enhancement Suite (SNES)
  @url            https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js
 */
 
-var NES_version = "2.1.3";
-var NES_loaded = NES_loaded || false;
-
-// Følgende indsættes i indstillinger -> stylesheet
+// Følgende (FRA OG MED CITATIONSTEGNET TIL SLUT) indsættes i indstillinger -> stylesheet for at installere SNES
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
+
+var SNES_version = "2.1.3";
+var SNES_loaded = SNES_loaded || false;
 
 if (!$) {
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
@@ -16,24 +16,24 @@ if (!$) {
 } else {
 	if ((typeof localStorage === 'undefined') || (typeof window.history.pushState === 'undefined')) {
 		$(document).ready(function () {
-			$('#nmSiteSelect').next().find('a:last').before('Failbrowser. NES kan ikke køre her. | ');
+			$('#nmSiteSelect').next().find('a:last').before('Failbrowser. SNES kan ikke køre her. | ');
 		});
 	} else {
-		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!NES_loaded)) {
-			NES_loaded = true;
-			var NES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-			var NES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
-			var NES_fixPostTimesCounter = 0;     // setTimeout til NES_fixPostTimes()
-			var NES_flashFaviconCounter = 0;     //setInterval til NES_flashFavicon(), som startes fra "NES_flashFavicon() #2" (TAG)
-			var NES_flashFaviconBoolean = false; // Hører også til NES_flashFavicon()
+		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!SNES_loaded)) {
+			SNES_loaded = true;
+			var SNES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+			var SNES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
+			var SNES_fixPostTimesCounter = 0;     // setTimeout til SNES_fixPostTimes()
+			var SNES_flashFaviconCounter = 0;     //setInterval til SNES_flashFavicon(), som startes fra "SNES_flashFavicon() #2" (TAG)
+			var SNES_flashFaviconBoolean = false; // Hører også til SNES_flashFavicon()
 			$(document).ready(function () {
-				NES_init();
+				SNES_init();
 			});
 		}
 	}
 }
 
-function NES_init() {
+function SNES_init() {
 	/**
 	* A Javascript object to encode and/or decode html characters
 	 * @Author R Reid
@@ -46,9 +46,36 @@ function NES_init() {
 	 * (c) 2006 Alex Brem <alex@0xab.cd> - http://blog.0xab.cd
 	 */
 	(function(){var a={getSelection:function(){var a=this.jquery?this[0]:this;return("selectionStart"in a&&function(){var b=a.selectionEnd-a.selectionStart;return{start:a.selectionStart,end:a.selectionEnd,length:b,text:a.value.substr(a.selectionStart,b)}}||document.selection&&function(){a.focus();var b=document.selection.createRange();if(b==null){return{start:0,end:a.value.length,length:0}}var c=a.createTextRange();var d=c.duplicate();c.moveToBookmark(b.getBookmark());d.setEndPoint("EndToStart",c);return{start:d.text.length,end:d.text.length+b.text.length,length:b.text.length,text:b.text}}||function(){return{start:0,end:a.value.length,length:0}})()},replaceSelection:function(){var a=this.jquery?this[0]:this;var b=arguments[0]||"";return("selectionStart"in a&&function(){a.value=a.value.substr(0,a.selectionStart)+b+a.value.substr(a.selectionEnd,a.value.length);return this}||document.selection&&function(){a.focus();document.selection.createRange().text=b;return this}||function(){a.value+=b;return this})()}};jQuery.each(a,function(a){jQuery.fn[a]=this})})();
+	// ----------------------------------------------------------------------------
+	// markItUp! Universal MarkUp Engine, JQuery plugin
+	// v 1.1.x
+	// Dual licensed under the MIT and GPL licenses.
+	// ----------------------------------------------------------------------------
+	// Copyright (C) 2007-2011 Jay Salvat
+	// http://markitup.jaysalvat.com/
+	// ----------------------------------------------------------------------------
+	// Permission is hereby granted, free of charge, to any person obtaining a copy
+	// of this software and associated documentation files (the "Software"), to deal
+	// in the Software without restriction, including without limitation the rights
+	// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	// copies of the Software, and to permit persons to whom the Software is
+	// furnished to do so, subject to the following conditions:
+	// 
+	// The above copyright notice and this permission notice shall be included in
+	// all copies or substantial portions of the Software.
+	// 
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	// THE SOFTWARE.
+	// ----------------------------------------------------------------------------
+	(function($){$.fn.markItUp=function(settings,extraSettings){var options,ctrlKey,shiftKey,altKey;ctrlKey=shiftKey=altKey=false;options={id:"",nameSpace:"",root:"",previewInWindow:"",previewAutoRefresh:true,previewPosition:"after",previewTemplatePath:"~/templates/preview.html",previewParser:false,previewParserPath:"",previewParserVar:"data",resizeHandle:true,beforeInsert:"",afterInsert:"",onEnter:{},onShiftEnter:{},onCtrlEnter:{},onTab:{},markupSet:[{}]};$.extend(options,settings,extraSettings);if(!options.root){$("script").each(function(a,b){miuScript=$(b).get(0).src.match(/(.*)jquery\.markitup(\.pack)?\.js$/);if(miuScript!==null){options.root=miuScript[1]}})}return this.each(function(){function keyPressed(a){shiftKey=a.shiftKey;altKey=a.altKey;ctrlKey=!(a.altKey&&a.ctrlKey)?a.ctrlKey||a.metaKey:false;if(a.type==="keydown"){if(ctrlKey===true){li=$('a[accesskey="'+String.fromCharCode(a.keyCode)+'"]',header).parent("li");if(li.length!==0){ctrlKey=false;setTimeout(function(){li.triggerHandler("mouseup")},1);return false}}if(a.keyCode===13||a.keyCode===10){if(ctrlKey===true){ctrlKey=false;markup(options.onCtrlEnter);return options.onCtrlEnter.keepDefault}else if(shiftKey===true){shiftKey=false;markup(options.onShiftEnter);return options.onShiftEnter.keepDefault}else{markup(options.onEnter);return options.onEnter.keepDefault}}if(a.keyCode===9){if(shiftKey==true||ctrlKey==true||altKey==true){return false}if(caretOffset!==-1){get();caretOffset=$$.val().length-caretOffset;set(caretOffset,0);caretOffset=-1;return false}else{markup(options.onTab);return options.onTab.keepDefault}}}}function writeInPreview(a){if(previewWindow.document){try{sp=previewWindow.document.documentElement.scrollTop}catch(b){sp=0}previewWindow.document.open();previewWindow.document.write(a);previewWindow.document.close();previewWindow.document.documentElement.scrollTop=sp}}function renderPreview(){var a;if(options.previewParser&&typeof options.previewParser==="function"){var b=options.previewParser($$.val());writeInPreview(localize(b,1))}else if(options.previewParserPath!==""){$.ajax({type:"POST",dataType:"text",global:false,url:options.previewParserPath,data:options.previewParserVar+"="+encodeURIComponent($$.val()),success:function(a){writeInPreview(localize(a,1))}})}else{if(!template){$.ajax({url:options.previewTemplatePath,dataType:"text",global:false,success:function(a){writeInPreview(localize(a,1).replace(/<!-- content -->/g,$$.val()))}})}}return false}function refreshPreview(){renderPreview()}function preview(){if(!previewWindow||previewWindow.closed){if(options.previewInWindow){previewWindow=window.open("","preview",options.previewInWindow);$(window).unload(function(){previewWindow.close()})}else{iFrame=$('<iframe class="markItUpPreviewFrame"></iframe>');if(options.previewPosition=="after"){iFrame.insertAfter(footer)}else{iFrame.insertBefore(header)}previewWindow=iFrame[iFrame.length-1].contentWindow||frame[iFrame.length-1]}}else if(altKey===true){if(iFrame){iFrame.remove()}else{previewWindow.close()}previewWindow=iFrame=false}if(!options.previewAutoRefresh){refreshPreview()}if(options.previewInWindow){previewWindow.focus()}}function get(){textarea.focus();scrollPosition=textarea.scrollTop;if(document.selection){selection=document.selection.createRange().text;if($.browser.msie){var a=document.selection.createRange(),b=a.duplicate();b.moveToElementText(textarea);caretPosition=-1;while(b.inRange(a)){b.moveStart("character");caretPosition++}}else{caretPosition=textarea.selectionStart}}else{caretPosition=textarea.selectionStart;selection=textarea.value.substring(caretPosition,textarea.selectionEnd)}return selection}function set(a,b){if(textarea.createTextRange){if($.browser.opera&&$.browser.version>=9.5&&b==0){return false}range=textarea.createTextRange();range.collapse(true);range.moveStart("character",a);range.moveEnd("character",b);range.select()}else if(textarea.setSelectionRange){textarea.setSelectionRange(a,a+b)}textarea.scrollTop=scrollPosition;textarea.focus()}function insert(a){if(document.selection){var b=document.selection.createRange();b.text=a}else{textarea.value=textarea.value.substring(0,caretPosition)+a+textarea.value.substring(caretPosition+selection.length,textarea.value.length)}}function fixIeBug(a){if($.browser.msie){return a.length-a.replace(/\r*/g,"").length}return 0}function fixOperaBug(a){if($.browser.opera){return a.length-a.replace(/\n*/g,"").length}return 0}function markup(a){var b,c,d,e;hash=clicked=a;get();$.extend(hash,{line:"",root:options.root,textarea:textarea,selection:selection||"",caretPosition:caretPosition,ctrlKey:ctrlKey,shiftKey:shiftKey,altKey:altKey});prepare(options.beforeInsert);prepare(clicked.beforeInsert);if(ctrlKey===true&&shiftKey===true||a.multiline===true){prepare(clicked.beforeMultiInsert)}$.extend(hash,{line:1});if(ctrlKey===true&&shiftKey===true){lines=selection.split(/\r?\n/);for(c=0,d=lines.length,e=0;e<d;e++){if($.trim(lines[e])!==""){$.extend(hash,{line:++c,selection:lines[e]});lines[e]=build(lines[e]).block}else{lines[e]=""}}string={block:lines.join("\n")};start=caretPosition;b=string.block.length+($.browser.opera?d-1:0)}else if(ctrlKey===true){string=build(selection);start=caretPosition+string.openWith.length;b=string.block.length-string.openWith.length-string.closeWith.length;b=b-(string.block.match(/ $/)?1:0);b-=fixIeBug(string.block)}else if(shiftKey===true){string=build(selection);start=caretPosition;b=string.block.length;b-=fixIeBug(string.block)}else{string=build(selection);start=caretPosition+string.block.length;b=0;start-=fixIeBug(string.block)}if(selection===""&&string.replaceWith===""){caretOffset+=fixOperaBug(string.block);start=caretPosition+string.openWith.length;b=string.block.length-string.openWith.length-string.closeWith.length;caretOffset=$$.val().substring(caretPosition,$$.val().length).length;caretOffset-=fixOperaBug($$.val().substring(0,caretPosition))}$.extend(hash,{caretPosition:caretPosition,scrollPosition:scrollPosition});if(string.block!==selection&&abort===false){insert(string.block);set(start,b)}else{caretOffset=-1}get();$.extend(hash,{line:"",selection:selection});if(ctrlKey===true&&shiftKey===true||a.multiline===true){prepare(clicked.afterMultiInsert)}prepare(clicked.afterInsert);prepare(options.afterInsert);if(previewWindow&&options.previewAutoRefresh){refreshPreview()}shiftKey=altKey=ctrlKey=abort=false}function build(a){var b=prepare(clicked.openWith);var c=prepare(clicked.placeHolder);var d=prepare(clicked.replaceWith);var e=prepare(clicked.closeWith);var f=prepare(clicked.openBlockWith);var g=prepare(clicked.closeBlockWith);var h=clicked.multiline;if(d!==""){block=b+d+e}else if(selection===""&&c!==""){block=b+c+e}else{a=a||selection;var i=[a],j=[];if(h===true){i=a.split(/\r?\n/)}for(var k=0;k<i.length;k++){line=i[k];var l;if(l=line.match(/ *$/)){j.push(b+line.replace(/ *$/g,"")+e+l)}else{j.push(b+line+e)}}block=j.join("\n")}block=f+block+g;return{block:block,openWith:b,replaceWith:d,placeHolder:c,closeWith:e}}function prepare(a){if($.isFunction(a)){a=a(hash)}return magicMarkups(a)}function magicMarkups(a){if(a){a=a.toString();a=a.replace(/\(\!\(([\s\S]*?)\)\!\)/g,function(a,b){var c=b.split("|!|");if(altKey===true){return c[1]!==undefined?c[1]:c[0]}else{return c[1]===undefined?"":c[0]}});a=a.replace(/\[\!\[([\s\S]*?)\]\!\]/g,function(a,b){var c=b.split(":!:");if(abort===true){return false}value=prompt(c[0],c[1]?c[1]:"");if(value===null){abort=true}return value});return a}return""}function dropMenus(markupSet){var ul=$("<ul></ul>"),i=0;$("li:hover > ul",ul).css("display","block");$.each(markupSet,function(){var button=this,t="",title,li,j;title=button.key?(button.name||"")+" [Ctrl+"+button.key+"]":button.name||"";key=button.key?'accesskey="'+button.key+'"':"";if(button.separator){li=$('<li class="markItUpSeparator">'+(button.separator||"")+"</li>").appendTo(ul)}else{i++;for(j=levels.length-1;j>=0;j--){t+=levels[j]+"-"}li=$('<li class="markItUpButton markItUpButton'+t+i+" "+(button.className||"")+'"><a href="" '+key+' title="'+title+'">'+(button.name||"")+"</a></li>").bind("contextmenu",function(){return false}).click(function(){return false}).bind("focusin",function(){$$.focus()}).mouseup(function(){if(button.call){eval(button.call)()}setTimeout(function(){markup(button)},1);return false}).hover(function(){$("> ul",this).show();$(document).one("click",function(){$("ul ul",header).hide()})},function(){$("> ul",this).hide()}).appendTo(ul);if(button.dropMenu){levels.push(i);$(li).addClass("markItUpDropMenu").append(dropMenus(button.dropMenu))}}});levels.pop();return ul}function init(){id="";nameSpace="";if(options.id){id='id="'+options.id+'"'}else if($$.attr("id")){id='id="markItUp'+$$.attr("id").substr(0,1).toUpperCase()+$$.attr("id").substr(1)+'"'}if(options.nameSpace){nameSpace='class="'+options.nameSpace+'"'}$$.wrap("<div "+nameSpace+"></div>");$$.wrap("<div "+id+' class="markItUp"></div>');$$.wrap('<div class="markItUpContainer"></div>');$$.addClass("markItUpEditor");header=$('<div class="markItUpHeader"></div>').insertBefore($$);$(dropMenus(options.markupSet)).appendTo(header);footer=$('<div class="markItUpFooter"></div>').insertAfter($$);if(options.resizeHandle===true&&$.browser.safari!==true){resizeHandle=$('<div class="markItUpResizeHandle"></div>').insertAfter($$).bind("mousedown",function(a){var b=$$.height(),c=a.clientY,d,e;d=function(a){$$.css("height",Math.max(20,a.clientY+b-c)+"px");return false};e=function(a){$("html").unbind("mousemove",d).unbind("mouseup",e);return false};$("html").bind("mousemove",d).bind("mouseup",e)});footer.append(resizeHandle)}$$.keydown(keyPressed).keyup(keyPressed);$$.bind("insertion",function(a,b){if(b.target!==false){get()}if(textarea===$.markItUp.focused){markup(b)}});$$.focus(function(){$.markItUp.focused=this})}function localize(a,b){if(b){return a.replace(/("|')~\//g,"$1"+options.root)}return a.replace(/^~\//,options.root)}var $$,textarea,levels,scrollPosition,caretPosition,caretOffset,clicked,hash,header,footer,previewWindow,template,iFrame,abort;$$=$(this);textarea=this;levels=[];abort=false;scrollPosition=caretPosition=0;caretOffset=-1;options.previewParserPath=localize(options.previewParserPath);options.previewTemplatePath=localize(options.previewTemplatePath);init()})};$.fn.markItUpRemove=function(){return this.each(function(){var a=$(this).unbind().removeClass("markItUpEditor");a.parent("div").parent("div.markItUp").parent("div").replaceWith(a)})};$.markItUp=function(a){var b={target:false};$.extend(b,a);if(b.target){return $(b.target).each(function(){$(this).focus();$(this).trigger("insertion",[b])})}else{$("textarea").trigger("insertion",[b])}}})(jQuery)
 	
-	// NES-indstillingsboksen
-	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0; width: 600px;" id="NES-menu" />').insertAfter('#nmTopBar')
+	// SNES-indstillingsboksen
+	$('<div class="secondary_column" style="font-size: 1.2em; margin: 16px auto auto; float: none; padding: 0; width: 600px;" id="SNES-menu" />').insertAfter('#nmTopBar')
 	.html(' \
 	<h3 style=\'background: url("http://newz.dk.css.zfour.dk/gfx/default/bg_h3.png") repeat-x scroll 100% 0 transparent;\'><span>Super newz.dk Enhancement Suite (SNES)</span></h3> \
 	<div style="text-align: left; padding-left: 12px;"> \
@@ -79,16 +106,16 @@ function NES_init() {
 		<input type="checkbox" id="narrowSite" name="narrowSite"><label for="narrowSite"> Gør newz.dk lidt smallere (til opløsninger med 1024 i bredde)</label> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
-			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om SNES på <a href="http://www.knowyournewz.dk/index.php?title=Super_newz.dk_Enhancement_Suite">kynz</a>! Version ' + NES_version + '. \
+			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om SNES på <a href="http://www.knowyournewz.dk/index.php?title=Super_newz.dk_Enhancement_Suite">kynz</a>! Version ' + SNES_version + '. \
 		</div> \
 	</div> \
 	').hide();
 	
-	// "NES-indstillinger"-knappen
-	$('#nmSiteSelect').next().find('a:last').before('<a href="#" id="NES-toggle">SNES-indstillinger</a> | ');
-	$('#NES-toggle').click(function (e) {
+	// "SNES-indstillinger"-knappen
+	$('#nmSiteSelect').next().find('a:last').before('<a href="#" id="SNES-toggle">SNES-indstillinger</a> | ');
+	$('#SNES-toggle').click(function (e) {
 		e.preventDefault();
-		$('#NES-menu').toggle();
+		$('#SNES-menu').toggle();
 		return false;
 	});
 	
@@ -114,12 +141,12 @@ function NES_init() {
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
-			NES_updateSettingsSub();
-			localStorage["NES_statistik2"] = 'false';
+			SNES_updateSettingsSub();
+			localStorage["SNES_statistik2"] = 'false';
 		}).attr('checked', (localStorage[handlerList[i]] == 'true'));
 	}
 	$("#sortRating").bind("click", function() {
-		NES_postSortByRating = true;
+		SNES_postSortByRating = true;
 		$('.comments_new').remove();
 		$(this).attr('disabled', true).text('* POOF *');
 		
@@ -144,38 +171,144 @@ function NES_init() {
 	.indexsection ul li { \
 		width: inherit !important; /* Fikser nyhedslisten, så teksten ikke går for langt og ikke kan læses */ \
 	} \
-	.NES_postReferenceLink { \
+	.SNES_postReferenceLink { \
 		color: green !important; \
 	} \
 	 \
-	" + (showPostOnMouseOverReference ? ".NES_cite{z-index: 9000; width: " + (showPostOnMouseOverReferenceMini ? '381' : '651') + "px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + '}' : '') + "\
-	.listtag { \
-		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFuSURBVDhPlVTNToNAEGZJoAlX0y6esI1PoInUpL6O0RfwETTxBfR9PKgHvWrVSPCAgIZeALkAfjB2u/zU6GQzmZl+8/PNLmVRFH2GgfvmKJCyVBhrGJXTlBpjWePhyGRP84cweLf3DwBhjJVlSbrryjVurq8431Rd19mbzoCG5HkOXRQFuWQIl4Ik9nSGRFWuNxic6fopTnfY3ogKnqKPQFA3vU9W4FJRQVQMI5Jp2q+OZFlGYOxFYUiud0Ot0vSEjkxPtgETi0BWg7NhnNP5M2fG5GKURhGjT4gRwTC2AmpxHKdpKhrCTpIk7BPEBRhjV5ypXhAc+/4RtHzDHTsXPRqcOb8wzUvof3AmKJq3rso0Tc55S+OaJM71kxa+XMjrE2KxXNiyHUKed0hHHqR6D2uk4ozvQdO0Xx5G6yeAqSJ7nj++Oi87u7Zc/ecBrt/b/d3tZLzNFovFR+jj+1ohwUhMSn8PnciWNdkYjr4BVz/GG5kJW6UAAAAASUVORK5CYII=); \
-	} \
-	.listtag:hover { \
-		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF3SURBVDhPjVRNb4JAEGUJ4d74caJi4lkQSfwb/bj3t7WJSeupHz+htb00qSAmcrK2xl7U9k4i0gdDFuiqdbJZdl7mzczbDMvG4/HPajn/mkmwSJJY/M0OiVewJEbTaqVylT33H1fLhWV3EMEYi6KIdtHNpxi8vVYqVXk+nxETttls4qoJkx+4mye37Q6Ich6q1690/RJLbHYrIkMecsOoLG8BiL7NsuBIkqGe/Hx7lOtdsOl0SpG4FxDjyqQW0GRyQYun+3NAGEVSmwXNjUaX1sGaWVpW1NzYZvnbYb3rbtNsr9dryDCMW6rpeed7ioOvKMrIG6RtU77h8Mx1T7FzYYQX95DnLWg2zbtW6x77gZqVdJhzg0WzBbMsS8ziui66IZz1brqGaQdBAMeyHgh1nJP9xVVVzTRzDmj/MguawzDE7e0aDBFHcDxhaPul//Q5+2gaBXnpAO5ufeQ5eq3OfN//Xi3wf2WR/EmIry55HgTkWNOPSuVffwRjRQhoys0AAAAASUVORK5CYII=); \
-	} \
-	.NES_urlImg { \
+	" + (showPostOnMouseOverReference ? ".SNES_cite{z-index: 9000; width: " + (showPostOnMouseOverReferenceMini ? '381' : '651') + "px; position: fixed; background-color: white; border: 1px solid black; padding: 10px 5px 1px 5px; top: 0; " + ((localStorage["showPostOnMouseOverReferenceLeft"] == "true") ? 'left: 0;' : 'right: 0') + '}' : '') + "\
+	.SNES_urlImg { \
 	max-height: 381px; \
+	} \
+	.markItUp .markItUpButton1 a	{ \
+		background-image:url(http://login.newz.dk/markitup/sets/bbcodenewz/images/bold.png); \
+	} \
+	.markItUp .markItUpButton2 a	{ \
+		background-image:url(http://login.newz.dk/markitup/sets/bbcodenewz/images/italic.png); \
+	} \
+	.markItUp .markItUpButton3 a	{ \
+		background-image:url(http://login.newz.dk/markitup/sets/bbcodenewz/images/underline.png); \
+	} \
+	.markItUp .markItUpButton4 a	{ \
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACfSURBVCjPY/jPgB8yUFNBiWDBzOy01PKEmZG7sSrIe5dVDqIjygP/Y1GQm5b2P7kDwvbAZkK6S8L/6P8hM32N/zPYu2C1InJ36P/A/x7/bc+YoSooLy3/D4Px/23+SyC5G8kEf0EIbZSmfdfov9wZDCvc0uzLYWyZ/2J3MRTYppn/14eaIvKOvxxDgUma7ju1M/LlkmnC5bwdNIoL7BAAWzr8P9A5d4gAAAAASUVORK5CYII=); \
+	} \
+	.markItUp .markItUpButton5 a	{ \
+		background-image:url(http://login.newz.dk/markitup/sets/bbcodenewz/images/list-bullet.png); \
+	} \
+	.markItUp .markItUpButton6 a	{ \
+		background-image:url(http://login.newz.dk/markitup/sets/bbcodenewz/images/list-numeric.png); \
+	} \
+	.markItUp .markItUpButton7 a	{ \
+		background-image:url(http://login.newz.dk/markitup/sets/bbcodenewz/images/list-item.png); \
+	} \
+	.markItUp .markItUpButton8 a	{ \
+		background-image:url(http://login.newz.dk/markitup/sets/bbcodenewz/images/link.png); \
+	} \
+	.markItUp .markItUpButton9 a	{ \
+		background-image:url(http://login.newz.dk/markitup/sets/bbcodenewz/images/code.png); \
+	} \
+	.markItUp .markItUpButton10 a	{ \
+		background-image:url(http://login.newz.dk/markitup/sets/bbcodenewz/images/quotes.png); \
+	} \
+	.markItUp a:link, \
+	.markItUp a:visited, \
+	.markItUp a:active, \
+	.markItUp a:hover { \
+		color:#000; \
+		text-decoration:none; \
+		background-color: white; \
+	} \
+	/***************************************************************************************/ \
+	/* first row of buttons */ \
+	.markItUpHeader ul li	{ \
+		list-style:none; \
+		float:left; \
+		position:relative; \
+	} \
+	.markItUpHeader ul li:hover > ul{ \
+		display:block; \
+	} \
+	.markItUpHeader ul .markItUpDropMenu { \
+		background:transparent url(images/menu.png) no-repeat 115% 50%; \
+		margin-right:5px; \
+	} \
+	.markItUpHeader ul .markItUpDropMenu li { \
+		margin-right:0px; \
+	} \
+	/* next rows of buttons */ \
+	.markItUpHeader ul ul { \
+		display:none; \
+		position:absolute; \
+		top:18px; left:0px;	 \
+		background:#FFF; \
+		border:1px solid #000; \
+	} \
+	.markItUpHeader ul ul li { \
+		float:none; \
+		border-bottom:1px solid #000; \
+	} \
+	.markItUpHeader ul ul .markItUpDropMenu { \
+		background:#FFF url(images/submenu.png) no-repeat 100% 50%; \
+	} \
+	.markItUpHeader ul .markItUpSeparator { \
+		margin:0 10px; \
+		width:1px; \
+		height:16px; \
+		overflow:hidden; \
+		background-color:#CCC; \
+	} \
+	.markItUpHeader ul ul .markItUpSeparator { \
+		width:auto; height:1px; \
+		margin:0px; \
+	} \
+	/* next rows of buttons */ \
+	.markItUpHeader ul ul ul { \
+		position:absolute; \
+		top:-1px; left:150px;  \
+	} \
+	.markItUpHeader ul ul ul li { \
+		float:none; \
+	} \
+	.markItUpHeader ul a { \
+		display:block; \
+		width:16px; height:16px; \
+		text-indent:-10000px; \
+		background-repeat:no-repeat; \
+		padding:3px; \
+		margin:0px; \
+	} \
+	.markItUpHeader ul ul a { \
+		display:block; \
+		padding-left:0px; \
+		text-indent:0; \
+		width:120px;  \
+		padding:5px 5px 5px 25px; \
+		background-position:2px 50%; \
+	} \
+	.markItUpHeader ul ul a:hover  { \
+		color:#FFF; \
+		background-color:#000; \
+	} \
+	.comment_content ul, .comment_content ol { \
+    padding: 0 !important; \
 	} \
 	</style>").appendTo("head");
 	
 	$(document).ajaxSuccess(function(event, xhr, options) {
 		// Behandling af AJAX-sideskift
 		if (options.url.match('class=Z4_Forum_Item&action=page') !== null) {
-			var href = NES_getUrl();
+			var href = SNES_getUrl();
 			
 			if (window._pageId > window._lastPage) {
 				// Hvis man får et link med en henvisning til et indlæg, som ikke findes endnu
-				NES_startHash = '';
+				SNES_startHash = '';
 				$('#postcontainer').prepend('Hopper lige til den rigtige side...');
 				history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
-				NES_fetchPage(_lastPage, 0);
+				SNES_fetchPage(_lastPage, 0);
 			} else {
-				if (NES_startHash != '') {
-					$(window).scrollTop($('.comment h2:has(a[name=' + NES_startHash.substr(1) + '])').offset().top);
-					history.replaceState({page: _pageId}, '', href + '/page' + _pageId + NES_startHash);
-					NES_startHash = '';
+				if (SNES_startHash != '') {
+					$(window).scrollTop($('.comment h2:has(a[name=' + SNES_startHash.substr(1) + '])').offset().top);
+					history.replaceState({page: _pageId}, '', href + '/page' + _pageId + SNES_startHash);
+					SNES_startHash = '';
 				}
 				
 				// Retter newz.dk's buggede AJAX.
@@ -184,9 +317,9 @@ function NES_init() {
 				});
 				
 				//
-				NES_fixTitle();
-				NES_insertLoadingGif();
-				NES_fixPosts();
+				SNES_fixTitle();
+				SNES_insertLoadingGif();
+				SNES_fixPosts();
 				$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 			}
 		}
@@ -197,32 +330,32 @@ function NES_init() {
 		if ((options.data.match('class=Z4_Forum_Item&action=usersave') !== null) || (options.url.match('class=Z4_Forum_Item&action=new') !== null)) {
 			var a = $('#comments > div:last');
 			if ($.trim(a.text()) != '')
-				NES_fixPosts(a);
+				SNES_fixPosts(a);
 		}
 		
 		// fixPosts() af Preview. (Slået fra, når man opretter en tråd.)
 		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1)) {
-			NES_fixPosts($('#post_preview .content'), false, true);
-			$("#NES_button_edit").focus(); // Hører til fiks af resize af kommentarfeltet efter Preview
+			SNES_fixPosts($('#post_preview .content'), false, true);
+			$("#SNES_button_edit").focus(); // Hører til fiks af resize af kommentarfeltet efter Preview
 		}
 		
 		// fixPosts() af indlæg efter endt redigering (rettelse)
 		if (options.data.match('class=Z4_Forum_Item&action=edit') !== null)
-			NES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
+			SNES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
 		
 		// Efter tryk på "Ret indlæg" og indlægget er hentet og forberedt.
 		if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null) {
-			NES_addToToolbar(true);
+			SNES_addToToolbar(true);
 		}
 		
-		// TAG: "NES_flashFavicon() #2"
-		// Starter NES_flashFavicon(), som blinker favicon, når der er ulæste tråde i /forum efter den 30-sekunders opdatering
+		// TAG: "SNES_flashFavicon() #2"
+		// Starter SNES_flashFavicon(), som blinker favicon, når der er ulæste tråde i /forum efter den 30-sekunders opdatering
 		if (options.data.match('class=Z4_Forum_Thread&action=mine') !== null) {
 			if ($('.unread', $('<div>').html($("Response", xhr.responseXML).text())).length > 0) {
-				clearInterval(NES_flashFaviconCounter);
-				NES_flashFaviconCounter = setInterval('NES_flashFavicon()', 1000);
+				clearInterval(SNES_flashFaviconCounter);
+				SNES_flashFaviconCounter = setInterval('SNES_flashFavicon()', 1000);
 			} else {
-				clearInterval(NES_flashFaviconCounter);
+				clearInterval(SNES_flashFaviconCounter);
 				$('link[type="image/x-icon"]').remove();
 				$('head').append($('<link rel="icon" type="image/x-icon" href="/gfx/newz.dk.favicon.ico">'));
 			}
@@ -230,8 +363,8 @@ function NES_init() {
 	});
 	
 	$(document).ajaxStop(function() {
-		if (NES_postSortByRating) {
-			NES_postSortByRating = false;
+		if (SNES_postSortByRating) {
+			SNES_postSortByRating = false;
 			var point = new Array();
 			point[1] = 2;
 			point[2] = 1;
@@ -275,11 +408,11 @@ function NES_init() {
 			// Hopper til top, så brugeren ved, at der skiftes side
 			$(window).scrollTop(0);
 			
-			var href = NES_getUrl();
-			NES_startHash = '';
+			var href = SNES_getUrl();
+			SNES_startHash = '';
 			var p = Math.ceil(a / _pageSize);
 			history.replaceState({page: p}, '', href + '/page' + p + '#' + a);
-			NES_fetchPage(p, 2, a);
+			SNES_fetchPage(p, 2, a);
 		}
 	});
 	
@@ -291,7 +424,7 @@ function NES_init() {
 			if (a.page == _pageId)
 				return;
 			//console.log('onpopstate: page = ' + a.page);
-			NES_fetchPage(a.page, 3);
+			SNES_fetchPage(a.page, 3);
 		}
 	};
 	
@@ -329,7 +462,7 @@ function NES_init() {
 			localStorage['commentHistory1'] = a;
 		}
 		
-		NES_updateCommentList();
+		SNES_updateCommentList();
 		SubmitPost(true);
 		return false;
 	});
@@ -347,14 +480,74 @@ function NES_init() {
 		}
 	});
 	
+	// Bedre toolbar
+	toolbarSettings = {
+		markupSet: [
+			{name:'[b]fed tekst[/b]', key:'B', openWith:'[b]', closeWith:'[/b]'},
+			{name:'[i]kursiv tekst[/i]', key:'I', openWith:'[i]', closeWith:'[/i]'},
+			{name:'[u]understreget tekst[/u]', key:'U', openWith:'[u]', closeWith:'[/u]'},
+			{name:'[s]gennemstreget tekst[/s]', key:'S', openWith:'[s]', closeWith:'[/s]'},
+			{separator:'---------------' },
+			{name:'Punktopstilling', openWith:'[list]\n', closeWith:'\n[/list]'},
+			{name:'Numerisk liste', openWith:'[list=1]\n', closeWith:'\n[/list]'}, 
+			{name:'Listeelement', openWith:'[li]', closeWith:'[/li]'},
+			{separator:'---------------' },
+			{
+				name:"[url=http://newz.dk/]newz.dk[/url]",
+				openWith: '[url=',
+				replaceWith: function(e) {
+					SNES_selstart = 0, SNES_selend = 0;
+					if (e.selection.substr(0, 7) == 'http://' || e.selection.substr(0, 8) == 'https://') {
+						SNES_selstart = e.textarea.selectionStart + e.selection.length + 6;
+						SNES_selend   = e.textarea.selectionEnd   + e.selection.length + 6;
+						return e.selection + ']' + e.selection;
+					} else {
+						SNES_selstart = e.textarea.selectionStart + 5;
+						SNES_selend   = e.textarea.selectionEnd   + 12;
+						return 'http://' + e.selection + ']' + e.selection;
+					}
+				},
+				closeWith: '[/url]',
+				afterInsert: function(e) {
+					e.textarea.setSelectionRange(SNES_selstart, SNES_selend);
+					e.textarea.focus();
+					return false;
+				} 
+			},
+			{separator:'---------------' },
+			{name:'[code]kode[/code]', openWith:'[code]', closeWith:'[/code]'},
+			{
+				name:'[quote]citat[/quote]',
+				openWith: '[quote',
+				replaceWith: function(e) {
+					var quotewho = prompt("Skriv venligst et navn eller en URL til der hvor quotet er fra") || '';
+					
+					SNES_selstart2 = 0, SNES_selend2 = 0;
+					SNES_selstart2 = e.textarea.selectionStart + 7 + (quotewho.length > 0 ? 1 + quotewho.length : 0);
+					SNES_selend2   = e.textarea.selectionEnd   + 7 + (quotewho.length > 0 ? 1 + quotewho.length : 0);
+					
+					return (quotewho.length > 0 ? "=" + quotewho : "") + "]" + e.selection;
+				},
+				closeWith: '[/quote]',
+				afterInsert: function(e) {
+					e.textarea.setSelectionRange(SNES_selstart2, SNES_selend2);
+					e.textarea.focus();
+					return false;
+				} 
+			}
+		]
+	}
+	$('.toolbar + textarea,.toolbar + div textarea').markItUp(toolbarSettings);
+	$('.toolbar').remove();
+	
 	// Til gemning af kommentarfeltet
 	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
-	NES_updateCommentList();
+	SNES_updateCommentList();
 	
 	// Resizer kommentarfeltet, når der trykkes på Rediger (inde i Preview)
 	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
-	$("#button_edit").unbind().attr('id', 'NES_button_edit').bind("click", function(e) {
+	$("#button_edit").unbind().attr('id', 'SNES_button_edit').bind("click", function(e) {
 		// Original newz.dk-kode
 		$("#post_preview").hide();
 		$("#post_form").show();
@@ -377,21 +570,21 @@ function NES_init() {
 	*/
 	
 	//
-	NES_fixTitle();
-	NES_ajaxPageChange();
-	NES_updateSettingsSub();
-	NES_addToToolbar();
+	SNES_fixTitle();
+	SNES_ajaxPageChange();
+	SNES_updateSettingsSub();
+	SNES_addToToolbar();
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
-		var href = NES_getUrl();
-		NES_startHash = '';
+		var href = SNES_getUrl();
+		SNES_startHash = '';
 		$('#postcontainer').prepend('Hopper lige til den rigtige side...');
 		history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
-		NES_fetchPage(_lastPage, 0);
+		SNES_fetchPage(_lastPage, 0);
 	} else if (window._pageId) {
 		history.replaceState({page: _pageId}, '', location.href);
-		NES_fixPosts();
+		SNES_fixPosts();
 	}
 	
 	// Smider genveje til underdomænernes fora ind.
@@ -399,7 +592,7 @@ function NES_init() {
 }
 
 // Sørger for, at underindstillingerne bliver grå, når featuren er slået fra.
-function NES_updateSettingsSub() {
+function SNES_updateSettingsSub() {
 	$('#addLinkToPostReferenceSub > input').attr('disabled', !$('#addLinkToPostReference').attr('checked'));
 	$('#showPostOnMouseOverReferenceSub input').attr('disabled', (!$('#showPostOnMouseOverReference').attr('checked') || !$('#addLinkToPostReference').attr('checked')));
 	$('#embedYouTubeUrlsSub input').attr('disabled', !$('#embedYouTubeUrls').attr('checked'));
@@ -407,7 +600,7 @@ function NES_updateSettingsSub() {
 }
 
 // Tilføjer ekstra BB-knapper til toolbaren vedhæftet kommentarfeltet.
-function NES_addToToolbar(editArea) {
+function SNES_addToToolbar(editArea) {
 	if (editArea === true) {
 		var domain = '#edit_area';
 		var area   = '.text_content .comment_form';
@@ -438,39 +631,39 @@ function NES_addToToolbar(editArea) {
 }
 
 // Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg, ved den løbende AJAX-indhentning af nye indlæg, ved Preview og ved rettelse af indlæg
-function NES_fixPosts(object, afterEdit, isPreview) {
+function SNES_fixPosts(object, afterEdit, isPreview) {
 	// Køres kun én per indlæg
 	if (afterEdit !== true) {
-		NES_improvedQuote(object);
-		NES_addPermLink(object);
-		NES_addMiniQuote(object);
-		NES_fixPostTimes(object);
-		NES_reportSpam(object);
+		SNES_improvedQuote(object);
+		SNES_addPermLink(object);
+		SNES_addMiniQuote(object);
+		SNES_fixPostTimes(object);
+		SNES_reportSpam(object);
 	}
 	
 	isPreview = (isPreview === true);
 	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
-	NES_addLinkToPostReferenceFunc(object, isPreview);
-	NES_urlToImg(object);
-	NES_fixFailTags(object);
-	NES_fixSpoilers(object);
-	NES_embedYouTubeUrlsFunc(object);
+	SNES_addLinkToPostReferenceFunc(object, isPreview);
+	SNES_urlToImg(object);
+	SNES_fixFailTags(object);
+	SNES_fixSpoilers(object);
+	SNES_embedYouTubeUrlsFunc(object);
 	
-	NES_applyTargetBlankFunc(object);
+	SNES_applyTargetBlankFunc(object);
 }
 
 // Blinker favicon, når der er ulæste tråde i /forum efter den 30-sekunders opdatering
-// Startes fra "NES_flashFavicon() #2" (TAG)
-function NES_flashFavicon() {
+// Startes fra "SNES_flashFavicon() #2" (TAG)
+function SNES_flashFavicon() {
 	$('link[type="image/x-icon"]').remove();
 	
-	(NES_flashFaviconBoolean = !NES_flashFaviconBoolean)
+	(SNES_flashFaviconBoolean = !SNES_flashFaviconBoolean)
 		? $('head').append($('<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARASURBVEhLjZbLUhNREIbPs7jXKheKQpBADATIlYSEEAIKGhUUwUsChItIgSCIoOVdC0XwVqArn0JXWiULF16q3OMT6DfTMMLM5JTUX1Pn9Pzdf5/uPhNUeVV0G5Eda4xsbRZhWnZZCMd67nI5WFGvPNWxLXhjHm/UWBuLbaO8NS0Vlt1cE/TwEUPAsAtnVyjDcsjTqCprmoC8K/OEnDhQHiSQ0IgF4VBluOpooi7YVh9u51nlS4gXEXZGY324MqiO+OJi9fqbz/WPXMiP918e24ni6Exz6xnqgExNXUt3b7EwNDk9u3j7ziMB64Hha525S3DQIKDE5GkIVPkTgE1dMLN4+97E1MxOjFyZePl6Df/9ZYF4S+7m4h2AcXD4SmFoND84Aljj8nR5dXR81gjti0tMUOENq+raJCD9QKhtenYhPzSCp4WL+aEnT5c5UGt7D/KEvjwwPFAcswH+pULx7v3HnIauSEzgqY5uCaAWCGURsHmK290Hz67fWJSsndEtC+THS8u57gFatS0QU5QVeP1JOmZUc3d2RBy7OjU3f0vOpInOK8o1NT33ZOkFI1BTlyIsnVC+QBqwaYwecwrgJrVmQXHIkbU8XcXg0LNUpoeMCUtL1NH6NGATjHW4CkgggtJenMHy6iu66toMjPcfLjFRNJWwHEX5G1oBm2DsOAKudcCNTnB2PKPNJ6gyXUHDeQ6YzAIEBAjLU3FTQG1jJhzvchUgyszsPIlTRlqHG3kl0qfJtJQAd4UeEJanTWCBFGS6LTCpzAZ3kHQkG0BJmfri6LiTTCV3CTCdgFsWSXTxjpmxgdlHIJ7KcUohA07DfWZmnGSKaQq0QPMFkqo+nAUI0OQvG183N3878enzBllzExll4VOlB49WXMkY+d5QHMiGQDjeCegw3fvx89cftz+ECSpMASV6trLmSsbI4cgYGjkpKhNJnAg1dcaSJ0sJcALSMZlboNUaAb5d1AcyaSkSB4xQU0on0BDpEKbA35jRC5AQtIZIVpE4QI2PpeYE3HNhCmi4XoCEoOGlSBygxmhrBBgBHIQMKLFGgJ8QQkPDS5E4wJlfFY1AqMlwEDKgxM9X10s1GQFCQ8NLkThgk8x0awRokjAFVGDlxVuNAKGhMUiKxAECqbYejQBNEiYgFSqgEeCSExomXgo2YNOSLSnAPaBJwhRwb/QChCZjvBRxWeGTbj+ruWg0ABoQPvdGL0BTYcaSXYq4AJ+2Y+e55aVuMt8iYQpoyZv196V6MD65gAA00lKtHecAGwT4ypOXE/xvQgYms1eelJRCu5Ix8rEz+b20VhEXZI/38TTGKZWzYMyluW1OnxKCBbaEsAg2F9IVPo6KVbazz3hqAEHDKf2Kg6p3ed//ovAfTBun4FMfCvs+5PcKPrKW7bbRafn31nK0vMSxsA8vw9GMqb4X9oBvJmRtg9htBItcyssK8hcq2z9GxOB6tAAAAABJRU5ErkJggg==">'))
 		: $('head').append($('<link rel="icon" type="image/x-icon" href="/gfx/newz.dk.favicon.ico">'));
 }
 
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
-function NES_reportSpam(object) {
+function SNES_reportSpam(object) {
 	$('.comment_rating li:first-child', object).before('<li><a title="Rapportér spam" class="reportSpam" href="#"><span></span>Rapportér spam</a></li>');
 	$('.reportSpam', object).bind('click', function(e) {
 		e.preventDefault();
@@ -500,17 +693,7 @@ function NES_reportSpam(object) {
 	});
 }
 
-function splitquery(q) {
-	q = q.substr(1).split('&');
-	var u = {};
-	for (var i = 0; i < q.length; i++) {
-		var t = q[i].split('=');
-		u[t[0]] = t[1];
-	};
-	return u;
-}
-
-function NES_embedYouTubeUrlsFunc(object) {
+function SNES_embedYouTubeUrlsFunc(object) {
 	function ttotime(s) {
 		s = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)(?:s)?)?$/.exec(s);
 		return (typeof s[1] === "undefined" ? 0 : +s[1])*3600 + (typeof s[2] === "undefined" ? 0 : +s[2])*60 + (typeof s[3] === "undefined" ? 0 : +s[3]);
@@ -522,7 +705,7 @@ function NES_embedYouTubeUrlsFunc(object) {
 		
 		$('.text_content a[href*="youtu"]', object).each(function() {
 			var w = parseInt($(this).parent().css('width'));
-			var res = /(?:http:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})[^ .,\?!:]*/gmi.exec(this.href);
+			var res = /(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})/gmi.exec(this.href);
 			if (typeof this.href !== 'undefined' && res != null && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381))) {
 				var q = '';
 				var t = 0;
@@ -536,18 +719,18 @@ function NES_embedYouTubeUrlsFunc(object) {
 	}
 }
 
-function NES_fixSpoilers(object) {
+function SNES_fixSpoilers(object) {
 	$('.spoiler', object).remove();
 	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
-	$('.open_spoiler', object).unbind().attr('class', 'NES_open_spoiler').click(function(e) {
+	$('.open_spoiler', object).unbind().attr('class', 'SNES_open_spoiler').click(function(e) {
 		e.preventDefault();
 		$(this).replaceWith(this.id);
 		return false;
 	})
 }
 
-function NES_fixPostTimes(object) {
+function SNES_fixPostTimes(object) {
 	var a = $('.comment_date:contains("min siden")', object);
 	var b = $('.comment_date:contains("sek siden")', object);
 	var c = $('.comment_date:contains("nu")', object);
@@ -591,11 +774,11 @@ function NES_fixPostTimes(object) {
 			e.html(e.attr('title') + ' (' + v + ' min siden)');
 	});
 	
-	clearTimeout(NES_fixPostTimesCounter);
-	NES_fixPostTimesCounter = setTimeout("NES_fixPostTimes()", l);
+	clearTimeout(SNES_fixPostTimesCounter);
+	SNES_fixPostTimesCounter = setTimeout("SNES_fixPostTimes()", l);
 }
 
-function NES_applyTargetBlankFunc(object) {
+function SNES_applyTargetBlankFunc(object) {
 	if (applyTargetBlank) {
 		if (applyTargetBlankOnlyOutgoing) {
 			var href = location.protocol + "//" + location.hostname + "/";
@@ -608,7 +791,7 @@ function NES_applyTargetBlankFunc(object) {
 	}
 }
 
-function NES_fixFailTags(object) {
+function SNES_fixFailTags(object) {
 	if (fixFailTagsSetting) {
 		var a = ['b',            'u',       'i',        's'      ];
 		var b = {'b': 'strong>', 'u': 'u>', 'i': 'em>', 's': 's>'};
@@ -633,7 +816,7 @@ function NES_fixFailTags(object) {
 	}
 }
 
-function NES_urlToImg(object) {
+function SNES_urlToImg(object) {
 	if (showUrlImages) {
 		$('.text_content a:not([href^="#"])', object).filter(function() {
 			return (/\.(png|gif|jp(e)?g)$/i.test(this.href) && $(this).attr('data') === undefined);
@@ -643,16 +826,16 @@ function NES_urlToImg(object) {
 			var c = e.text();
 			if (b == c)
 				var c = $('<div><a href="'+b+'">'+b+'</a></div>').linkShorten().find('a').text();
-			e.replaceWith('<a data="NES_img" title="'+c+'" href="'+b+'"><img title="'+c+'" alt="'+c+'" class="NES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
+			e.replaceWith('<a data="SNES_img" title="'+c+'" href="'+b+'"><img title="'+c+'" alt="'+c+'" class="SNES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
 		});
-		//location.hash = location.hash; // Skide smart, Daniel!
+		//location.hash = location.hash; // Må kun køres, første gang denne function startes
 	}
 }
 
-// SKAL køres EFTER NES_improvedQuote().
+// SKAL køres EFTER SNES_improvedQuote().
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
-function NES_addMiniQuote(object) {
-	$('.NES_quoteitem', object).after(' (<a href="#" class="miniquote">miniquote</a>)');
+function SNES_addMiniQuote(object) {
+	$('.SNES_quoteitem', object).after(' (<a href="#" class="miniquote">miniquote</a>)');
 	$('.miniquote', object).bind('click', function(e) {
 		e.preventDefault();
 		
@@ -670,7 +853,7 @@ function NES_addMiniQuote(object) {
 	});	
 }
 
-function NES_addLinkToPostReferenceFunc(object, isPreview) {
+function SNES_addLinkToPostReferenceFunc(object, isPreview) {
 	if (addLinkToPostReference) {
 		$('.text_content p:contains("#")', object).each(function() {
 			if (isPreview) {
@@ -694,7 +877,7 @@ function NES_addLinkToPostReferenceFunc(object, isPreview) {
 						if (a == 0 || (c == postNum && p != 'post_preview'))
 							return '#' + a + b;
 						var him = $('.comment:has(a[name=' + c + '])').attr('id');
-						return '<a data="NES_ref" class="NES_postReferenceLink"' + (((showPostOnMouseOverReference) && ((c > 50 * (_pageId - 1)) && (c <= 50 * (_pageId - 1) + 50))) ? ' onclick="NES_goToPost(\'' + him + '\')" onmouseout="NES_hidePost();" onmouseover="NES_showPost(\'' + p + '\', \'' + him + '\')"' : '') + ' href="#' + c + '">#' + a + '</a>' + b;
+						return '<a data="SNES_ref" class="SNES_postReferenceLink"' + (((showPostOnMouseOverReference) && ((c > 50 * (_pageId - 1)) && (c <= 50 * (_pageId - 1) + 50))) ? ' onclick="SNES_goToPost(\'' + him + '\')" onmouseout="SNES_hidePost();" onmouseover="SNES_showPost(\'' + p + '\', \'' + him + '\')"' : '') + ' href="#' + c + '">#' + a + '</a>' + b;
 					}).replace(/&/gm, '&amp;'));
 				}
 			});
@@ -702,22 +885,22 @@ function NES_addLinkToPostReferenceFunc(object, isPreview) {
 	}
 }
 
-function NES_showPost(me, him) {
-	var q = $("#" + him).clone().attr('id', '').addClass("NES_cite").prependTo('#comments');
+function SNES_showPost(me, him) {
+	var q = $("#" + him).clone().attr('id', '').addClass("SNES_cite").prependTo('#comments');
 	if (showPostOnMouseOverReferenceMini)
 		q.find('.comment_right').remove();
 }
 
-function NES_hidePost() {
-	$('.NES_cite').remove();
+function SNES_hidePost() {
+	$('.SNES_cite').remove();
 }
 
-function NES_goToPost(him) {
-	NES_hidePost();
+function SNES_goToPost(him) {
+	SNES_hidePost();
 }
 
-function NES_addPermLink(object) {
-	href = NES_getUrl();
+function SNES_addPermLink(object) {
+	href = SNES_getUrl();
 	
 	$('h2', object).each(function() {
 		var a = $(this).html();
@@ -728,10 +911,10 @@ function NES_addPermLink(object) {
 
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
 // Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk med vigtige ændringer. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
-function NES_improvedQuote(object) {
+function SNES_improvedQuote(object) {
 	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
-	$(".quoteitem", object).unbind().attr('class', 'NES_quoteitem').bind("click", function(e) {
+	$(".quoteitem", object).unbind().attr('class', 'SNES_quoteitem').bind("click", function(e) {
 		e.preventDefault();
 		
 		// Finder indlæggets id (ikke nummer)
@@ -855,7 +1038,7 @@ function NES_improvedQuote(object) {
 										break;
 									case 'a':
 										switch (obj.attr.data) {
-											case 'NES_img':
+											case 'SNES_img':
 												s = $('<div><a href="'+obj.attr.href+'">'+obj.attr.href+'</a></div>').linkShorten().find('a').text();
 												if (s === obj.attr.title || s.substr(7) === obj.attr.title)
 													t += obj.attr.href;
@@ -863,7 +1046,7 @@ function NES_improvedQuote(object) {
 													t += '[url=' + obj.attr.href + ']' + obj.attr.title + '[/url]';
 												i += 4;
 												break;
-											case 'NES_ref':
+											case 'SNES_ref':
 												t += obj.attr.href;
 												i += text.substr(i).indexOf('>') + 1;
 												break;
@@ -929,7 +1112,7 @@ function NES_improvedQuote(object) {
 										i += text.substr(i).indexOf('</iframe>') + 9;
 										break;
 									default:
-										console.log('NES: Parse fejlede. Data:');
+										console.log('SNES: Parse fejlede. Data:');
 										console.log(obj);
 										return;
 								}
@@ -1032,7 +1215,7 @@ function NES_improvedQuote(object) {
 	});
 }
 
-function NES_updateCommentList() {
+function SNES_updateCommentList() {
 	$('#commentStorage').empty();
 	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()]).keyup();" style="width: 130px">')
 		.appendTo('#commentStorage');
@@ -1048,7 +1231,7 @@ function NES_updateCommentList() {
 
 // Sætter en ordentlig overskrift på tråden
 // newz.dk sætter normalt kun side-nr. ind i <h1>, når man skifter side, tsk tsk
-function NES_fixTitle() {
+function SNES_fixTitle() {
 	if (window._lastPage > 1) {
 		var regexMatch;
 		if (regexMatch = /(Side \d+ » )*([^»]+) ».+/.exec(document.title))
@@ -1062,25 +1245,25 @@ function NES_fixTitle() {
 }
 
 // Indsætter en loading.gif til AJAX-sideskift
-function NES_insertLoadingGif() {
+function SNES_insertLoadingGif() {
 	$('<span/>').insertAfter('.pagination').html('<div class="loading" style="float: left; margin: -2px 10px; padding: 5px; position: relative; width: 330px;"><p><img src="data:image/gif;base64,R0lGODlhEAAQAPYAAP///zMzM/r6+qenp5+fn/Hx8dLS0t/f37GxsTMzM6SkpNHR0VpaWnR0dO/v77e3t6mpqfT09JqamklJScHBwba2tq6urvb29vn5+bm5udfX12lpaTw8PH9/f+Tk5Ozs7MnJyVRUVF5eXmpqatzc3M/Pz2JiYnFxcWRkZGxsbNnZ2dTU1Hp6esLCwu7u7oyMjLy8vMbGxsfHx35+fnx8fIGBgZ6enubm5peXl/z8/LS0tEZGRlZWVnd3dzY2NnJyctbW1l9fX3l5eUdHR/Ly8t7e3q+vr+fn5+rq6mZmZrq6uk9PT0xMTL6+vo6Ojm5ublxcXIeHh9ra2szMzFFRUZaWlmdnZ3Z2djo6Ojk5Ob+/v+np6W9vb/f398TExISEhIaGhuLi4rKyskFBQU5OTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/h1CdWlsdCB3aXRoIEdJRiBNb3ZpZSBHZWFyIDQuMAAh/hVNYWRlIGJ5IEFqYXhMb2FkLmluZm8AIfkECQoAAAAsAAAAABAAEAAAB2iAAIKDICImJYOJAAsSGgAhCQkoioIGDAkbHpcJKYIRiQSRHBYLIycqABgZn4IHDRMdH5QYig4UBZSKAggPuZQDkRW+ACSIoQkWw8UABQoQF8PR0qm+tIkRGdaJqqyD3SQk3tEliNPRgQAh+QQJCgAAACwAAAAAEAAQAAAHa4AAgoMHNDU3g4mKMwkJLzk6PRk5gysvGhcvjTgQOwk7MIMsCQ0yLhI2BSGNCTWDLSkxBYkVPD48MoMuMLOKMD8gisLDACUkxIIkJYLGyADKztHSgxjE1YkRGdeJGBkRit/Jx4LhxCXL08iBACH5BAkKAAAALAAAAAAQABAAAAdogACCgwIID4OIiQADCQkVACUSKokRggSNFkBBCSZFgxEZGAAFChAXOD6NRoiiiR5CQzRHiooOFES0tCAiJiWQJLkAIY0ov8EMjSnBgwsjJ5PLua2K04Kg1YIYGZWI3AAkwNbLJb7R0YEAIfkECQoAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkAEQLTlKEERkYhQ9JCVGFmYVISk9Ti4UfMAWmhQc0NTcAJZCLMwkJL7Gzhy+2OKuCLhI2qqtGUA+fhhBLCUwwjJiFIbYJNZaOkBVMCVQyi4mCTVHev4aBACH5BAkKAAAALAAAAAAQABAAAAdogACCg4SFhoIlJYeDEYMkJIyFERkYhhgZjYSVh5uLnp+CAggPiJCLAwkJFQAlpocEqRagAAUKEBegC05FhZ2DK1ZYVryCk5UgIiYlVT6pRoSZIakoR1dZQluHDKkpAEdaH4sLIycqhoEAIfkECQoAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkjIURGRiGGBmNhJWHm4uen4clkJ4kigCin6WgixZQD4ZdIF2DRhMJIRmERFMsGoNcCcEpBzQ1Nw9JCWCDGUMJPDIzwS8fXl8LhE1RMgAvwTirLhI2BYaBACH5BAkKAAAALAAAAAAQABAAAAdngACCg4SFhoIlJYeDEYMkJIyFERkYhhgZjYSVh5uLniAiJoqegiEJCSieJIoMpymqigsjJyqkhCtOUrYABkEcT2GWhDanHBYCCA+Cl5kAYVxZMw4DpxWCzYJbWkgABKcWuwUKEBeGgQAh+QQJCgAAACwAAAAAEAAQAAAHaIAAgoOEhYICYj1KgiUlhoJGYwlMGQAkJIMRhFwJnU+FGBmaghlkPiIyhhiFMD8xj4QHNDU3sIQznS+2JI4vnTi7ji4SNgW2hREyAseDJUIrXaqFLAkNr4Sho4JTX1NElpiC2o+NzOaBADsAAAAAAAAAAAA=" /> Weeeeeeeeee.</p></div>');
 	$(".loading").hide();
 }
 
 // Forbereder AJAX-sideskift
-function NES_ajaxPageChange() {
+function SNES_ajaxPageChange() {
 	if (typeof _threadId == 'undefined' || _threadId == 0)
 		return;
 
-	NES_insertLoadingGif();
+	SNES_insertLoadingGif();
 	
 	$('.pagination a').live('click', function(e) {
 		e.preventDefault();
-		NES_startHash = '';
+		SNES_startHash = '';
 		var p = /page(\d+)$/.exec(this.href)[1];
-		var href = NES_getUrl();
+		var href = SNES_getUrl();
 		history.pushState({page: p}, '', href + '/page' + p);
-		NES_fetchPage(p, 1);
+		SNES_fetchPage(p, 1);
 		return false;
 	});
 }
@@ -1088,7 +1271,7 @@ function NES_ajaxPageChange() {
 // pageNo: sidenummer
 //  state: 0 = replaceState (fikser nuværende side), 1 = pushState (skifter side), 2 = hopper til side, hvorpå indlægget ligger, 3 = ingen ændring i historien (skifter side pga. hop i historien)
 //   hash: Hvis der skal hoppes til et bestemt indlæg
-function NES_fetchPage(pageNo, state, hash) {
+function SNES_fetchPage(pageNo, state, hash) {
 	$('.pagination').hide();
 	$(".loading").show();
 	
@@ -1133,7 +1316,7 @@ function NES_fetchPage(pageNo, state, hash) {
 }
 
 // URL uden /page eller #
-function NES_getUrl() {
+function SNES_getUrl() {
 	var a = 0;
 	
 	if ((a = location.href.indexOf('#')) == -1)
