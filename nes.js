@@ -345,7 +345,7 @@ function SNES_init() {
 		
 		// Efter tryk på "Ret indlæg" og indlægget er hentet og forberedt.
 		if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null) {
-			SNES_addToToolbar(true);
+			SNES_fixToolbar();
 		}
 		
 		// TAG: "SNES_flashFavicon() #2"
@@ -480,7 +480,7 @@ function SNES_init() {
 		}
 	});
 	
-	// Bedre toolbar
+	// Indstillinger til den nye toolbar. Se SNES_fixToolbar().
 	toolbarSettings = {
 		markupSet: [
 			{name:'[b]fed tekst[/b]', key:'B', openWith:'[b]', closeWith:'[/b]'},
@@ -537,8 +537,7 @@ function SNES_init() {
 			}
 		]
 	}
-	$('.toolbar + textarea,.toolbar + div textarea').markItUp(toolbarSettings);
-	$('.toolbar').remove();
+	
 	
 	// Til gemning af kommentarfeltet
 	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
@@ -573,7 +572,7 @@ function SNES_init() {
 	SNES_fixTitle();
 	SNES_ajaxPageChange();
 	SNES_updateSettingsSub();
-	SNES_addToToolbar();
+	SNES_fixToolbar();
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
@@ -599,35 +598,10 @@ function SNES_updateSettingsSub() {
 	$('#applyTargetBlankSub input').attr('disabled', !$('#applyTargetBlank').attr('checked'));
 }
 
-// Tilføjer ekstra BB-knapper til toolbaren vedhæftet kommentarfeltet.
-function SNES_addToToolbar(editArea) {
-	if (editArea === true) {
-		var domain = '#edit_area';
-		var area   = '.text_content .comment_form';
-	} else {
-		var domain = '#id_comment,#id_forumcontent';
-		var area   = undefined;
-	}
-	
-	// Til [list]
-	$('li.strikethrough', area).after('<li><span><a class="listtag" title="[list][li]liste1[/li][li]liste2[/li][li]liste3[/li][/list]" href="#"></a></span></li>');
-	$('.listtag', area).bind('click', function(e) {
-		e.preventDefault();
-		$(domain).replaceSelection('[list]\n[li]liste1[/li]\n[li]liste2[/li]\n[li]liste3[/li]\n[/list]');
-		return false;
-	});
-	
-	/*
-	// Til URL-billeder
-	$('li.url', area).after('<li><span><a class="img" title="[url=billede-url]billede-url (billede)[/url]" href="#"></a></span></li>');
-	$('.img', area).bind('click', function(e) {
-		e.preventDefault();
-		var imgurl = prompt("URL til billedet:");
-		if (imgurl !== null)
-			$(domain).replaceSelection('[url=' + imgurl + ']' + imgurl + ' (billede)[/url]');
-		return false;
-	});
-	*/
+// Den nye BB-toolbar
+function SNES_fixToolbar() {
+	$('.toolbar + textarea,.toolbar + div textarea').markItUp(toolbarSettings);
+	$('.toolbar').remove();
 }
 
 // Køres ved indlæsning, AJAX-sideskift, indsendelse af indlæg, ved den løbende AJAX-indhentning af nye indlæg, ved Preview og ved rettelse af indlæg
