@@ -1341,6 +1341,7 @@ function splitquery(q) {
 	return u;
 }
 
+
 /*
 	Til d. 1. april:
 	$('.comment h2 a:last-child').text('terracide')
