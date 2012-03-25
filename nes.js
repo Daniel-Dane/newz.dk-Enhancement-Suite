@@ -538,11 +538,6 @@ function SNES_init() {
 		]
 	}
 	
-	
-	// Til gemning af kommentarfeltet
-	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
-	SNES_updateCommentList();
-	
 	// Resizer kommentarfeltet, når der trykkes på Rediger (inde i Preview)
 	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
@@ -573,6 +568,10 @@ function SNES_init() {
 	SNES_ajaxPageChange();
 	SNES_updateSettingsSub();
 	SNES_fixToolbar();
+	
+	// Til gemning af kommentarfeltet
+	$('.toolbar').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
+	SNES_updateCommentList();
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
@@ -1191,7 +1190,7 @@ function SNES_improvedQuote(object) {
 
 function SNES_updateCommentList() {
 	$('#commentStorage').empty();
-	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()]).keyup();" style="width: 130px">')
+	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()]).keyup();" style="width: 100px">')
 		.appendTo('#commentStorage');
 	a.append('<option value="-1">Tidligere indlæg</option>');
 	for (var i = 0; i < 6; i++) {
