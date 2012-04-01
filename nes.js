@@ -623,6 +623,11 @@ function SNES_fixPosts(object, afterEdit, isPreview) {
 	SNES_embedYouTubeUrlsFunc(object);
 	
 	SNES_applyTargetBlankFunc(object);
+	
+	$('.comment h2 a:last-child').text('terracide')
+	$('.comment_image img').attr('src', 'http://www.gravatar.com/avatar/b4b68a783c9565679f8cd6e6d8a2a828?s=47&d=retro&r=pg')
+	$('.comment_signiture').text('Linux is only free if your sparetime has no value & AMD is only cheaper if your (spare)time has no value...')
+	$('.rating_name').text('Informativ')
 }
 
 // Blinker favicon, når der er ulæste tråde i /forum efter den 30-sekunders opdatering
@@ -1316,11 +1321,16 @@ function splitquery(q) {
 
 
 /*
+	$('.SNES_quoteitem').parent().html('Citer <a class="SNES_quoteitem" href="#">indlæg</a> | <a class="miniquote" href="#">nummer</a> | <a class="responsequote" href="#">svar</a>')
+
+	a = $("#id_comment").val()
+	a.replace(/\[quote(?:.|\n)*\[\/quote\]/, '').trim()
+
 	Til d. 1. april:
 	$('.comment h2 a:last-child').text('terracide')
-	$('.comment_image img').attr('src', 'http://www.gravatar.com/avatar/b4b68a783c9565679f8cd6e6d8a2a828?s=47&d=retro&r=pg')
+	$('.comment_image img').not(':last').attr('src', 'http://www.gravatar.com/avatar/b4b68a783c9565679f8cd6e6d8a2a828?s=47&d=retro&r=pg')
 	$('.comment_signiture').text('Linux is only free if your sparetime has no value & AMD is only cheaper if your (spare)time has no value...')
-	$('.rating_name').text('Informativ')
+	$('.rating_name').not(':last').text('Informativ')
 	
 	http://dagobah.net/flashswf/rickroll.swf
 */
