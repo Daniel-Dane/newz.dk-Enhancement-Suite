@@ -682,9 +682,12 @@ function SNES_embedYouTubeUrlsFunc(object) {
 			if (typeof this.href !== 'undefined' && res != null && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381))) {
 				var q = '';
 				var t = 0;
-				if (this.hash.length > 1 && (q = splitquery(this.hash)) && (typeof q.t !== "undefined"))
-					t = ttotime(q.t);
-				else if (this.search.length > 1 && (q = splitquery(this.search)) && (typeof q.t !== "undefined"))
+				if (this.hash.length > 1 && (q = splitquery(this.hash))) {
+					if (typeof q.t !== "undefined")
+						t = ttotime(q.t);
+					else if (typeof q.at !== "undefined")
+						t = ttotime(q.at);
+				} else if (this.search.length > 1 && (q = splitquery(this.search)) && (typeof q.t !== "undefined"))
 					t = ttotime(q.t);
 				$(this).replaceWith('<iframe data="'+this.href+'" width="'+(w-1)+'" height="'+((w-1)*(3/4))+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + res[1] + '?rel=0&start=' + t + '"></iframe>'.replace(/&/gm, '&amp;'));
 			}
