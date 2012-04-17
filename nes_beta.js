@@ -6,7 +6,7 @@
 // Følgende (FRA OG MED CITATIONSTEGNET TIL SLUT) indsættes i indstillinger -> stylesheet for at installere SNES
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
 
-var SNES_version = "2.1.4";
+var SNES_version = "2.2 beta";
 var SNES_loaded = SNES_loaded || false;
 
 if (!$) {
