@@ -564,7 +564,6 @@ function SNES_init() {
 	*/
 	
 	//
-	SNES_fixTitle();
 	SNES_ajaxPageChange();
 	SNES_updateSettingsSub();
 	SNES_fixToolbar();
@@ -582,6 +581,7 @@ function SNES_init() {
 		SNES_fetchPage(_lastPage, 0);
 	} else if (window._pageId) {
 		history.replaceState({page: _pageId}, '', location.href);
+		SNES_fixTitle();
 		SNES_fixPosts();
 	}
 	
