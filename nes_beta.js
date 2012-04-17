@@ -587,7 +587,6 @@ function SNES_init() {
 	} else if (window._pageId) {
 		SNES_fixTitle();
 		SNES_fixPosts();
-		console.log(history.state);
 		if (location.hash.length > 1)
 			history.replaceState({page: _pageId}, '', location.href);
 		else {
