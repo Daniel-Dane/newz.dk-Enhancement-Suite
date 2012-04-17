@@ -804,7 +804,6 @@ function SNES_urlToImg(object) {
 				var c = $('<div><a href="'+b+'">'+b+'</a></div>').linkShorten().find('a').text();
 			e.replaceWith('<a data="SNES_img" title="'+c+'" href="'+b+'"><img title="'+c+'" alt="'+c+'" class="SNES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
 		});
-		//location.hash = location.hash; // Må kun køres, første gang denne function startes
 	}
 }
 
@@ -1257,6 +1256,8 @@ function SNES_fetchPage(pageNo, state, hash) {
 		data: {"class":"Z4_Forum_Item", "action":"page", "id":_threadId, "offset":pageNo},
 		success: function (xml) {
 			$("#postcontainer").html($("Response", xml).text());
+			
+			console.log($(".pagination a"));
 			
 			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
 			$(".pagination a").each(function(i) {
