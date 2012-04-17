@@ -591,9 +591,13 @@ function SNES_init() {
 		if (location.hash.length > 1)
 			history.replaceState({page: _pageId}, '', location.href);
 		else {
-			history.replaceState({page: _pageId}, '', location.href + '#new');
+			if (location.href.substr(-1) == '#')
+				var href = location.href.substr(0, location.href.length-1);
+			else
+				var href = location.href;
+			history.replaceState({page: _pageId}, '', href + '#new');
 			location.hash = location.hash;
-			history.replaceState({page: _pageId}, '', location.href);
+			history.replaceState({page: _pageId}, '', href);
 		}
 		console.log(history.state);
 	}
