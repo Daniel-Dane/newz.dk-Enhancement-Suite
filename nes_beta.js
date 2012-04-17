@@ -320,7 +320,8 @@ function SNES_init() {
 				SNES_fixTitle();
 				SNES_insertLoadingGif();
 				SNES_fixPosts();
-				location.hash = location.hash;
+				if (location.hash.length > 1)
+					location.hash = location.hash;
 				$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 			}
 		}
