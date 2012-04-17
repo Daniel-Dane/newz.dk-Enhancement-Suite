@@ -1259,7 +1259,8 @@ function SNES_fetchPage(pageNo, state, hash) {
 			
 			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
 			$('a,span', '.pagination:first').each(function() {
-				if (+$(this).text() > _lastPage)
+				var v = +$(this).text();
+				if (v > _lastPage)
 					_lastPage = v;
 			});
 			_pageId = pageNo;
