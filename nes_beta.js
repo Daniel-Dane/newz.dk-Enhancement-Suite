@@ -1246,7 +1246,7 @@ function SNES_ajaxPageChange() {
 	$('.pagination a').live('click', function(e) {
 		e.preventDefault();
 		SNES_startHash = '';
-		var p = /page(\d+)$/.exec(this.href)[1];
+		var p = +/page(\d+)$/.exec(this.href)[1];
 		var href = SNES_getUrl();
 		history.pushState({page: p}, '', href + '/page' + p);
 		SNES_fetchPage(p, 1);
