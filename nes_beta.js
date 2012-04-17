@@ -419,6 +419,7 @@ function SNES_init() {
 	});
 	
 	window.onpopstate = function(e) {
+		console.log(e.state);
 		var a = e.state;
 		if (a == null)
 			history.replaceState({page: window._pageId}, '', location.href);
