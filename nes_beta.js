@@ -1285,14 +1285,16 @@ function SNES_fetchPage(pageNo, state, hash) {
 			// Det kan ikke vides, om der er et nyere (inden for samme minut) indlæg på næste side, men det går nok.
 			// Datokonverteringen er nuppet fra SNES_fixPostTimes().
 			var a = $('.comment:not(:has(.comment_rate)):last');
-			var e = $('.comment_date', a);
-			var m = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11};
-			var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
-			var d = (new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0)).getTime();
-			var s = _lastPostTime - (d/1000);
-			var s2= Math.round(((new Date()).getTime() / 1000) - _lastPostTime)/60;
-			if (s>=0 && s<60 && s2<10)
-				$('.position', a).parents('li').next().after('<li><a title="Ret indlæg" class="edititem" href="#"><span></span>Ret indlæg ('+Math.round(10-s2)+' min)</a></li>');
+			if (a.length > 0) {
+				var e = $('.comment_date', a);
+				var m = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11};
+				var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
+				var d = (new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0)).getTime();
+				var s = _lastPostTime - (d/1000);
+				var s2= Math.round(((new Date()).getTime() / 1000) - _lastPostTime)/60;
+				if (s>=0 && s<60 && s2<10)
+					$('.position', a).parents('li').next().after('<li><a title="Ret indlæg" class="edititem" href="#"><span></span>Ret indlæg ('+Math.round(10-s2)+' min)</a></li>');
+			}
 			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
 			UpdatePosts();
