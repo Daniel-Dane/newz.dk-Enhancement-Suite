@@ -1216,6 +1216,10 @@ function SNES_fixTitle() {
 			document.title = document.title.replace(/Side \d+/, "Side " + _pageId);
 		else
 			document.title = "Side " + _pageId + " » " + document.title;
+	} else if (window._lastPage == 1 && /^Side \d+$/.test($("#container div h1").text())) {
+		var regexMatch;
+		if (regexMatch = /(Side \d+ » )*([^»]+) ».+/.exec(document.title))
+			$("#container div h1").html(regexMatch[2]);
 	}
 }
 
