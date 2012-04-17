@@ -592,12 +592,12 @@ function SNES_init() {
 			history.replaceState({page: _pageId}, '', location.href);
 		else {
 			if (location.href.substr(-1) == '#')
-				var href = location.href.substr(0, location.href.length-1);
+				var href = location.href + 'new';
 			else
-				var href = location.href;
-			history.replaceState({page: _pageId}, '', href + '#new');
-			location.hash = location.hash;
+				var href = location.href + '#new';
 			history.replaceState({page: _pageId}, '', href);
+			location.hash = location.hash;
+			history.replaceState({page: _pageId}, '', location.href);
 		}
 		console.log(history.state);
 	}
