@@ -1257,7 +1257,7 @@ function SNES_fetchPage(pageNo, state, hash) {
 		success: function (xml) {
 			$("#postcontainer").html($("Response", xml).text());
 			
-			//console.log($(".pagination a"));
+			console.log($(".pagination a"));
 			
 			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
 			$(".pagination a").each(function(i) {
