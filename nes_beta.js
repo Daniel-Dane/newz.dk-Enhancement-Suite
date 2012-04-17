@@ -1207,9 +1207,8 @@ function SNES_updateCommentList() {
 // Sætter en ordentlig overskrift på tråden
 // newz.dk sætter normalt kun side-nr. ind i <h1>, når man skifter side, tsk tsk
 function SNES_fixTitle() {
-	console.log(window._lastPage);
-	console.log($("#container div h1"));
-	if (window._lastPage > 1) {
+	console.log('|' + $("#container div h1").text() + '|');
+	if (window._lastPage > 1 || /^Side \d+$/.match($("#container div h1").text())) {
 		var regexMatch;
 		if (regexMatch = /(Side \d+ » )*([^»]+) ».+/.exec(document.title))
 			$("#container div h1").html('Side ' + _pageId + ' » ' + regexMatch[2]);
