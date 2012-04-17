@@ -1291,8 +1291,8 @@ function SNES_fetchPage(pageNo, state, hash) {
 			var d = (new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0)).getTime();
 			var s = _lastPostTime - (d/1000);
 			var s2= Math.round(((new Date()).getTime() / 1000) - _lastPostTime)/60;
-			if (s>=0 && s<60 && s2<10);
-			$('.position', a).parents('li').next().after('<li><a title="Ret indlæg" class="edititem" href="#"><span></span>Ret indlæg ('+Math.round(10-s2)+' min)</a></li>');
+			if (s>=0 && s<60 && s2<10)
+				$('.position', a).parents('li').next().after('<li><a title="Ret indlæg" class="edititem" href="#"><span></span>Ret indlæg ('+Math.round(10-s2)+' min)</a></li>');
 			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
 			UpdatePosts();
