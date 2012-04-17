@@ -584,7 +584,6 @@ function SNES_init() {
 		history.replaceState({page: _pageId}, '', location.href);
 		SNES_fixTitle();
 		SNES_fixPosts();
-		location.hash = location.hash;
 	}
 	
 	// Smider genveje til underdomænernes fora ind.
