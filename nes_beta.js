@@ -1258,13 +1258,10 @@ function SNES_fetchPage(pageNo, state, hash) {
 			$("#postcontainer").html($("Response", xml).text());
 			
 			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
-			var a = Array();
 			$('a,span', '.pagination:first').each(function() {
-				var v = +$(this).text();
-				if (!isNaN(v))
-					a.push(v)
+				if (+$(this).text() > _lastPage)
+					_lastPage = v;
 			});
-			_lastPage = Math.max.apply(null, a);
 			_pageId = pageNo;
 			if (_pageId == _lastPage) {
 				_updateFrequency = 10000;
