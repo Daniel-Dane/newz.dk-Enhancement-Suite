@@ -1263,8 +1263,11 @@ function SNES_fetchPage(pageNo, state, hash) {
 			$(".pagination a").each(function(i) {
 				// Sakset fra newz.dk's egen kode. _lastPage returneres ikke fra AJAX, så hmn kigger simpelthen alle <a>'erne igennem
 				var pageId = +(this.href.substring(this.href.indexOf("page") + 4));
-				if (typeof pageId != 'undefined' && pageId > _lastPage)
+				console.log(pageId);
+				if (typeof pageId != 'undefined' && pageId > _lastPage) {
 					_lastPage = pageId;
+					console.log(_lastPage);
+				}
 			});
 			_pageId = pageNo;
 			if (_pageId == _lastPage) {
