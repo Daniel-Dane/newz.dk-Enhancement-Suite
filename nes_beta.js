@@ -590,11 +590,11 @@ function SNES_init() {
 		console.log(history.state);
 		if (location.hash.length > 1)
 			history.replaceState({page: _pageId}, '', location.href);
-		else
+		else {
 			history.replaceState({page: _pageId}, '', location.href + '#new');
-		console.log(history.state);
-		location.hash = location.hash;
-		history.replaceState({page: _pageId}, '', location.href);
+			location.hash = location.hash;
+			history.replaceState({page: _pageId}, '', location.href);
+		}
 		console.log(history.state);
 	}
 	
