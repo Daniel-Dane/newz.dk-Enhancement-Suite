@@ -583,13 +583,13 @@ function SNES_init() {
 		history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
 		SNES_fetchPage(_lastPage, 0);
 	} else if (window._pageId) {
-		history.replaceState({page: _pageId}, '', location.href);
 		SNES_fixTitle();
 		SNES_fixPosts();
 		if (location.hash.length > 1)
-			location.hash = location.hash;
+			history.replaceState({page: _pageId}, '', location.href);
 		else
-			location.hash = '#new';
+			history.replaceState({page: _pageId}, '', location.href + '#new');
+		location.hash = location.hash;
 	}
 	
 	// Smider genveje til underdomænernes fora ind.
