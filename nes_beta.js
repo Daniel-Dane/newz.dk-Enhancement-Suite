@@ -1257,16 +1257,16 @@ function SNES_fetchPage(pageNo, state, hash) {
 		success: function (xml) {
 			$("#postcontainer").html($("Response", xml).text());
 			
-			console.log($(".pagination a"));
+			//console.log($(".pagination a"));
 			
 			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
 			$(".pagination a").each(function(i) {
 				// Sakset fra newz.dk's egen kode. _lastPage returneres ikke fra AJAX, så hmn kigger simpelthen alle <a>'erne igennem
 				var pageId = +(this.href.substring(this.href.indexOf("page") + 4));
-				console.log(pageId);
+				console.log(this.href);
 				if (typeof pageId != 'undefined' && pageId > _lastPage) {
 					_lastPage = pageId;
-					console.log(_lastPage);
+					//console.log(_lastPage);
 				}
 			});
 			_pageId = pageNo;
