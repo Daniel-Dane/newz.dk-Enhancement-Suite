@@ -596,10 +596,9 @@ function SNES_init() {
 			else
 				var href = location.href + '#new';
 			history.replaceState({page: _pageId}, '', href);
-			location.hash = location.hash;
-			history.replaceState({page: _pageId}, '', location.href);
 		}
-		console.log(history.state);
+		location.hash = location.hash;
+		history.replaceState({page: _pageId}, '', location.href);
 	}
 	
 	// Smider genveje til underdomænernes fora ind.
