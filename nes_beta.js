@@ -1327,8 +1327,6 @@ function SNES_ajaxPageChange() {
 		e.preventDefault();
 		SNES_startHash = '';
 		var p = +/page(\d+)$/.exec(this.href)[1];
-		var href = SNES_getUrl();
-		history.pushState({page: p}, '', href + '/page' + p);
 		SNES_fetchPage(p, 1);
 		return false;
 	});
@@ -1364,6 +1362,8 @@ function SNES_fetchPage(pageNo, state, hash) {
 			switch (state) {
 				case 1:
 					$(window).scrollTop(0);
+					var href = SNES_getUrl();
+					history.pushState({page: _pageId}, '', href + '/page' + p);
 					break;
 				case 2:
 					$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
@@ -1387,9 +1387,6 @@ function SNES_fetchPage(pageNo, state, hash) {
 			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
 			UpdatePosts();
-		},
-		error: function() {
-			console.log('fejl');
 		},
 		complete: function() {
 			$(".loading").hide();
