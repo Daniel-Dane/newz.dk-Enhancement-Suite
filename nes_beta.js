@@ -917,7 +917,7 @@ function SNES_improvedQuote(object) {
 	$('.quoteitem').parent().html('Citer <a class="SNES_quoteitem" href="#">indlæg</a> | <a class="miniquote" href="#">nummer</a>');
 	$('.text_content').filter(function() { var a = $(this).children(); return($('>blockquote', this).length === 1 && a[1].tagName === 'BLOCKQUOTE' && a[0].tagName === 'P' && $(a[0]).text() === ''); }).each(function() {
 		 var a = $('.SNES_quoteitem', $(this).parents('.comment')).parent();
-		 a.html(a.html() + '| <a class="responsequote" href="#">svar</a>');
+		 a.html(a.html() + ' | <a class="responsequote" href="#">svar</a>');
 	});
 	
 	// "svar"-citering
