@@ -658,14 +658,12 @@ function SNES_fixPosts(object, afterEdit, isPreview) {
 	if (afterEdit !== true) {
 		SNES_improvedQuote(object);
 		SNES_addPermLink(object);
-		SNES_addMiniQuote(object);
 		SNES_fixPostTimes(object);
 		SNES_reportSpam(object);
 	}
 	
-	isPreview = (isPreview === true);
 	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
-	SNES_addLinkToPostReferenceFunc(object, isPreview);
+	SNES_addLinkToPostReferenceFunc(object, (isPreview === true));
 	SNES_urlToImg(object);
 	SNES_fixFailTags(object);
 	SNES_fixSpoilers(object);
@@ -856,27 +854,6 @@ function SNES_urlToImg(object) {
 	}
 }
 
-// SKAL køres EFTER SNES_improvedQuote().
-// Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
-function SNES_addMiniQuote(object) {
-	$('.SNES_quoteitem', object).after(' (<a href="#" class="miniquote">miniquote</a>)');
-	$('.miniquote', object).bind('click', function(e) {
-		e.preventDefault();
-		
-		// Hvis dette ligner noget kode fra newz.dk, så er det, fordi det er.
-		var comment = $("#id_comment").val();
-		if (comment.length > 0) {
-			comment += "\n\n";
-		}
-		
-		comment += "#" + $(this).parents(".comment").find("h2 a").attr("name") + "\n";
-		$("#id_comment").val(comment);
-		
-		$('#id_comment').keyup();
-		return false;
-	});	
-}
-
 function SNES_addLinkToPostReferenceFunc(object, isPreview) {
 	if (addLinkToPostReference) {
 		$('.text_content p:contains("#")', object).each(function() {
@@ -936,9 +913,60 @@ function SNES_addPermLink(object) {
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
 // Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk med vigtige ændringer. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
 function SNES_improvedQuote(object) {
-	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
-	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
-	$(".quoteitem", object).unbind().attr('class', 'SNES_quoteitem').bind("click", function(e) {
+	// Laver citeringslinjen om, så den indeholder "citer indlæg, nummer, svar".
+	$('.quoteitem').parent().html('Citer <a class="SNES_quoteitem" href="#">indlæg</a> | <a class="miniquote" href="#">nummer</a>');
+	$('.text_content').filter(function() { var a = $(this).children(); return($('>blockquote', this).length === 1 && a[1].tagName === 'BLOCKQUOTE' && a[0].tagName === 'P' && $(a[0]).text() === ''); }).each(function() {
+		 var a = $('.SNES_quoteitem', this).parent();
+		 a.html(a.html() + '| <a class="responsequote" href="#">svar</a>');
+	});
+	
+	// "svar"-citering
+	$('.responsequote').click(function(e) {
+		e.preventDefault();
+		
+		// Hvis dette ligner noget kode fra newz.dk, så er det, fordi det er. Der er lige en enkelt tilføjelse to linjer nede.
+		$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
+			var text = $.trim($("Response", xml).text()).replace(/\[quote(?:.|\n)*\[\/quote\]/, '');
+			
+			// Fjerner flere end ét efter hinanden følgende linjeknæk
+			text = $.trim(text.replace("\n\n\n\n", "\n\n"));
+			
+			// Finder kommentarfeltet og indsætter et linjeknæk før det citerede indlæg, hvis feltet ikke er tomt
+			var comment = $("#id_comment").val();
+			if (comment.length > 0) {
+				comment += "\n\n";
+			}
+			
+			// Sætter indlægget ind i en quote, som vi kender den
+			comment += "[quote=" + username + " (" + itemId + ")]" + text + "[/quote]" + "\n\n";
+			$("#id_comment").val(comment);
+			
+			$('#id_comment').keyup();
+		}, "xml");
+		
+		$('#id_comment').keyup();
+		return false;
+	}
+	
+	// "nummer"-citering
+	$('.miniquote', object).click(function(e) {
+		e.preventDefault();
+		
+		// Hvis dette ligner noget kode fra newz.dk, så er det, fordi det er.
+		var comment = $("#id_comment").val();
+		if (comment.length > 0) {
+			comment += "\n\n";
+		}
+		
+		comment += "#" + $(this).parents(".comment").find("h2 a").attr("name") + "\n";
+		$("#id_comment").val(comment);
+		
+		$('#id_comment').keyup();
+		return false;
+	});	
+	
+	// Almindelig citering med SNES' forbedring, hvis slået til
+	$(".SNES_quoteitem", object).click(function(e) {
 		e.preventDefault();
 		
 		// Finder indlæggets id (ikke nummer)
