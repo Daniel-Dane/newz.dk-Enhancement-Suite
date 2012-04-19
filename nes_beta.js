@@ -168,7 +168,7 @@ function SNES_init() {
 	});
 	$('#embedYouTubeUrlsCount').change(function() {
 		var a = +$(this).val();
-		if isNaN(a)
+		if (isNaN(a))
 			a = 0;
 		$(this).val(localStorage["embedYouTubeUrlsCount"] = a);
 	}
