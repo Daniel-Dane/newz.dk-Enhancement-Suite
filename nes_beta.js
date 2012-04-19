@@ -21,6 +21,7 @@ if (!$) {
 	} else {
 		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!SNES_loaded)) {
 			SNES_loaded = true;
+			$.fn.reverse = [].reverse;
 			var SNES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 			var SNES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
 			var SNES_fixPostTimesCounter = 0;     // setTimeout til SNES_fixPostTimes()
@@ -719,7 +720,7 @@ function SNES_embedYouTubeUrlsFunc(object) {
 		if (embedYouTubeUrlsNewOnly && object == undefined)
 			object = $('.comments_new').nextAll();
 		
-		$('.text_content a[href*="youtu"]', object).each(function() {
+		$('.text_content a[href*="youtu"]', object).reverse().each(function() {
 			var w = parseInt($(this).parent().css('width'));
 			var res = /(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})/gmi.exec(this.href);
 			if (typeof this.href !== 'undefined' && res != null && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381))) {
