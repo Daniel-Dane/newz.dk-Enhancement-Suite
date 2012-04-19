@@ -105,7 +105,7 @@ function SNES_init() {
 		<div id="embedYouTubeUrlsSub" style="padding-left: 16px;"> \
 			<input type="checkbox" id="embedYouTubeUrlsNotInQuote" name="embedYouTubeUrlsNotInQuote"><label for="embedYouTubeUrlsNotInQuote"> Men ikke i citater</label><br> \
 			<!--<input type="checkbox" id="embedYouTubeUrlsNewOnly" name="embedYouTubeUrlsNewOnly"><label for="embedYouTubeUrlsNewOnly"> Kun i ulæste indlæg (indlæg efter "Indlæg skrevet siden sidste besøg i denne tråd."-bjælken)</label><br>--> \
-			<label for="embedYouTubeUrlsCount">Kun de sidste </label><input style="width: 20px;" type="text" id="embedYouTubeUrlsCount" name="embedYouTubeUrlsCount"><label for="embedYouTubeUrlsCount"> videoer konverteres (0 = ∞)</label> \
+			<label for="embedYouTubeUrlsCount">Kun de sidste </label><input style="width: 20px;" type="text" id="embedYouTubeUrlsCount" name="embedYouTubeUrlsCount"><label for="embedYouTubeUrlsCount"> links konverteres (0 = ∞)</label> \
 		</div> \
 		<input type="checkbox" id="narrowSite" name="narrowSite"><label for="narrowSite"> Gør newz.dk lidt smallere (til opløsninger med 1024 i bredde)</label> \
 		<div style="margin-top: 12px;"> \
