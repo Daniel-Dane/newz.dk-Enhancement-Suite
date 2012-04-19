@@ -21,13 +21,13 @@ if (!$) {
 	} else {
 		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!SNES_loaded)) {
 			SNES_loaded = true;
-			$.fn.reverse = [].reverse;
 			var SNES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
 			var SNES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
 			var SNES_fixPostTimesCounter = 0;     // setTimeout til SNES_fixPostTimes()
 			var SNES_flashFaviconCounter = 0;     //setInterval til SNES_flashFavicon(), som startes fra "SNES_flashFavicon() #2" (TAG)
 			var SNES_flashFaviconBoolean = false; // Hører også til SNES_flashFavicon()
 			$(document).ready(function () {
+				$.fn.reverse = [].reverse;
 				SNES_init();
 			});
 		}
