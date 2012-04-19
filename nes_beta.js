@@ -6,8 +6,8 @@
 // Følgende (FRA OG MED CITATIONSTEGNET TIL SLUT) indsættes i indstillinger -> stylesheet for at installere SNES
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
 
-var SNES_version = "2.2 beta";
-var SNES_loaded = SNES_loaded || false;
+SNES_version = "2.2 beta";
+SNES_loaded = SNES_loaded || false;
 
 if (!$) {
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
@@ -21,11 +21,11 @@ if (!$) {
 	} else {
 		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!SNES_loaded)) {
 			SNES_loaded = true;
-			var SNES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-			var SNES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
-			var SNES_fixPostTimesCounter = 0;     // setTimeout til SNES_fixPostTimes()
-			var SNES_flashFaviconCounter = 0;     //setInterval til SNES_flashFavicon(), som startes fra "SNES_flashFavicon() #2" (TAG)
-			var SNES_flashFaviconBoolean = false; // Hører også til SNES_flashFavicon()
+			SNES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+			SNES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
+			SNES_fixPostTimesCounter = 0;     // setTimeout til SNES_fixPostTimes()
+			SNES_flashFaviconCounter = 0;     //setInterval til SNES_flashFavicon(), som startes fra "SNES_flashFavicon() #2" (TAG)
+			SNES_flashFaviconBoolean = false; // Hører også til SNES_flashFavicon()
 			$(document).ready(function () {
 				$.fn.reverse = [].reverse;
 				SNES_init();
@@ -101,6 +101,7 @@ function SNES_init() {
 		</div> \
 		<input type="checkbox" id="fixFailTagsSetting" name="fixFailTagsSetting"><label for="fixFailTagsSetting"> Ret overflødige BB-tags i indlæg (NB: Læs om funktionen på kynz inden ibrugtagen)</label><br> \
 		<input type="checkbox" id="showUrlImages" name="showUrlImages"><label for="showUrlImages"> Vis billeder i indlæg</label><br> \
+		<input type="checkbox" id="showUrlVideos" name="showUrlVideos"><label for="showUrlVideos"> Vis film i indlæg</label><br> \
 		<input type="checkbox" id="embedYouTubeUrls" name="embedYouTubeUrls"><label for="embedYouTubeUrls"> Omdan YouTube-links til embedded video</label><br> \
 		<div id="embedYouTubeUrlsSub" style="padding-left: 16px;"> \
 			<input type="checkbox" id="embedYouTubeUrlsNotInQuote" name="embedYouTubeUrlsNotInQuote"><label for="embedYouTubeUrlsNotInQuote"> Men ikke i citater</label><br> \
@@ -132,6 +133,7 @@ function SNES_init() {
 	applyTargetBlankOnlyOutgoing = (localStorage["applyTargetBlankOnlyOutgoing"] == "true");
 	fixFailTagsSetting = (localStorage["fixFailTagsSetting"] == "true");
 	showUrlImages = (localStorage["showUrlImages"] == "true");
+	showUrlVideos = (localStorage["showUrlVideos"] == "true");
 	embedYouTubeUrls = (localStorage["embedYouTubeUrls"] == "true");
 	embedYouTubeUrlsNotInQuote = (localStorage["embedYouTubeUrlsNotInQuote"] == "true");
 	//embedYouTubeUrlsNewOnly = (localStorage["embedYouTubeUrlsNewOnly"] == "true");
@@ -142,7 +144,7 @@ function SNES_init() {
 	
 	// Event handlers til knapperne
 	var handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
-					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote', 'narrowSite'];
+					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'showUrlVideos', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote', 'narrowSite'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
@@ -670,6 +672,7 @@ function SNES_fixPosts(object, afterEdit, isPreview) {
 	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
 	SNES_addLinkToPostReferenceFunc(object, (isPreview === true));
 	SNES_urlToImg(object);
+	SNES_urlToVid(object);
 	SNES_fixFailTags(object);
 	SNES_fixSpoilers(object);
 	SNES_embedYouTubeUrlsFunc(object);
@@ -865,6 +868,16 @@ function SNES_urlToImg(object) {
 	}
 }
 
+function SNES_urlToVid(object) {
+	if (showUrlVideos) {
+		$('.text_content a:not([href^="#"])', object).each(function() {
+			var reg;
+			if (reg = /\.(og(?:g|v|a|x)|spx|mp4)$/i.exec(this.href))
+				$(this).replaceWith('<video width="380" height="285" controls="controls"><source src="'+this.href+'" type="video/'+reg[1]+'" /></video>');
+		});
+	}
+}
+
 function SNES_addLinkToPostReferenceFunc(object, isPreview) {
 	if (addLinkToPostReference) {
 		$('.text_content p:contains("#")', object).each(function() {
@@ -935,7 +948,7 @@ function SNES_improvedQuote(object) {
 	$('.responsequote', object).click(function(e) {
 		e.preventDefault();
 		
-		// Hvis dette ligner noget kode fra newz.dk, så er det, fordi det er. Der er lige en enkelt tilføjelse to linjer nede.
+		// Hvis dette ligner noget kode fra newz.dk, så er det, fordi det er. Der er lige en enkelt tilføjelse.
 		// Finder indlæggets id (ikke nummer)
 		var $post = $(this).parents(".comment");
 		var postId = $post.attr("id").substring(4);
