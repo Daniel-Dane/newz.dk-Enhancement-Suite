@@ -6,8 +6,8 @@
 // Følgende (FRA OG MED CITATIONSTEGNET TIL SLUT) indsættes i indstillinger -> stylesheet for at installere SNES
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
 
-SNES_version = "2.2 beta";
-SNES_loaded = SNES_loaded || false;
+var SNES_version = "2.2 beta";
+var SNES_loaded = SNES_loaded || false;
 
 if (!$) {
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
@@ -21,11 +21,11 @@ if (!$) {
 	} else {
 		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!SNES_loaded)) {
 			SNES_loaded = true;
-			SNES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-			SNES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
-			SNES_fixPostTimesCounter = 0;     // setTimeout til SNES_fixPostTimes()
-			SNES_flashFaviconCounter = 0;     //setInterval til SNES_flashFavicon(), som startes fra "SNES_flashFavicon() #2" (TAG)
-			SNES_flashFaviconBoolean = false; // Hører også til SNES_flashFavicon()
+			var SNES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+			var SNES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
+			var SNES_fixPostTimesCounter = 0;     // setTimeout til SNES_fixPostTimes()
+			var SNES_flashFaviconCounter = 0;     //setInterval til SNES_flashFavicon(), som startes fra "SNES_flashFavicon() #2" (TAG)
+			var SNES_flashFaviconBoolean = false; // Hører også til SNES_flashFavicon()
 			$(document).ready(function () {
 				$.fn.reverse = [].reverse;
 				SNES_init();
