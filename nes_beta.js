@@ -171,7 +171,7 @@ function SNES_init() {
 		if (isNaN(a))
 			a = 0;
 		$(this).val(localStorage["embedYouTubeUrlsCount"] = a);
-	}
+	});
 	
 	// Styles til fix af newz.dk samt til nogle af SNES' features.
 	$("<style type='text/css'> \
