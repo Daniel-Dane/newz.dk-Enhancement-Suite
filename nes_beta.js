@@ -582,6 +582,35 @@ function SNES_init() {
 	$('.markItUpHeader').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
 	SNES_updateCommentList();
 	
+	// Fjerner også tråden fra listen over overvågede tråde, når man trykker på "Ignorer denne tråd"
+	$('a[title="Ignorer denne tråd"]').unbind().click(function(e) {
+		e.preventDefault();
+		var id = this.href.match(/\d+$/)[0];
+		$(this).replaceWith('<div id="SNES_ignorethread">');
+		var me = $('#SNES_ignorethread');
+		$.ajax({
+			url: '/forum/track/delete/' + id,
+			success: function() {
+				me.html('<br>[✓] Fjernet fra listen over overvågede tråde');
+			},
+			error: function() {
+				me.html('<br>[X] Fjernelse fra listen over overvågede tråden fejlede');
+			},
+			complete: function() {
+				$.ajax({
+					url: '/forum/ignore/add/' + id,
+					success: function() {
+						me.html(me.html() + '<br>[✓] Tråd ignoreret');
+					},
+					error: function() {
+						me.html(me.html() + '<br>[X] Fjernelse fra listen over overvågede tråden fejlede');
+					},
+				});
+			}
+		});
+		return false;
+	});
+	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
 		var href = SNES_getUrl();
