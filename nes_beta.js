@@ -918,6 +918,7 @@ function SNES_improvedQuote(object) {
 	$('.text_content').filter(function() { var a = $(this).children(); return($('>blockquote', this).length === 1 && a[1].tagName === 'BLOCKQUOTE' && a[0].tagName === 'P' && $(a[0]).text() === ''); }).each(function() {
 		 var a = $('.SNES_quoteitem', this).parent();
 		 a.html(a.html() + '| <a class="responsequote" href="#">svar</a>');
+		 console.log('hest');
 	});
 	
 	// "svar"-citering
