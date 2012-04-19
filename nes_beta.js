@@ -104,7 +104,8 @@ function SNES_init() {
 		<input type="checkbox" id="embedYouTubeUrls" name="embedYouTubeUrls"><label for="embedYouTubeUrls"> Omdan YouTube-links til embedded video</label><br> \
 		<div id="embedYouTubeUrlsSub" style="padding-left: 16px;"> \
 			<input type="checkbox" id="embedYouTubeUrlsNotInQuote" name="embedYouTubeUrlsNotInQuote"><label for="embedYouTubeUrlsNotInQuote"> Men ikke i citater</label><br> \
-			<input type="checkbox" id="embedYouTubeUrlsNewOnly" name="embedYouTubeUrlsNewOnly"><label for="embedYouTubeUrlsNewOnly"> Kun i ulæste indlæg (indlæg efter "Indlæg skrevet siden sidste besøg i denne tråd."-bjælken)</label><br> \
+			<!--<input type="checkbox" id="embedYouTubeUrlsNewOnly" name="embedYouTubeUrlsNewOnly"><label for="embedYouTubeUrlsNewOnly"> Kun i ulæste indlæg (indlæg efter "Indlæg skrevet siden sidste besøg i denne tråd."-bjælken)</label><br>--> \
+			<label for="embedYouTubeUrlsCount">Kun de sidste </label><input type="text" id="embedYouTubeUrlsCount" name="embedYouTubeUrlsCount"><label for="embedYouTubeUrlsCount"> videoer konverteres (0 = ∞)</label> \
 		</div> \
 		<input type="checkbox" id="narrowSite" name="narrowSite"><label for="narrowSite"> Gør newz.dk lidt smallere (til opløsninger med 1024 i bredde)</label> \
 		<div style="margin-top: 12px;"> \
@@ -133,14 +134,15 @@ function SNES_init() {
 	showUrlImages = (localStorage["showUrlImages"] == "true");
 	embedYouTubeUrls = (localStorage["embedYouTubeUrls"] == "true");
 	embedYouTubeUrlsNotInQuote = (localStorage["embedYouTubeUrlsNotInQuote"] == "true");
-	embedYouTubeUrlsNewOnly = (localStorage["embedYouTubeUrlsNewOnly"] == "true");
+	//embedYouTubeUrlsNewOnly = (localStorage["embedYouTubeUrlsNewOnly"] == "true");
+	$('#embedYouTubeUrlsCount').val(embedYouTubeUrlsCount = +localStorage["embedYouTubeUrlsCount"]);
 	if (narrowSite = (localStorage["narrowSite"] == "true")) {
 		$('body,#center,#nmContainer').css('width','1000px');
 	}
 	
 	// Event handlers til knapperne
 	var handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
-					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote', 'embedYouTubeUrlsNewOnly', 'narrowSite'];
+					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote', 'narrowSite'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
@@ -164,6 +166,12 @@ function SNES_init() {
 			$(this).change();
 		});
 	});
+	$('#embedYouTubeUrlsCount').change(function() {
+		var a = +$(this).val();
+		if isNaN(a)
+			a = 0;
+		$(this).val(localStorage["embedYouTubeUrlsCount"] = a);
+	}
 	
 	// Styles til fix af newz.dk samt til nogle af SNES' features.
 	$("<style type='text/css'> \
@@ -717,8 +725,11 @@ function SNES_embedYouTubeUrlsFunc(object) {
 	}
 	
 	if (embedYouTubeUrls) {
-		if (embedYouTubeUrlsNewOnly && object == undefined)
-			object = $('.comments_new').nextAll();
+		if (embedYouTubeUrlsCount > 0)
+			var count = 0;
+	
+		//if (embedYouTubeUrlsNewOnly && object == undefined)
+		//	object = $('.comments_new').nextAll();
 		
 		$('.text_content a[href*="youtu"]', object).reverse().each(function() {
 			var w = parseInt($(this).parent().css('width'));
@@ -734,6 +745,9 @@ function SNES_embedYouTubeUrlsFunc(object) {
 				} else if (this.search.length > 1 && (q = splitquery(this.search)) && (typeof q.t !== "undefined"))
 					t = ttotime(q.t);
 				$(this).replaceWith('<iframe data="'+this.href+'" width="'+(w-1)+'" height="'+((w-1)*(3/4))+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + res[1] + '?rel=0&start=' + t + '"></iframe>'.replace(/&/gm, '&amp;'));
+				
+				if (embedYouTubeUrlsCount > 0 && ++count >= embedYouTubeUrlsCount)
+					return false;
 			}
 		});
 	}
