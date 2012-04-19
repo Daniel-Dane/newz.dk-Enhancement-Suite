@@ -946,7 +946,7 @@ function SNES_improvedQuote(object) {
 		
 		$('#id_comment').keyup();
 		return false;
-	}
+	});
 	
 	// "nummer"-citering
 	$('.miniquote', object).click(function(e) {
