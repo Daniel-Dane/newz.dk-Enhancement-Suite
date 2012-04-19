@@ -424,16 +424,12 @@ function SNES_init() {
 	});
 	
 	window.onpopstate = function(e) {
-		console.log('onpop start');
-		console.log(e.state);
-		console.log('onpop end');
 		var a = e.state;
 		if (a == null)
 			history.replaceState({page: window._pageId}, '', location.href);
 		else {
 			if (a.page == _pageId)
 				return;
-			//console.log('onpopstate: page = ' + a.page);
 			SNES_fetchPage(a.page, 3);
 		}
 	};
