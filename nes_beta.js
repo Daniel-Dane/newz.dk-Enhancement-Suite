@@ -910,14 +910,14 @@ function SNES_addPermLink(object) {
 // Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk med vigtige ændringer. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
 function SNES_improvedQuote(object) {
 	// Laver citeringslinjen om, så den indeholder "citer indlæg, nummer, svar".
-	$('.quoteitem').parent().html('Citer <a class="SNES_quoteitem" href="#">indlæg</a> | <a class="miniquote" href="#">nummer</a>');
-	$('.text_content').filter(function() { var a = $(this).children(); return($('>blockquote', this).length === 1 && a[1].tagName === 'BLOCKQUOTE' && a[0].tagName === 'P' && $(a[0]).text() === ''); }).each(function() {
+	$('.quoteitem', object).parent().html('Citer <a class="SNES_quoteitem" href="#">indlæg</a> | <a class="miniquote" href="#">nummer</a>');
+	$('.text_content', object).filter(function() { var a = $(this).children(); return($('>blockquote', this).length === 1 && a[1].tagName === 'BLOCKQUOTE' && a[0].tagName === 'P' && $(a[0]).text() === ''); }).each(function() {
 		 var a = $('.SNES_quoteitem', $(this).parents('.comment')).parent();
 		 a.html(a.html() + ' | <a class="responsequote" href="#">svar</a>');
 	});
 	
 	// "svar"-citering
-	$('.responsequote').click(function(e) {
+	$('.responsequote', object).click(function(e) {
 		e.preventDefault();
 		
 		// Hvis dette ligner noget kode fra newz.dk, så er det, fordi det er. Der er lige en enkelt tilføjelse to linjer nede.
