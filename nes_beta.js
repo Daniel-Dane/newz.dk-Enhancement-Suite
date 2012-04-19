@@ -925,6 +925,20 @@ function SNES_improvedQuote(object) {
 		e.preventDefault();
 		
 		// Hvis dette ligner noget kode fra newz.dk, så er det, fordi det er. Der er lige en enkelt tilføjelse to linjer nede.
+		// Finder indlæggets id (ikke nummer)
+		var $post = $(this).parents(".comment");
+		var postId = $post.attr("id").substring(4);
+		
+		// Finder indlæggets nummer (ikke id)
+		var itemId = $post.find("h2 a").attr("name");
+		
+		// Finder indlæggets ejermand
+		var username = $post.find("h2 a:last").html();
+		
+		// Hvis den ikke kunne findes, prøv et andet sted (dunno hvor)
+		if (!username) {
+			username = $post.find('.right_box a:last').html();
+		}
 		$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
 			var text = $.trim($("Response", xml).text()).replace(/\[quote(?:.|\n)*\[\/quote\]/, '');
 			
