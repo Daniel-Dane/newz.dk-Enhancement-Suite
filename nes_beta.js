@@ -1363,7 +1363,7 @@ function SNES_fetchPage(pageNo, state, hash) {
 				case 1:
 					$(window).scrollTop(0);
 					var href = SNES_getUrl();
-					history.pushState({page: _pageId}, '', href + '/page' + p);
+					history.pushState({page: _pageId}, '', href + '/page' + _pageId);
 					break;
 				case 2:
 					$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
