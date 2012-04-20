@@ -176,7 +176,7 @@ function SNES_init() {
 		});
 	});
 	$('#embedYouTubeUrlsCount').change(function() {
-		$(this).val(localStorage["embedYouTubeUrlsCount"] = +$(this).val() || 0);
+		$(this).val(localStorage["embedYouTubeUrlsCount"] = Math.max(+$(this).val() || 0));
 	});
 	
 	// Styles til fix af newz.dk samt til nogle af SNES' features.
