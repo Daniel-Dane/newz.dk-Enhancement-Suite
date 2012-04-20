@@ -660,6 +660,7 @@ function SNES_updateSettingsSub() {
 	$('#showPostOnMouseOverReferenceSub input').attr('disabled', (!$('#showPostOnMouseOverReference').attr('checked') || !$('#addLinkToPostReference').attr('checked')));
 	$('#embedYouTubeUrlsSub input').attr('disabled', !$('#embedYouTubeUrls').attr('checked'));
 	$('#applyTargetBlankSub input').attr('disabled', !$('#applyTargetBlank').attr('checked'));
+	$('#updateFaviconOnNewPostsSub input').attr('disabled', !$('#updateFaviconOnNewPosts').attr('checked'));
 }
 
 // Den nye BB-toolbar
