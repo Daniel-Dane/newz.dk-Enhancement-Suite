@@ -141,7 +141,7 @@ function SNES_init() {
 	embedYouTubeUrls = (localStorage["embedYouTubeUrls"] == "true");
 	embedYouTubeUrlsNotInQuote = (localStorage["embedYouTubeUrlsNotInQuote"] == "true");
 	//embedYouTubeUrlsNewOnly = (localStorage["embedYouTubeUrlsNewOnly"] == "true");
-	$('#embedYouTubeUrlsCount').val(embedYouTubeUrlsCount = +localStorage["embedYouTubeUrlsCount"]);
+	$('#embedYouTubeUrlsCount').val(embedYouTubeUrlsCount = +localStorage["embedYouTubeUrlsCount"] || 0);
 	if (narrowSite = (localStorage["narrowSite"] == "true")) {
 		$('body,#center,#nmContainer').css('width','1000px');
 	}
@@ -176,10 +176,7 @@ function SNES_init() {
 		});
 	});
 	$('#embedYouTubeUrlsCount').change(function() {
-		var a = +$(this).val();
-		if (isNaN(a))
-			a = 0;
-		$(this).val(localStorage["embedYouTubeUrlsCount"] = a);
+		$(this).val(localStorage["embedYouTubeUrlsCount"] = +$(this).val() || 0);
 	});
 	
 	// Styles til fix af newz.dk samt til nogle af SNES' features.
