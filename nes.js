@@ -6,7 +6,7 @@
 // Følgende (FRA OG MED CITATIONSTEGNET TIL SLUT) indsættes i indstillinger -> stylesheet for at installere SNES
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
 
-var SNES_version = "2.1.4";
+var SNES_version = "2.2 beta";
 var SNES_loaded = SNES_loaded || false;
 
 if (!$) {
@@ -27,6 +27,7 @@ if (!$) {
 			var SNES_flashFaviconCounter = 0;     //setInterval til SNES_flashFavicon(), som startes fra "SNES_flashFavicon() #2" (TAG)
 			var SNES_flashFaviconBoolean = false; // Hører også til SNES_flashFavicon()
 			$(document).ready(function () {
+				$.fn.reverse = [].reverse;
 				SNES_init();
 			});
 		}
@@ -41,11 +42,13 @@ function SNES_init() {
 	 * Licence: GPL
 	 */
 	Encoder={EncodeType:"entity",isEmpty:function(val){if(val){return((val===null)||val.length==0||/^\s+$/.test(val))}else{return true}},arr1:new Array('&nbsp;','&iexcl;','&cent;','&pound;','&curren;','&yen;','&brvbar;','&sect;','&uml;','&copy;','&ordf;','&laquo;','&not;','&shy;','&reg;','&macr;','&deg;','&plusmn;','&sup2;','&sup3;','&acute;','&micro;','&para;','&middot;','&cedil;','&sup1;','&ordm;','&raquo;','&frac14;','&frac12;','&frac34;','&iquest;','&Agrave;','&Aacute;','&Acirc;','&Atilde;','&Auml;','&Aring;','&Aelig;','&Ccedil;','&Egrave;','&Eacute;','&Ecirc;','&Euml;','&Igrave;','&Iacute;','&Icirc;','&Iuml;','&ETH;','&Ntilde;','&Ograve;','&Oacute;','&Ocirc;','&Otilde;','&Ouml;','&times;','&Oslash;','&Ugrave;','&Uacute;','&Ucirc;','&Uuml;','&Yacute;','&THORN;','&szlig;','&agrave;','&aacute;','&acirc;','&atilde;','&auml;','&aring;','&aelig;','&ccedil;','&egrave;','&eacute;','&ecirc;','&euml;','&igrave;','&iacute;','&icirc;','&iuml;','&eth;','&ntilde;','&ograve;','&oacute;','&ocirc;','&otilde;','&ouml;','&divide;','&Oslash;','&ugrave;','&uacute;','&ucirc;','&uuml;','&yacute;','&thorn;','&yuml;','&quot;','&amp;','&lt;','&gt;','&oelig;','&oelig;','&scaron;','&scaron;','&yuml;','&circ;','&tilde;','&ensp;','&emsp;','&thinsp;','&zwnj;','&zwj;','&lrm;','&rlm;','&ndash;','&mdash;','&lsquo;','&rsquo;','&sbquo;','&ldquo;','&rdquo;','&bdquo;','&dagger;','&dagger;','&permil;','&lsaquo;','&rsaquo;','&euro;','&fnof;','&alpha;','&beta;','&gamma;','&delta;','&epsilon;','&zeta;','&eta;','&theta;','&iota;','&kappa;','&lambda;','&mu;','&nu;','&xi;','&omicron;','&pi;','&rho;','&sigma;','&tau;','&upsilon;','&phi;','&chi;','&psi;','&omega;','&alpha;','&beta;','&gamma;','&delta;','&epsilon;','&zeta;','&eta;','&theta;','&iota;','&kappa;','&lambda;','&mu;','&nu;','&xi;','&omicron;','&pi;','&rho;','&sigmaf;','&sigma;','&tau;','&upsilon;','&phi;','&chi;','&psi;','&omega;','&thetasym;','&upsih;','&piv;','&bull;','&hellip;','&prime;','&prime;','&oline;','&frasl;','&weierp;','&image;','&real;','&trade;','&alefsym;','&larr;','&uarr;','&rarr;','&darr;','&harr;','&crarr;','&larr;','&uarr;','&rarr;','&darr;','&harr;','&forall;','&part;','&exist;','&empty;','&nabla;','&isin;','&notin;','&ni;','&prod;','&sum;','&minus;','&lowast;','&radic;','&prop;','&infin;','&ang;','&and;','&or;','&cap;','&cup;','&int;','&there4;','&sim;','&cong;','&asymp;','&ne;','&equiv;','&le;','&ge;','&sub;','&sup;','&nsub;','&sube;','&supe;','&oplus;','&otimes;','&perp;','&sdot;','&lceil;','&rceil;','&lfloor;','&rfloor;','&lang;','&rang;','&loz;','&spades;','&clubs;','&hearts;','&diams;'),arr2:new Array('&#160;','&#161;','&#162;','&#163;','&#164;','&#165;','&#166;','&#167;','&#168;','&#169;','&#170;','&#171;','&#172;','&#173;','&#174;','&#175;','&#176;','&#177;','&#178;','&#179;','&#180;','&#181;','&#182;','&#183;','&#184;','&#185;','&#186;','&#187;','&#188;','&#189;','&#190;','&#191;','&#192;','&#193;','&#194;','&#195;','&#196;','&#197;','&#198;','&#199;','&#200;','&#201;','&#202;','&#203;','&#204;','&#205;','&#206;','&#207;','&#208;','&#209;','&#210;','&#211;','&#212;','&#213;','&#214;','&#215;','&#216;','&#217;','&#218;','&#219;','&#220;','&#221;','&#222;','&#223;','&#224;','&#225;','&#226;','&#227;','&#228;','&#229;','&#230;','&#231;','&#232;','&#233;','&#234;','&#235;','&#236;','&#237;','&#238;','&#239;','&#240;','&#241;','&#242;','&#243;','&#244;','&#245;','&#246;','&#247;','&#248;','&#249;','&#250;','&#251;','&#252;','&#253;','&#254;','&#255;','&#34;','&#38;','&#60;','&#62;','&#338;','&#339;','&#352;','&#353;','&#376;','&#710;','&#732;','&#8194;','&#8195;','&#8201;','&#8204;','&#8205;','&#8206;','&#8207;','&#8211;','&#8212;','&#8216;','&#8217;','&#8218;','&#8220;','&#8221;','&#8222;','&#8224;','&#8225;','&#8240;','&#8249;','&#8250;','&#8364;','&#402;','&#913;','&#914;','&#915;','&#916;','&#917;','&#918;','&#919;','&#920;','&#921;','&#922;','&#923;','&#924;','&#925;','&#926;','&#927;','&#928;','&#929;','&#931;','&#932;','&#933;','&#934;','&#935;','&#936;','&#937;','&#945;','&#946;','&#947;','&#948;','&#949;','&#950;','&#951;','&#952;','&#953;','&#954;','&#955;','&#956;','&#957;','&#958;','&#959;','&#960;','&#961;','&#962;','&#963;','&#964;','&#965;','&#966;','&#967;','&#968;','&#969;','&#977;','&#978;','&#982;','&#8226;','&#8230;','&#8242;','&#8243;','&#8254;','&#8260;','&#8472;','&#8465;','&#8476;','&#8482;','&#8501;','&#8592;','&#8593;','&#8594;','&#8595;','&#8596;','&#8629;','&#8656;','&#8657;','&#8658;','&#8659;','&#8660;','&#8704;','&#8706;','&#8707;','&#8709;','&#8711;','&#8712;','&#8713;','&#8715;','&#8719;','&#8721;','&#8722;','&#8727;','&#8730;','&#8733;','&#8734;','&#8736;','&#8743;','&#8744;','&#8745;','&#8746;','&#8747;','&#8756;','&#8764;','&#8773;','&#8776;','&#8800;','&#8801;','&#8804;','&#8805;','&#8834;','&#8835;','&#8836;','&#8838;','&#8839;','&#8853;','&#8855;','&#8869;','&#8901;','&#8968;','&#8969;','&#8970;','&#8971;','&#9001;','&#9002;','&#9674;','&#9824;','&#9827;','&#9829;','&#9830;'),HTML2Numerical:function(s){return this.swapArrayVals(s,this.arr1,this.arr2)},NumericalToHTML:function(s){return this.swapArrayVals(s,this.arr2,this.arr1)},numEncode:function(s){if(this.isEmpty(s))return"";var e="";for(var i=0;i<s.length;i++){var c=s.charAt(i);if(c<" "||c>"~"){c="&#"+c.charCodeAt()+";"}e+=c}return e},htmlDecode:function(s){var c,m,d=s;if(this.isEmpty(d))return"";d=this.HTML2Numerical(d);arr=d.match(/&#[0-9]{1,5};/g);if(arr!=null){for(var x=0;x<arr.length;x++){m=arr[x];c=m.substring(2,m.length-1);if(c>=-32768&&c<=65535){d=d.replace(m,String.fromCharCode(c))}else{d=d.replace(m,"")}}}return d},htmlEncode:function(s,dbl){if(this.isEmpty(s))return"";dbl=dbl||false;if(dbl){if(this.EncodeType=="numerical"){s=s.replace(/&/g,"&#38;")}else{s=s.replace(/&/g,"&amp;")}}s=this.XSSEncode(s,false);if(this.EncodeType=="numerical"||!dbl){s=this.HTML2Numerical(s)}s=this.numEncode(s);if(!dbl){s=s.replace(/&#/g,"##AMPHASH##");if(this.EncodeType=="numerical"){s=s.replace(/&/g,"&#38;")}else{s=s.replace(/&/g,"&amp;")}s=s.replace(/##AMPHASH##/g,"&#")}s=s.replace(/&#\d*([^\d;]|$)/g,"$1");if(!dbl){s=this.correctEncoding(s)}if(this.EncodeType=="entity"){s=this.NumericalToHTML(s)}return s},XSSEncode:function(s,en){if(!this.isEmpty(s)){en=en||true;if(en){s=s.replace(/\'/g,"&#39;");s=s.replace(/\"/g,"&quot;");s=s.replace(/</g,"&lt;");s=s.replace(/>/g,"&gt;")}else{s=s.replace(/\'/g,"&#39;");s=s.replace(/\"/g,"&#34;");s=s.replace(/</g,"&#60;");s=s.replace(/>/g,"&#62;")}return s}else{return""}},hasEncoded:function(s){if(/&#[0-9]{1,5};/g.test(s)){return true}else if(/&[A-Z]{2,6};/gi.test(s)){return true}else{return false}},stripUnicode:function(s){return s.replace(/[^\x20-\x7E]/g,"")},correctEncoding:function(s){return s.replace(/(&amp;)(amp;)+/,"$1")},swapArrayVals:function(s,arr1,arr2){if(this.isEmpty(s))return"";var re;if(arr1&&arr2){if(arr1.length==arr2.length){for(var x=0,i=arr1.length;x<i;x++){re=new RegExp(arr1[x],'g');s=s.replace(re,arr2[x])}}}return s},inArray:function(item,arr){for(var i=0,x=arr.length;i<x;i++){if(arr[i]===item){return i}}return-1}};
+	
 	/*
 	 * jQuery plugin: fieldSelection - v0.1.0 - last change: 2006-12-16
 	 * (c) 2006 Alex Brem <alex@0xab.cd> - http://blog.0xab.cd
 	 */
 	(function(){var a={getSelection:function(){var a=this.jquery?this[0]:this;return("selectionStart"in a&&function(){var b=a.selectionEnd-a.selectionStart;return{start:a.selectionStart,end:a.selectionEnd,length:b,text:a.value.substr(a.selectionStart,b)}}||document.selection&&function(){a.focus();var b=document.selection.createRange();if(b==null){return{start:0,end:a.value.length,length:0}}var c=a.createTextRange();var d=c.duplicate();c.moveToBookmark(b.getBookmark());d.setEndPoint("EndToStart",c);return{start:d.text.length,end:d.text.length+b.text.length,length:b.text.length,text:b.text}}||function(){return{start:0,end:a.value.length,length:0}})()},replaceSelection:function(){var a=this.jquery?this[0]:this;var b=arguments[0]||"";return("selectionStart"in a&&function(){a.value=a.value.substr(0,a.selectionStart)+b+a.value.substr(a.selectionEnd,a.value.length);return this}||document.selection&&function(){a.focus();document.selection.createRange().text=b;return this}||function(){a.value+=b;return this})()}};jQuery.each(a,function(a){jQuery.fn[a]=this})})();
+	
 	// ----------------------------------------------------------------------------
 	// markItUp! Universal MarkUp Engine, JQuery plugin
 	// v 1.1.x
@@ -98,12 +101,18 @@ function SNES_init() {
 		</div> \
 		<input type="checkbox" id="fixFailTagsSetting" name="fixFailTagsSetting"><label for="fixFailTagsSetting"> Ret overflødige BB-tags i indlæg (NB: Læs om funktionen på kynz inden ibrugtagen)</label><br> \
 		<input type="checkbox" id="showUrlImages" name="showUrlImages"><label for="showUrlImages"> Vis billeder i indlæg</label><br> \
+		<input type="checkbox" id="showUrlVideos" name="showUrlVideos"><label for="showUrlVideos"> Vis film i indlæg</label><br> \
 		<input type="checkbox" id="embedYouTubeUrls" name="embedYouTubeUrls"><label for="embedYouTubeUrls"> Omdan YouTube-links til embedded video</label><br> \
 		<div id="embedYouTubeUrlsSub" style="padding-left: 16px;"> \
 			<input type="checkbox" id="embedYouTubeUrlsNotInQuote" name="embedYouTubeUrlsNotInQuote"><label for="embedYouTubeUrlsNotInQuote"> Men ikke i citater</label><br> \
-			<input type="checkbox" id="embedYouTubeUrlsNewOnly" name="embedYouTubeUrlsNewOnly"><label for="embedYouTubeUrlsNewOnly"> Kun i ulæste indlæg (indlæg efter "Indlæg skrevet siden sidste besøg i denne tråd."-bjælken)</label><br> \
+			<!--<input type="checkbox" id="embedYouTubeUrlsNewOnly" name="embedYouTubeUrlsNewOnly"><label for="embedYouTubeUrlsNewOnly"> Kun i ulæste indlæg (indlæg efter "Indlæg skrevet siden sidste besøg i denne tråd."-bjælken)</label><br>--> \
+			<label for="embedYouTubeUrlsCount">Kun de sidste </label><input style="width: 20px;" type="text" id="embedYouTubeUrlsCount" name="embedYouTubeUrlsCount"><label for="embedYouTubeUrlsCount"> links konverteres (0 = ∞)</label> \
 		</div> \
-		<input type="checkbox" id="narrowSite" name="narrowSite"><label for="narrowSite"> Gør newz.dk lidt smallere (til opløsninger med 1024 i bredde)</label> \
+		<input type="checkbox" id="narrowSite" name="narrowSite"><label for="narrowSite"> Gør newz.dk lidt smallere (til opløsninger med 1024 i bredde)</label><br> \
+		<input type="checkbox" id="updateFaviconOnNewPosts" name="updateFaviconOnNewPosts"><label for="updateFaviconOnNewPosts"> Informér mig om nye indlæg, når jeg befinder mig på /forum, ved at skifte favicon</label><br> \
+		<div id="updateFaviconOnNewPostsSub" style="padding-left: 16px;"> \
+			<input type="checkbox" id="updateFaviconOnNewPostsBlink" name="updateFaviconOnNewPostsBlink"><label for="updateFaviconOnNewPostsBlink"> Blink for mig!</label><br> \
+		</div> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
 			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om SNES på <a href="http://www.knowyournewz.dk/index.php?title=Super_newz.dk_Enhancement_Suite">kynz</a>! Version ' + SNES_version + '. \
@@ -128,21 +137,25 @@ function SNES_init() {
 	applyTargetBlankOnlyOutgoing = (localStorage["applyTargetBlankOnlyOutgoing"] == "true");
 	fixFailTagsSetting = (localStorage["fixFailTagsSetting"] == "true");
 	showUrlImages = (localStorage["showUrlImages"] == "true");
+	showUrlVideos = (localStorage["showUrlVideos"] == "true");
 	embedYouTubeUrls = (localStorage["embedYouTubeUrls"] == "true");
 	embedYouTubeUrlsNotInQuote = (localStorage["embedYouTubeUrlsNotInQuote"] == "true");
-	embedYouTubeUrlsNewOnly = (localStorage["embedYouTubeUrlsNewOnly"] == "true");
+	//embedYouTubeUrlsNewOnly = (localStorage["embedYouTubeUrlsNewOnly"] == "true");
+	$('#embedYouTubeUrlsCount').val(embedYouTubeUrlsCount = +localStorage["embedYouTubeUrlsCount"]);
 	if (narrowSite = (localStorage["narrowSite"] == "true")) {
 		$('body,#center,#nmContainer').css('width','1000px');
 	}
+	updateFaviconOnNewPosts = (localStorage["updateFaviconOnNewPosts"] == "true");
+	updateFaviconOnNewPostsBlink = (localStorage["updateFaviconOnNewPostsBlink"] == "true");
 	
 	// Event handlers til knapperne
 	var handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
-					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote', 'embedYouTubeUrlsNewOnly', 'narrowSite'];
+					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'showUrlVideos', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote',
+					   'narrowSite', 'updateFaviconOnNewPosts', 'updateFaviconOnNewPostsBlink'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
 			SNES_updateSettingsSub();
-			localStorage["SNES_statistik2"] = 'false';
 		}).attr('checked', (localStorage[handlerList[i]] == 'true'));
 	}
 	$("#sortRating").bind("click", function() {
@@ -161,6 +174,12 @@ function SNES_init() {
 			this.selectedIndex = a;
 			$(this).change();
 		});
+	});
+	$('#embedYouTubeUrlsCount').change(function() {
+		var a = +$(this).val();
+		if (isNaN(a))
+			a = 0;
+		$(this).val(localStorage["embedYouTubeUrlsCount"] = a);
 	});
 	
 	// Styles til fix af newz.dk samt til nogle af SNES' features.
@@ -320,44 +339,55 @@ function SNES_init() {
 				SNES_fixTitle();
 				SNES_insertLoadingGif();
 				SNES_fixPosts();
+				if (location.hash.length > 1) {
+					location.hash = location.hash;
+					history.replaceState({page: _pageId}, '', location.href);
+				}
 				$("#sortRating").attr('disabled', false).text('Sorter indlæg efter rating');
 			}
 		}
 		
-		// fixPosts() af det indsendte indlæg. (Der SKAL bruges options.data, da det er POST!)
-		// samt
-		// fixPosts() efter den løbende AJAX-indhentning af nye indlæg.
-		if ((options.data.match('class=Z4_Forum_Item&action=usersave') !== null) || (options.url.match('class=Z4_Forum_Item&action=new') !== null)) {
-			var a = $('#comments > div:last');
-			if ($.trim(a.text()) != '')
-				SNES_fixPosts(a);
-		}
-		
-		// fixPosts() af Preview. (Slået fra, når man opretter en tråd.)
-		if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1)) {
-			SNES_fixPosts($('#post_preview .content'), false, true);
-			$("#SNES_button_edit").focus(); // Hører til fiks af resize af kommentarfeltet efter Preview
-		}
-		
-		// fixPosts() af indlæg efter endt redigering (rettelse)
-		if (options.data.match('class=Z4_Forum_Item&action=edit') !== null)
-			SNES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
-		
-		// Efter tryk på "Ret indlæg" og indlægget er hentet og forberedt.
-		if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null) {
-			SNES_fixToolbar();
-		}
-		
-		// TAG: "SNES_flashFavicon() #2"
-		// Starter SNES_flashFavicon(), som blinker favicon, når der er ulæste tråde i /forum efter den 30-sekunders opdatering
-		if (options.data.match('class=Z4_Forum_Thread&action=mine') !== null) {
-			if ($('.unread', $('<div>').html($("Response", xhr.responseXML).text())).length > 0) {
-				clearInterval(SNES_flashFaviconCounter);
-				SNES_flashFaviconCounter = setInterval('SNES_flashFavicon()', 1000);
-			} else {
-				clearInterval(SNES_flashFaviconCounter);
-				$('link[type="image/x-icon"]').remove();
-				$('head').append($('<link rel="icon" type="image/x-icon" href="/gfx/newz.dk.favicon.ico">'));
+		if (options.data) {
+			// fixPosts() af det indsendte indlæg. (Der SKAL bruges options.data, da det er POST!)
+			// samt
+			// fixPosts() efter den løbende AJAX-indhentning af nye indlæg.
+			if ((options.data.match('class=Z4_Forum_Item&action=usersave') !== null) || (options.url.match('class=Z4_Forum_Item&action=new') !== null)) {
+				var a = $('#comments > div:last');
+				if ($.trim(a.text()) != '')
+					SNES_fixPosts(a);
+			}
+			
+			// fixPosts() af Preview. (Slået fra, når man opretter en tråd.)
+			if ((options.data.match('class=Z4_Forum_Item&action=preview') !== null) && (location.href.indexOf('/opret') == -1)) {
+				SNES_fixPosts($('#post_preview .content'), false, true);
+				$("#SNES_button_edit").focus(); // Hører til fiks af resize af kommentarfeltet efter Preview
+			}
+			
+			// fixPosts() af indlæg efter endt redigering (rettelse)
+			if (options.data.match('class=Z4_Forum_Item&action=edit') !== null)
+				SNES_fixPosts($('#post' + /&id=(\d+)&/.exec(options.data)[1]), true);
+			
+			// Efter tryk på "Ret indlæg" og indlægget er hentet og forberedt.
+			if (options.data.match('class=Z4_Forum_Item&action=getRaw') !== null && options.data.match('&jstimestamp') !== null) {
+				SNES_fixToolbar();
+			}
+			
+			// TAG: "SNES_flashFavicon() #2"
+			// Starter SNES_flashFavicon(), som blinker favicon, når der er ulæste tråde i /forum efter den 30-sekunders opdatering
+			if (updateFaviconOnNewPosts && options.data.match('class=Z4_Forum_Thread&action=mine') !== null) {
+				if ($('.unread', $('<div>').html($("Response", xhr.responseXML).text())).length > 0) {
+					if (updateFaviconOnNewPostsBlink) {
+						clearInterval(SNES_flashFaviconCounter);
+						SNES_flashFaviconCounter = setInterval('SNES_flashFavicon()', 1000);
+					} else {
+						$('link[type="image/x-icon"]').remove();
+						$('head').append($('<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,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h/+BhYj/eX2A/21xc/+BhYj/gYWI/4CEh/+AhIf/gISH/4CEh/+AhIf/gISH/4CEh/+AhIf/gISH/4CEh/+Chon/c3d5/1lgYv+ru8D/qLi9/6e4vf+tvcL/AAAAAAAAAAAAAAAAqbm+/6m5vv+rusD/orK3/290d/+AhIf/gISH/4CEh/+AhIf/gISH/4SIi/9jZ2n/XmZp/25ydf9/g4b/gYWI/4CEh/+AhIf/gISH/4CEh/+AhIf/gISH/4CEh/+AhIf/gISH/4SIi/9dYGP/h5WZ/66/xP+pub7/qbm+/66+w/8AAAAAAAAAAAAAAACpub7/qbm+/6q6v/+jsrf/b3R3/4KFif+BhYj/gYWI/4GFiP+BhYj/hYmM/11fYv+Aio7/lKGl/2hsbv98f4L/g4eK/4CEh/+AhIf/gISH/4CEh/+AhIf/gISH/4GFiP+EiIv/Y2dp/250d/+wwMX/qbm+/6m5vv+pub7/r77D/wAAAAAAAAAAAAAAAKu6wP+rusD/rLzB/6SzuP9obG7/dnl8/3Z5fP92eXz/dnl8/3Z5fP98f4L/U1ZY/3iDh/+3yM7/maes/2pucP9qbnD/fH+C/3+Dhv+BhYj/goaJ/4KGif9/g4b/dnl8/1pdX/90foH/rLzB/6y8wv+rusD/q7rA/6u6wP+xv8T/AAAAAAAAAAAAAAAArLzB/629wv+tvcL/qrq//4KOkv9+iY3/gIqO/4CKjv+Aio7/gIqO/4CKjv92gYT/lqWq/6/Axf+wwcb/p7i9/4SRlf96hYj/bnR3/2RqbP9kamz/ZGps/250d/94g4f/i5md/6/Axf+uvsP/rLzB/6y8wf+tvcL/rLzB/7PCxv8AAAAAAAAAAAAAAACtvcL/rb3C/66+w/+uvsP/ssPI/7LDyP+yw8j/ssPI/7LDyP+yw8j/ssPI/7PFyv+wwcb/rb3C/629wv+uv8T/ssPI/7HCx/+ru8D/o7O4/6Gxtv+js7j/q7zA/7LDyP+yw8j/rr7D/629wv+tvcL/rr7D/66+w/+tvcL/s8LG/wAAAAAAAAAAAAAAAK6+w/+uvsP/rr7D/66/w/+vv8P/rr7D/66/w/+uv8P/rr7D/66+w/+uvsP/rr7D/66/w/+uv8P/rr/E/66/w/+uvsP/rr/D/66/xP+wwMX/sMHG/7DAxf+uv8T/rr7D/66/w/+uvsP/rr7D/66+w/+uv8P/rr/D/66/w/+0w8f/AAAAAAAAAAAAAAAAr8DF/6/Axf+vwMX/sMDF/6/Axf+vwMX/r8DF/6/Axf+wwMX/sMDF/6/Axf+vwMX/r8DF/6/Axf+vwMX/r8DF/7DAxf+wwMX/r8DF/7DAxf+wwMX/sMDF/6/Axf+wwMX/r8DF/7DAxf+wwMX/r8DF/6/Axf+vwMX/r8DF/7bEyf8AAAAAAAAAAAAAAAD/////4AAAAAAAAADgAAAAAAAAAOAAAAAAAAAA4AAAAAAAAADgAAAAAAAAAOAAAAAAAAAAYAAAAAAAAABgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAAGAAAAAAAAAAYAAAAAAAAADgAAAAAAAAAOAAAAAAAAAA4AAAAAAAAADgAAAAAAAAAOAAAAAAAAAA4AAAAAAAAADgAAAAAAAAAOAAAAAAAAAA4AAAAAAAAADgAAAAAAAAAOAAAAAAAAAA4AAAAAAAAADgAAAAAAAAAOAAAAA=">'));
+					}
+				} else {
+					clearInterval(SNES_flashFaviconCounter);
+					$('link[type="image/x-icon"]').remove();
+					$('head').append($('<link rel="icon" type="image/x-icon" href="/gfx/newz.dk.favicon.ico">'));
+				}
 			}
 		}
 	});
@@ -423,7 +453,6 @@ function SNES_init() {
 		else {
 			if (a.page == _pageId)
 				return;
-			//console.log('onpopstate: page = ' + a.page);
 			SNES_fetchPage(a.page, 3);
 		}
 	};
@@ -564,7 +593,6 @@ function SNES_init() {
 	*/
 	
 	//
-	SNES_fixTitle();
 	SNES_ajaxPageChange();
 	SNES_updateSettingsSub();
 	SNES_fixToolbar();
@@ -572,6 +600,35 @@ function SNES_init() {
 	// Til gemning af kommentarfeltet
 	$('.markItUpHeader').append('<ul><li style="font-size: small;" id="commentStorage"></li></ul>');
 	SNES_updateCommentList();
+	
+	// Fjerner også tråden fra listen over overvågede tråde, når man trykker på "Ignorer denne tråd"
+	$('a[title="Ignorer denne tråd"]').unbind().click(function(e) {
+		e.preventDefault();
+		var id = this.href.match(/\d+$/)[0];
+		$(this).replaceWith('<div id="SNES_ignorethread">');
+		var me = $('#SNES_ignorethread');
+		$.ajax({
+			url: '/forum/track/delete/' + id,
+			success: function() {
+				me.html('<br>[✓] Fjernet fra listen over overvågede tråde');
+			},
+			error: function() {
+				me.html('<br>[X] Fjernelse fra listen over overvågede tråden fejlede');
+			},
+			complete: function() {
+				$.ajax({
+					url: '/forum/ignore/add/' + id,
+					success: function() {
+						me.html(me.html() + '<br>[✓] Tråd ignoreret');
+					},
+					error: function() {
+						me.html(me.html() + '<br>[X] Fjernelse fra listen over overvågede tråden fejlede');
+					},
+				});
+			}
+		});
+		return false;
+	});
 	
 	// I store tråde ender man nogle gange (hvis den sidste side er på 50 indlæg) en side for langt
 	if (window._pageId > window._lastPage) {
@@ -581,8 +638,19 @@ function SNES_init() {
 		history.replaceState({page: _lastPage}, '', href + '/page' + _lastPage);
 		SNES_fetchPage(_lastPage, 0);
 	} else if (window._pageId) {
-		history.replaceState({page: _pageId}, '', location.href);
+		SNES_fixTitle();
 		SNES_fixPosts();
+		if (location.hash.length > 1)
+			history.replaceState({page: _pageId}, '', location.href);
+		else {
+			if (location.href.substr(-1) == '#')
+				var href = location.href + 'new';
+			else
+				var href = location.href + '#new';
+			history.replaceState({page: _pageId}, '', href);
+		}
+		location.hash = location.hash;
+		history.replaceState({page: _pageId}, '', location.href);
 	}
 	
 	// Smider genveje til underdomænernes fora ind.
@@ -609,15 +677,14 @@ function SNES_fixPosts(object, afterEdit, isPreview) {
 	if (afterEdit !== true) {
 		SNES_improvedQuote(object);
 		SNES_addPermLink(object);
-		SNES_addMiniQuote(object);
 		SNES_fixPostTimes(object);
 		SNES_reportSpam(object);
 	}
 	
-	isPreview = (isPreview === true);
 	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
-	SNES_addLinkToPostReferenceFunc(object, isPreview);
+	SNES_addLinkToPostReferenceFunc(object, (isPreview === true));
 	SNES_urlToImg(object);
+	SNES_urlToVid(object);
 	SNES_fixFailTags(object);
 	SNES_fixSpoilers(object);
 	SNES_embedYouTubeUrlsFunc(object);
@@ -673,10 +740,13 @@ function SNES_embedYouTubeUrlsFunc(object) {
 	}
 	
 	if (embedYouTubeUrls) {
-		if (embedYouTubeUrlsNewOnly && object == undefined)
-			object = $('.comments_new').nextAll();
+		if (embedYouTubeUrlsCount > 0)
+			var count = 0;
+	
+		//if (embedYouTubeUrlsNewOnly && object == undefined)
+		//	object = $('.comments_new').nextAll();
 		
-		$('.text_content a[href*="youtu"]', object).each(function() {
+		$('.text_content a[href*="youtu"]', object).reverse().each(function() {
 			var w = parseInt($(this).parent().css('width'));
 			var res = /(?:youtu\.be\/|youtube\.com\/watch\?.*v=)(.{11})/gmi.exec(this.href);
 			if (typeof this.href !== 'undefined' && res != null && (!embedYouTubeUrlsNotInQuote || (embedYouTubeUrlsNotInQuote && w === 381))) {
@@ -690,6 +760,9 @@ function SNES_embedYouTubeUrlsFunc(object) {
 				} else if (this.search.length > 1 && (q = splitquery(this.search)) && (typeof q.t !== "undefined"))
 					t = ttotime(q.t);
 				$(this).replaceWith('<iframe data="'+this.href+'" width="'+(w-1)+'" height="'+((w-1)*(3/4))+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + res[1] + '?rel=0&start=' + t + '"></iframe>'.replace(/&/gm, '&amp;'));
+				
+				if (embedYouTubeUrlsCount > 0 && ++count >= embedYouTubeUrlsCount)
+					return false;
 			}
 		});
 	}
@@ -701,7 +774,12 @@ function SNES_fixSpoilers(object) {
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
 	$('.open_spoiler', object).unbind().attr('class', 'SNES_open_spoiler').click(function(e) {
 		e.preventDefault();
-		$(this).replaceWith(Encoder.htmlEncode(this.id));
+		if (/^(?:http:\/\/|www\.)[^\^!\(\)\[\]{} ]+$/i.test(this.id)) {
+			var parent = $(this).parents('.comment');
+			$(this).replaceWith('<a href="'+this.id+'">'+$('<div><a href="'+this.id+'">'+this.id+'</a></div>').linkShorten().find('a').text()+'</a>');
+			SNES_urlToImg(parent);
+		} else
+			$(this).replaceWith(Encoder.htmlEncode(this.id));
 		return false;
 	})
 }
@@ -804,29 +882,17 @@ function SNES_urlToImg(object) {
 				var c = $('<div><a href="'+b+'">'+b+'</a></div>').linkShorten().find('a').text();
 			e.replaceWith('<a data="SNES_img" title="'+c+'" href="'+b+'"><img title="'+c+'" alt="'+c+'" class="SNES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
 		});
-		//location.hash = location.hash; // Må kun køres, første gang denne function startes
 	}
 }
 
-// SKAL køres EFTER SNES_improvedQuote().
-// Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
-function SNES_addMiniQuote(object) {
-	$('.SNES_quoteitem', object).after(' (<a href="#" class="miniquote">miniquote</a>)');
-	$('.miniquote', object).bind('click', function(e) {
-		e.preventDefault();
-		
-		// Hvis dette ligner noget kode fra newz.dk, så er det, fordi det er.
-		var comment = $("#id_comment").val();
-		if (comment.length > 0) {
-			comment += "\n\n";
-		}
-		
-		comment += "#" + $(this).parents(".comment").find("h2 a").attr("name") + "\n";
-		$("#id_comment").val(comment);
-		
-		$('#id_comment').keyup();
-		return false;
-	});	
+function SNES_urlToVid(object) {
+	if (showUrlVideos) {
+		$('.text_content a:not([href^="#"])', object).each(function() {
+			var reg;
+			if (reg = /\.(og(?:g|v|a|x)|spx|mp4)$/i.exec(this.href))
+				$(this).replaceWith('<video width="380" height="285" controls="controls"><source src="'+this.href+'" type="video/'+reg[1]+'" /></video>');
+		});
+	}
 }
 
 function SNES_addLinkToPostReferenceFunc(object, isPreview) {
@@ -888,9 +954,74 @@ function SNES_addPermLink(object) {
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
 // Sætter event handler på "Citer indlæg" - Sakset direkte fra newz.dk med vigtige ændringer. Jeg har ladet mine kommentarer fra newz.dk's script lade blive.
 function SNES_improvedQuote(object) {
-	// Skal omdøbes, så den originale bind ikke kommer på. Hvis den allerede er på, sørger unbind() for at fjerne den.
-	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
-	$(".quoteitem", object).unbind().attr('class', 'SNES_quoteitem').bind("click", function(e) {
+	// Laver citeringslinjen om, så den indeholder "citer indlæg, nummer, svar".
+	$('.quoteitem', object).parent().html('Citer <a class="SNES_quoteitem" href="#">indlæg</a> | <a class="miniquote" href="#">nummer</a>');
+	$('.text_content', object).filter(function() { var a = $(this).children(); return($('>blockquote', this).length === 1 && a[1].tagName === 'BLOCKQUOTE' && a[0].tagName === 'P' && $(a[0]).text() === ''); }).each(function() {
+		 var a = $('.SNES_quoteitem', $(this).parents('.comment')).parent();
+		 a.html(a.html() + ' | <a class="responsequote" href="#">svar</a>');
+	});
+	
+	// "svar"-citering
+	$('.responsequote', object).click(function(e) {
+		e.preventDefault();
+		
+		// Hvis dette ligner noget kode fra newz.dk, så er det, fordi det er. Der er lige en enkelt tilføjelse.
+		// Finder indlæggets id (ikke nummer)
+		var $post = $(this).parents(".comment");
+		var postId = $post.attr("id").substring(4);
+		
+		// Finder indlæggets nummer (ikke id)
+		var itemId = $post.find("h2 a").attr("name");
+		
+		// Finder indlæggets ejermand
+		var username = $post.find("h2 a:last").html();
+		
+		// Hvis den ikke kunne findes, prøv et andet sted (dunno hvor)
+		if (!username) {
+			username = $post.find('.right_box a:last').html();
+		}
+		$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
+			var text = $.trim($("Response", xml).text()).replace(/\[quote(?:.|\n)*\[\/quote\]/, '');
+			
+			// Fjerner flere end ét efter hinanden følgende linjeknæk
+			text = $.trim(text.replace("\n\n\n\n", "\n\n"));
+			
+			// Finder kommentarfeltet og indsætter et linjeknæk før det citerede indlæg, hvis feltet ikke er tomt
+			var comment = $("#id_comment").val();
+			if (comment.length > 0) {
+				comment += "\n\n";
+			}
+			
+			// Sætter indlægget ind i en quote, som vi kender den
+			comment += "[quote=" + username + " (" + itemId + ")]" + text + "[/quote]" + "\n\n";
+			$("#id_comment").val(comment);
+			
+			$('#id_comment').keyup();
+		}, "xml");
+		
+		$('#id_comment').keyup();
+		return false;
+	});
+	
+	// "nummer"-citering
+	$('.miniquote', object).click(function(e) {
+		e.preventDefault();
+		
+		// Hvis dette ligner noget kode fra newz.dk, så er det, fordi det er.
+		var comment = $("#id_comment").val();
+		if (comment.length > 0) {
+			comment += "\n\n";
+		}
+		
+		comment += "#" + $(this).parents(".comment").find("h2 a").attr("name") + "\n";
+		$("#id_comment").val(comment);
+		
+		$('#id_comment').keyup();
+		return false;
+	});	
+	
+	// Almindelig citering med SNES' forbedring, hvis slået til
+	$(".SNES_quoteitem", object).click(function(e) {
 		e.preventDefault();
 		
 		// Finder indlæggets id (ikke nummer)
@@ -1217,12 +1348,16 @@ function SNES_fixTitle() {
 			document.title = document.title.replace(/Side \d+/, "Side " + _pageId);
 		else
 			document.title = "Side " + _pageId + " » " + document.title;
+	} else if (window._lastPage == 1 && /^Side \d+$/.test($("#container div h1").text())) {
+		var regexMatch;
+		if (regexMatch = /(Side \d+ » )*([^»]+) ».+/.exec(document.title))
+			$("#container div h1").html(regexMatch[2]);
 	}
 }
 
 // Indsætter en loading.gif til AJAX-sideskift
 function SNES_insertLoadingGif() {
-	$('<span/>').insertAfter('.pagination').html('<div class="loading" style="float: left; margin: -2px 10px; padding: 5px; position: relative; width: 330px;"><p><img src="data:image/gif;base64,R0lGODlhEAAQAPYAAP///zMzM/r6+qenp5+fn/Hx8dLS0t/f37GxsTMzM6SkpNHR0VpaWnR0dO/v77e3t6mpqfT09JqamklJScHBwba2tq6urvb29vn5+bm5udfX12lpaTw8PH9/f+Tk5Ozs7MnJyVRUVF5eXmpqatzc3M/Pz2JiYnFxcWRkZGxsbNnZ2dTU1Hp6esLCwu7u7oyMjLy8vMbGxsfHx35+fnx8fIGBgZ6enubm5peXl/z8/LS0tEZGRlZWVnd3dzY2NnJyctbW1l9fX3l5eUdHR/Ly8t7e3q+vr+fn5+rq6mZmZrq6uk9PT0xMTL6+vo6Ojm5ublxcXIeHh9ra2szMzFFRUZaWlmdnZ3Z2djo6Ojk5Ob+/v+np6W9vb/f398TExISEhIaGhuLi4rKyskFBQU5OTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/h1CdWlsdCB3aXRoIEdJRiBNb3ZpZSBHZWFyIDQuMAAh/hVNYWRlIGJ5IEFqYXhMb2FkLmluZm8AIfkECQoAAAAsAAAAABAAEAAAB2iAAIKDICImJYOJAAsSGgAhCQkoioIGDAkbHpcJKYIRiQSRHBYLIycqABgZn4IHDRMdH5QYig4UBZSKAggPuZQDkRW+ACSIoQkWw8UABQoQF8PR0qm+tIkRGdaJqqyD3SQk3tEliNPRgQAh+QQJCgAAACwAAAAAEAAQAAAHa4AAgoMHNDU3g4mKMwkJLzk6PRk5gysvGhcvjTgQOwk7MIMsCQ0yLhI2BSGNCTWDLSkxBYkVPD48MoMuMLOKMD8gisLDACUkxIIkJYLGyADKztHSgxjE1YkRGdeJGBkRit/Jx4LhxCXL08iBACH5BAkKAAAALAAAAAAQABAAAAdogACCgwIID4OIiQADCQkVACUSKokRggSNFkBBCSZFgxEZGAAFChAXOD6NRoiiiR5CQzRHiooOFES0tCAiJiWQJLkAIY0ov8EMjSnBgwsjJ5PLua2K04Kg1YIYGZWI3AAkwNbLJb7R0YEAIfkECQoAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkAEQLTlKEERkYhQ9JCVGFmYVISk9Ti4UfMAWmhQc0NTcAJZCLMwkJL7Gzhy+2OKuCLhI2qqtGUA+fhhBLCUwwjJiFIbYJNZaOkBVMCVQyi4mCTVHev4aBACH5BAkKAAAALAAAAAAQABAAAAdogACCg4SFhoIlJYeDEYMkJIyFERkYhhgZjYSVh5uLnp+CAggPiJCLAwkJFQAlpocEqRagAAUKEBegC05FhZ2DK1ZYVryCk5UgIiYlVT6pRoSZIakoR1dZQluHDKkpAEdaH4sLIycqhoEAIfkECQoAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkjIURGRiGGBmNhJWHm4uen4clkJ4kigCin6WgixZQD4ZdIF2DRhMJIRmERFMsGoNcCcEpBzQ1Nw9JCWCDGUMJPDIzwS8fXl8LhE1RMgAvwTirLhI2BYaBACH5BAkKAAAALAAAAAAQABAAAAdngACCg4SFhoIlJYeDEYMkJIyFERkYhhgZjYSVh5uLniAiJoqegiEJCSieJIoMpymqigsjJyqkhCtOUrYABkEcT2GWhDanHBYCCA+Cl5kAYVxZMw4DpxWCzYJbWkgABKcWuwUKEBeGgQAh+QQJCgAAACwAAAAAEAAQAAAHaIAAgoOEhYICYj1KgiUlhoJGYwlMGQAkJIMRhFwJnU+FGBmaghlkPiIyhhiFMD8xj4QHNDU3sIQznS+2JI4vnTi7ji4SNgW2hREyAseDJUIrXaqFLAkNr4Sho4JTX1NElpiC2o+NzOaBADsAAAAAAAAAAAA=" /> Weeeeeeeeee.</p></div>');
+	$('<span/>').insertAfter('.pagination').html('<div class="loading" style="float: left; margin: -2px 10px; padding: 5px; position: relative; width: 330px;"><p><img src="data:image/gif;base64,R0lGODlhEAAQAPYAAP///zMzM/r6+qenp5+fn/Hx8dLS0t/f37GxsTMzM6SkpNHR0VpaWnR0dO/v77e3t6mpqfT09JqamklJScHBwba2tq6urvb29vn5+bm5udfX12lpaTw8PH9/f+Tk5Ozs7MnJyVRUVF5eXmpqatzc3M/Pz2JiYnFxcWRkZGxsbNnZ2dTU1Hp6esLCwu7u7oyMjLy8vMbGxsfHx35+fnx8fIGBgZ6enubm5peXl/z8/LS0tEZGRlZWVnd3dzY2NnJyctbW1l9fX3l5eUdHR/Ly8t7e3q+vr+fn5+rq6mZmZrq6uk9PT0xMTL6+vo6Ojm5ublxcXIeHh9ra2szMzFFRUZaWlmdnZ3Z2djo6Ojk5Ob+/v+np6W9vb/f398TExISEhIaGhuLi4rKyskFBQU5OTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/h1CdWlsdCB3aXRoIEdJRiBNb3ZpZSBHZWFyIDQuMAAh/hVNYWRlIGJ5IEFqYXhMb2FkLmluZm8AIfkECQoAAAAsAAAAABAAEAAAB2iAAIKDICImJYOJAAsSGgAhCQkoioIGDAkbHpcJKYIRiQSRHBYLIycqABgZn4IHDRMdH5QYig4UBZSKAggPuZQDkRW+ACSIoQkWw8UABQoQF8PR0qm+tIkRGdaJqqyD3SQk3tEliNPRgQAh+QQJCgAAACwAAAAAEAAQAAAHa4AAgoMHNDU3g4mKMwkJLzk6PRk5gysvGhcvjTgQOwk7MIMsCQ0yLhI2BSGNCTWDLSkxBYkVPD48MoMuMLOKMD8gisLDACUkxIIkJYLGyADKztHSgxjE1YkRGdeJGBkRit/Jx4LhxCXL08iBACH5BAkKAAAALAAAAAAQABAAAAdogACCgwIID4OIiQADCQkVACUSKokRggSNFkBBCSZFgxEZGAAFChAXOD6NRoiiiR5CQzRHiooOFES0tCAiJiWQJLkAIY0ov8EMjSnBgwsjJ5PLua2K04Kg1YIYGZWI3AAkwNbLJb7R0YEAIfkECQoAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkAEQLTlKEERkYhQ9JCVGFmYVISk9Ti4UfMAWmhQc0NTcAJZCLMwkJL7Gzhy+2OKuCLhI2qqtGUA+fhhBLCUwwjJiFIbYJNZaOkBVMCVQyi4mCTVHev4aBACH5BAkKAAAALAAAAAAQABAAAAdogACCg4SFhoIlJYeDEYMkJIyFERkYhhgZjYSVh5uLnp+CAggPiJCLAwkJFQAlpocEqRagAAUKEBegC05FhZ2DK1ZYVryCk5UgIiYlVT6pRoSZIakoR1dZQluHDKkpAEdaH4sLIycqhoEAIfkECQoAAAAsAAAAABAAEAAAB2eAAIKDhIWGgiUlh4MRgyQkjIURGRiGGBmNhJWHm4uen4clkJ4kigCin6WgixZQD4ZdIF2DRhMJIRmERFMsGoNcCcEpBzQ1Nw9JCWCDGUMJPDIzwS8fXl8LhE1RMgAvwTirLhI2BYaBACH5BAkKAAAALAAAAAAQABAAAAdngACCg4SFhoIlJYeDEYMkJIyFERkYhhgZjYSVh5uLniAiJoqegiEJCSieJIoMpymqigsjJyqkhCtOUrYABkEcT2GWhDanHBYCCA+Cl5kAYVxZMw4DpxWCzYJbWkgABKcWuwUKEBeGgQAh+QQJCgAAACwAAAAAEAAQAAAHaIAAgoOEhYICYj1KgiUlhoJGYwlMGQAkJIMRhFwJnU+FGBmaghlkPiIyhhiFMD8xj4QHNDU3sIQznS+2JI4vnTi7ji4SNgW2hREyAseDJUIrXaqFLAkNr4Sho4JTX1NElpiC2o+NzOaBADsAAAAAAAAAAAA=" /> Skifter side...</p></div>');
 	$(".loading").hide();
 }
 
@@ -1236,9 +1371,7 @@ function SNES_ajaxPageChange() {
 	$('.pagination a').live('click', function(e) {
 		e.preventDefault();
 		SNES_startHash = '';
-		var p = /page(\d+)$/.exec(this.href)[1];
-		var href = SNES_getUrl();
-		history.pushState({page: p}, '', href + '/page' + p);
+		var p = +/page(\d+)$/.exec(this.href)[1];
 		SNES_fetchPage(p, 1);
 		return false;
 	});
@@ -1259,11 +1392,10 @@ function SNES_fetchPage(pageNo, state, hash) {
 			$("#postcontainer").html($("Response", xml).text());
 			
 			// Opdaterer newz.dk's variable, så den kun henter nye indlæg, når man er på sidste side
-			$(".pagination a").each(function(i) {
-				// Sakset fra newz.dk's egen kode. _lastPage returneres ikke fra AJAX, så hmn kigger simpelthen alle <a>'erne igennem
-				var pageId = +(this.href.substring(this.href.indexOf("page") + 4));
-				if (typeof pageId != 'undefined' && pageId > _lastPage)
-					_lastPage = pageId;
+			$('a,span', '.pagination:first').each(function() {
+				var v = +$(this).text();
+				if (v > _lastPage)
+					_lastPage = v;
 			});
 			_pageId = pageNo;
 			if (_pageId == _lastPage) {
@@ -1275,10 +1407,27 @@ function SNES_fetchPage(pageNo, state, hash) {
 			switch (state) {
 				case 1:
 					$(window).scrollTop(0);
+					var href = SNES_getUrl();
+					history.pushState({page: _pageId}, '', href + '/page' + _pageId);
 					break;
 				case 2:
 					$(window).scrollTop($('.comment h2:has(a[name=' + hash + '])').offset().top);
 					break;
+			}
+			
+			// Sætter "ret indlæg" på det sidste af brugerens indlæg på siden, hvis tidsstemplet passer med minutpræcision samt er yngre end ti minutter.
+			// Det kan ikke vides, om der er et nyere (inden for samme minut) indlæg på næste side, men det går nok.
+			// Datokonverteringen er nuppet fra SNES_fixPostTimes().
+			var a = $('.comment:not(:has(.comment_rate)):last');
+			if (a.length > 0) {
+				var e = $('.comment_date', a);
+				var m = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11};
+				var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
+				var d = (new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0)).getTime();
+				var s = _lastPostTime - (d/1000);
+				var s2= Math.round(((new Date()).getTime() / 1000) - _lastPostTime)/60;
+				if (s>=0 && s<60 && s2<10)
+					$('.position', a).parents('li').next().after('<li><a title="Ret indlæg" class="edititem" href="#"><span></span>Ret indlæg ('+Math.round(10-s2)+' min)</a></li>');
 			}
 			
 			// (Gen)aktiverer js for "Yderligere information", etc. ved at sætte event handlers igen (newz.dk-funktion)
