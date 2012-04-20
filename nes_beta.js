@@ -774,7 +774,7 @@ function SNES_fixSpoilers(object) {
 	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
 	$('.open_spoiler', object).unbind().attr('class', 'SNES_open_spoiler').click(function(e) {
 		e.preventDefault();
-		if (/(?:http:\/\/|www\.)[^\^!\(\)\[\]{}]+/i.test(this.id)) {
+		if (/^(?:http:\/\/|www\.)[^\^!\(\)\[\]{} ]+$/i.test(this.id)) {
 			var parent = $(this).parents('.comment');
 			$(this).replaceWith('<a href="'+this.id+'">'+$('<div><a href="'+this.id+'">'+this.id+'</a></div>').linkShorten().find('a').text()+'</a>');
 			SNES_urlToImg(parent);
