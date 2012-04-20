@@ -775,8 +775,9 @@ function SNES_fixSpoilers(object) {
 	$('.open_spoiler', object).unbind().attr('class', 'SNES_open_spoiler').click(function(e) {
 		e.preventDefault();
 		if (/(?:http:\/\/|www\.)[^\^!\(\)\[\]{}]+/i.test(this.id)) {
+			var parent = $(this).parents('.comment');
 			$(this).replaceWith('<a href="'+this.id+'">'+$('<div><a href="'+this.id+'">'+this.id+'</a></div>').linkShorten().find('a').text()+'</a>');
-			SNES_urlToImg($(this).parents('.comment'));
+			SNES_urlToImg(parent);
 		} else
 			$(this).replaceWith(Encoder.htmlEncode(this.id));
 		return false;
