@@ -108,7 +108,11 @@ function SNES_init() {
 			<!--<input type="checkbox" id="embedYouTubeUrlsNewOnly" name="embedYouTubeUrlsNewOnly"><label for="embedYouTubeUrlsNewOnly"> Kun i ulæste indlæg (indlæg efter "Indlæg skrevet siden sidste besøg i denne tråd."-bjælken)</label><br>--> \
 			<label for="embedYouTubeUrlsCount">Kun de sidste </label><input style="width: 20px;" type="text" id="embedYouTubeUrlsCount" name="embedYouTubeUrlsCount"><label for="embedYouTubeUrlsCount"> links konverteres (0 = ∞)</label> \
 		</div> \
-		<input type="checkbox" id="narrowSite" name="narrowSite"><label for="narrowSite"> Gør newz.dk lidt smallere (til opløsninger med 1024 i bredde)</label> \
+		<input type="checkbox" id="narrowSite" name="narrowSite"><label for="narrowSite"> Gør newz.dk lidt smallere (til opløsninger med 1024 i bredde)</label><br> \
+		<input type="checkbox" id="updateFaviconOnNewPosts" name="updateFaviconOnNewPosts"><label for="updateFaviconOnNewPosts"> Informér mig om nye indlæg, når jeg befinder mig på /forum, ved at skifte favicon</label><br> \
+		<div id="updateFaviconOnNewPostsSub" style="padding-left: 16px;"> \
+			<input type="checkbox" id="updateFaviconOnNewPostsBlink" name="updateFaviconOnNewPostsBlink"><label for="updateFaviconOnNewPostsBlink"> Blink for mig!</label><br> \
+		</div> \
 		<div style="margin-top: 12px;"> \
 			<hr> \
 			Ændringerne sættes i kraft ved næste indlæsning. Lær alt om SNES på <a href="http://www.knowyournewz.dk/index.php?title=Super_newz.dk_Enhancement_Suite">kynz</a>! Version ' + SNES_version + '. \
@@ -141,10 +145,13 @@ function SNES_init() {
 	if (narrowSite = (localStorage["narrowSite"] == "true")) {
 		$('body,#center,#nmContainer').css('width','1000px');
 	}
+	updateFaviconOnNewPosts = (localStorage["updateFaviconOnNewPosts"] == "true");
+	updateFaviconOnNewPostsBlink = (localStorage["updateFaviconOnNewPostsBlink"] == "true");
 	
 	// Event handlers til knapperne
 	var handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
-					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'showUrlVideos', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote', 'narrowSite'];
+					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'showUrlVideos', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote',
+					   'narrowSite', 'updateFaviconOnNewPosts', 'updateFaviconOnNewPostsBlink'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
 			localStorage[this.id] = this.checked ? 'true' : 'false';
@@ -367,10 +374,15 @@ function SNES_init() {
 			
 			// TAG: "SNES_flashFavicon() #2"
 			// Starter SNES_flashFavicon(), som blinker favicon, når der er ulæste tråde i /forum efter den 30-sekunders opdatering
-			if (options.data.match('class=Z4_Forum_Thread&action=mine') !== null) {
+			if (updateFaviconOnNewPosts && options.data.match('class=Z4_Forum_Thread&action=mine') !== null) {
 				if ($('.unread', $('<div>').html($("Response", xhr.responseXML).text())).length > 0) {
-					clearInterval(SNES_flashFaviconCounter);
-					SNES_flashFaviconCounter = setInterval('SNES_flashFavicon()', 1000);
+					if (updateFaviconOnNewPostsBlink) {
+						clearInterval(SNES_flashFaviconCounter);
+						SNES_flashFaviconCounter = setInterval('SNES_flashFavicon()', 1000);
+					} else {
+						$('link[type="image/x-icon"]').remove();
+						$('head').append($('<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,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">'))
+					}
 				} else {
 					clearInterval(SNES_flashFaviconCounter);
 					$('link[type="image/x-icon"]').remove();
