@@ -495,7 +495,7 @@ function SNES_init() {
 	
 	// Indholdet af kommentarfeltet gemmes løbende, så det kan gendannes. Feltet til skrivning af trådbrødtekst er også inkluderet.
 	$("#id_comment,#id_forumcontent").keyup(function() {
-		a = $("#id_comment,#id_forumcontent").val();
+		var a = $("#id_comment,#id_forumcontent").val();
 		if ($.trim(a).length > 1) {
 			localStorage['commentHistory0'] = a;
 			a = Encoder.htmlEncode(a);
@@ -788,49 +788,63 @@ function SNES_fixSpoilers(object) {
 }
 
 function SNES_fixPostTimes(object) {
-	var a = $('.comment_date:contains("min siden")', object);
-	var b = $('.comment_date:contains("sek siden")', object);
-	var c = $('.comment_date:contains("nu")', object);
-	var d = $('.comment_date:contains("i dag"):not(:contains("."))', object);
-	
-	d.each(function() {
-		var e = $(this);
-		e.html(e.attr('title') + ' (i dag)');
-	});
-	
-	if (b.length > 0 || c.length > 0)
-		var l = 980;
-	else if (a.length > 0)
-		var l = 1000 * (61 - (new Date()).getSeconds()); // Så starter den altid, når klokken slår et nyt minut.
-	else
-		return;
-	
-	c.each(function() {
-		var e = $(this);
-		e.html(e.attr('title') + ' (1 sek siden)');
-	});
-	
-	b.each(function() {
-		var e = $(this);
-		var s = +e.html().match(/(\d+) sek siden/)[1] + 1;
-		if (s >= 60)
-			$(this).html(e.attr('title') + ' (1 min siden)');
-		else
-			$(this).html(e.attr('title') + ' (' + s + ' sek siden)');
-	});
-	
-	a.each(function() {
-		var e = $(this);
-		var m = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11};
-		var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
-		var d = new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0);
-		var v = Math.round(((new Date()) - d)/(60000));
-		if (v >= 60)
+	try {
+		var a = $('.comment_date:contains("min siden")', object);
+		var b = $('.comment_date:contains("sek siden")', object);
+		var c = $('.comment_date:contains("nu")', object);
+		var d = $('.comment_date:contains("i dag"):not(:contains("."))', object);
+		
+		d.each(function() {
+			var e = $(this);
 			e.html(e.attr('title') + ' (i dag)');
+		});
+		
+		if (b.length > 0 || c.length > 0)
+			var l = 980;
+		else if (a.length > 0)
+			var l = 1000 * (61 - (new Date()).getSeconds()); // Så starter den altid, når klokken slår et nyt minut.
 		else
-			e.html(e.attr('title') + ' (' + v + ' min siden)');
-	});
-	
+			return;
+		
+		c.each(function() {
+			var e = $(this);
+			e.html(e.attr('title') + ' (1 sek siden)');
+		});
+		
+		b.each(function() {
+			var e = $(this);
+			var s = +e.html().match(/(\d+) sek siden/)[1] + 1;
+			if (s >= 60)
+				$(this).html(e.attr('title') + ' (1 min siden)');
+			else
+				$(this).html(e.attr('title') + ' (' + s + ' sek siden)');
+		});
+		
+		a.each(function() {
+			var e = $(this);
+			var m = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11};
+			var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
+			var d = new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0);
+			var v = Math.round(((new Date()) - d)/(60000));
+			if (v >= 60)
+				e.html(e.attr('title') + ' (i dag)');
+			else
+				e.html(e.attr('title') + ' (' + v + ' min siden)');
+		});
+	}
+	catch(e) {
+		if (localStorage['fixPostTimesDebug'] == 'true') {
+			console.log('SNES_fixPostTimes() fejlede med koden:');
+			console.log(e);
+			console.log('data:');
+			try {
+				console.log(e.attr('title'));
+				console.log(JSON.stringify(s));
+			}
+			catch(e) {
+			}
+		}
+	}
 	clearTimeout(SNES_fixPostTimesCounter);
 	SNES_fixPostTimesCounter = setTimeout("SNES_fixPostTimes()", l);
 }
@@ -1468,13 +1482,3 @@ function splitquery(q) {
 	};
 	return u;
 }
-
-
-/*
-	$('.text_content').filter(function() { var a = $(this).children(); return($('>blockquote', this).length === 1 && a[1].tagName === 'BLOCKQUOTE' && a[0].tagName === 'P' && $(a[0]).text() === ''); })
-
-	$('.SNES_quoteitem').parent().html('Citer <a class="SNES_quoteitem" href="#">indlæg</a> | <a class="miniquote" href="#">nummer</a> | <a class="responsequote" href="#">svar</a>')
-
-	a = $("#id_comment").val()
-	a.replace(/\[quote(?:.|\n)*\[\/quote\]/, '').trim()
-*/
