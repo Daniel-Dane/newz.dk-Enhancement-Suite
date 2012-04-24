@@ -841,7 +841,7 @@ function SNES_fixPostTimes(object) {
 				console.log(e.attr('title'));
 				console.log(JSON.stringify(s));
 			}
-			catch(e) {
+			catch(err) {
 			}
 		}
 	}
