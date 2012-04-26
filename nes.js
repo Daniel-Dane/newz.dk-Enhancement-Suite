@@ -832,7 +832,7 @@ function SNES_fixPostTimes(object) {
 				e.html(e.attr('title') + ' (' + v + ' min siden)');
 		});
 	}
-	catch(e) {
+	catch(wejrhewhigrissldghdkguhsfdkguifhdugifhdgfdhigfd) {
 		if (localStorage['fixPostTimesDebug'] == 'true') {
 			try {
 				console.log('SNES_fixPostTimes() fejlede med koden:');
