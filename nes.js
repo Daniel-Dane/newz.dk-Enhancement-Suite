@@ -833,22 +833,6 @@ function SNES_fixPostTimes(object) {
 		});
 	}
 	catch(wejrhewhigrissldghdkguhsfdkguifhdugifhdgfdhigfd) {
-		if (localStorage['fixPostTimesDebug'] == 'true') {
-			confirm('Hej. Check konsollen.');
-			try {
-				console.log('SNES_fixPostTimes() fejlede med koden:');
-				console.log(e);
-				console.log('data:');
-				try {
-					console.log(e.attr('title'));
-					console.log(JSON.stringify(s));
-				}
-				catch(err) {
-				}
-			}
-			catch (error) {
-			}
-		}
 	}
 	clearTimeout(SNES_fixPostTimesCounter);
 	SNES_fixPostTimesCounter = setTimeout("SNES_fixPostTimes()", l);
