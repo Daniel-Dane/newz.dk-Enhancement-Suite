@@ -1330,8 +1330,7 @@ function SNES_improvedQuote(object) {
 
 function SNES_updateCommentList() {
 	$('#commentStorage').empty();
-	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()]).keyup();" style="width: 100px">')
-		.appendTo('#commentStorage');
+	var a = $('<select onchange="if ($(this).val() == -1) return(false); $(\'#id_comment\').val(localStorage[\'commentHistory\' + $(this).val()]).keyup();" style="width: 100px">').appendTo('#commentStorage');
 	a.append('<option value="-1">Tidligere indlæg</option>');
 	for (var i = 0; i < 6; i++) {
 		var b = Encoder.htmlEncode(localStorage['commentHistory' + i]);
@@ -1426,13 +1425,16 @@ function SNES_fetchPage(pageNo, state, hash) {
 			// Datokonverteringen er nuppet fra SNES_fixPostTimes().
 			var a = $('.comment:not(:has(.comment_rate)):last');
 			if (a.length > 0) {
-				var e = $('.comment_date', a);
-				var m = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11};
-				var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
-				var d = (new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0)).getTime();
-				var s = _lastPostTime - (d/1000);
-				var s2= Math.round(((new Date()).getTime() / 1000) - _lastPostTime)/60;
-				if (s>=0 && s<60 && s2<10)
+				var e  = $('.comment_date', a),
+					m  = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11},
+					s  = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
+				if (s == null)
+					console.log(e.attr('title'));
+				var
+					d  = (new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0)).getTime(),
+					s1 = _lastPostTime - (d/1000),
+					s2 = Math.round(((new Date()).getTime() / 1000) - _lastPostTime)/60;
+				if (s1>=0 && s1<60 && s2<10)
 					$('.position', a).parents('li').next().after('<li><a title="Ret indlæg" class="edititem" href="#"><span></span>Ret indlæg ('+Math.round(10-s2)+' min)</a></li>');
 			}
 			
@@ -1456,7 +1458,7 @@ function SNES_getUrl() {
 		var href = location.href.substr(0, a);
 	
 	if ((a = href.indexOf('/page')) != -1)
-		var href = href.substr(0, a);
+		href = href.substr(0, a);
 	
 	return href;
 }
@@ -1468,6 +1470,6 @@ function splitquery(q) {
 	for (var i = 0; i < q.length; i++) {
 		var t = q[i].split('=');
 		u[t[0]] = t[1];
-	};
+	}
 	return u;
 }
