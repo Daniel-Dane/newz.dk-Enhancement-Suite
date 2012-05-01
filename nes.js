@@ -823,7 +823,7 @@ function SNES_fixPostTimes(object) {
 		a.each(function() {
 			var e = $(this);
 			var m = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11};
-			var s = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
+			var s = /(\d+)\. ([a-z]+)\.? (\d+) (\d+):(\d+)/.exec(e.attr('title'));
 			var d = new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0);
 			var v = Math.round(((new Date()) - d)/(60000));
 			if (v >= 60)
@@ -1427,10 +1427,7 @@ function SNES_fetchPage(pageNo, state, hash) {
 			if (a.length > 0) {
 				var e  = $('.comment_date', a),
 					m  = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11},
-					s  = /(\d+)\. ([a-z]+)\. (\d+) (\d+):(\d+)/.exec(e.attr('title'));
-				if (s == null)
-					console.log(e.attr('title'));
-				var
+					s  = /(\d+)\. ([a-z]+)\.? (\d+) (\d+):(\d+)/.exec(e.attr('title')),
 					d  = (new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0)).getTime(),
 					s1 = _lastPostTime - (d/1000),
 					s2 = Math.round(((new Date()).getTime() / 1000) - _lastPostTime)/60;
