@@ -733,7 +733,7 @@ function SNES_reportSpam(object) {
 
 function SNES_embedYouTubeUrlsFunc(object) {
 	function ttotime(s) {
-		s = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)(?:s)?)?$/.exec(s);
+		s = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?$/.exec(s);
 		return (typeof s[1] === "undefined" ? 0 : +s[1])*3600 + (typeof s[2] === "undefined" ? 0 : +s[2])*60 + (typeof s[3] === "undefined" ? 0 : +s[3]);
 	}
 	
@@ -760,8 +760,10 @@ function SNES_embedYouTubeUrlsFunc(object) {
 						t = ttotime(q.t);
 					else if (typeof q.at !== "undefined")
 						t = ttotime(q.at);
-				} else if (this.search.length > 1 && (q = splitquery(this.search)) && (typeof q.t !== "undefined"))
+				}
+				if (t === 0 && this.search.length > 1 && (q = splitquery(this.search)) && (typeof q.t !== "undefined"))
 					t = ttotime(q.t);
+				
 				$(this).replaceWith('<iframe data="'+this.href+'" width="'+(w-1)+'" height="'+((w-1)*(3/4))+'" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/' + res[1] + '?rel=0&start=' + t + '"></iframe>'.replace(/&/gm, '&amp;'));
 				
 				if (countmax > 0 && ++count >= countmax)
