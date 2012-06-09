@@ -6,33 +6,8 @@
 // Følgende (FRA OG MED CITATIONSTEGNET TIL SLUT) indsættes i indstillinger -> stylesheet for at installere SNES
 // " /><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script type="text/javascript" src="https://raw.github.com/Daniel-Dane/newz.dk-Enhancement-Suite/master/nes.js"></script><link rel="stylesheet
 
-var SNES_version = "2.2";
+var SNES_version = "2.2.1";
 var SNES_loaded = SNES_loaded || false;
-
-if (!$) {
-	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
-	// Når jQuery er cached, burde det ikke være noget problem.
-	alert('Opdatér (F5, men IKKE Ctrl+F5) lige. Får du denne pop-up flere gange, skal du fjerne SNES og fortælle om det.');
-} else {
-	if ((typeof localStorage === 'undefined') || (typeof window.history.pushState === 'undefined')) {
-		$(document).ready(function () {
-			$('#nmSiteSelect').next().find('a:last').before('Failbrowser. SNES kan ikke køre her. | ');
-		});
-	} else {
-		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!SNES_loaded)) {
-			SNES_loaded = true;
-			var SNES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
-			var SNES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
-			var SNES_fixPostTimesCounter = 0;     // setTimeout til SNES_fixPostTimes()
-			var SNES_flashFaviconCounter = 0;     //setInterval til SNES_flashFavicon(), som startes fra "SNES_flashFavicon() #2" (TAG)
-			var SNES_flashFaviconBoolean = false; // Hører også til SNES_flashFavicon()
-			$(document).ready(function () {
-				$.fn.reverse = [].reverse;
-				SNES_init();
-			});
-		}
-	}
-}
 
 function SNES_init() {
 	/**
@@ -101,6 +76,11 @@ function SNES_init() {
 		</div> \
 		<input type="checkbox" id="fixFailTagsSetting" name="fixFailTagsSetting"><label for="fixFailTagsSetting"> Ret overflødige BB-tags i indlæg (NB: Læs om funktionen på kynz inden ibrugtagen)</label><br> \
 		<input type="checkbox" id="showUrlImages" name="showUrlImages"><label for="showUrlImages"> Vis billeder i indlæg</label><br> \
+		<div id="showUrlImagesSub" style="padding-left: 16px;"> \
+			<input type="checkbox" id="showUrlImagesNotInQuote" name="showUrlImagesNotInQuote"><label for="showUrlImagesNotInQuote"> Men ikke i citater</label><br> \
+			<input type="checkbox" id="showUrlImagesNewOnly" name="showUrlImagesNewOnly"><label for="showUrlImagesNewOnly"> Kun i ulæste indlæg (indlæg efter "Indlæg skrevet siden sidste besøg i denne tråd."-bjælken)</label><br> \
+			<label for="showUrlImagesCount">Kun de sidste </label><input style="width: 20px;" type="text" id="showUrlImagesCount" name="showUrlImagesCount"><label for="showUrlImagesCount"> links konverteres (0 = ∞)</label> \
+		</div> \
 		<input type="checkbox" id="showUrlVideos" name="showUrlVideos"><label for="showUrlVideos"> Vis film i indlæg</label><br> \
 		<input type="checkbox" id="embedYouTubeUrls" name="embedYouTubeUrls"><label for="embedYouTubeUrls"> Omdan YouTube-links til embedded video</label><br> \
 		<div id="embedYouTubeUrlsSub" style="padding-left: 16px;"> \
@@ -130,18 +110,21 @@ function SNES_init() {
 	
 	// Henter indstillinger
 	addLinkToPostReference = (localStorage["addLinkToPostReference"] == "true");
-	showPostOnMouseOverReferenceMini = (localStorage["showPostOnMouseOverReferenceMini"] == "true");
-	showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true");
+		showPostOnMouseOverReferenceMini = (localStorage["showPostOnMouseOverReferenceMini"] == "true");
+		showPostOnMouseOverReference = (localStorage["showPostOnMouseOverReference"] == "true");
 	improvedQuoteSetting = (localStorage["improvedQuoteSetting"] == "true");
 	applyTargetBlank = (localStorage["applyTargetBlank"] == "true");
 	applyTargetBlankOnlyOutgoing = (localStorage["applyTargetBlankOnlyOutgoing"] == "true");
 	fixFailTagsSetting = (localStorage["fixFailTagsSetting"] == "true");
 	showUrlImages = (localStorage["showUrlImages"] == "true");
+		showUrlImagesNotInQuote = (localStorage["showUrlImagesNotInQuote"] == "true");
+		showUrlImagesNewOnly = (localStorage["showUrlImagesNewOnly"] == "true");
+		$('#showUrlImagesCount').val(showUrlImagesCount = +localStorage["showUrlImagesCount"] || 0);
 	showUrlVideos = (localStorage["showUrlVideos"] == "true");
 	embedYouTubeUrls = (localStorage["embedYouTubeUrls"] == "true");
-	embedYouTubeUrlsNotInQuote = (localStorage["embedYouTubeUrlsNotInQuote"] == "true");
-	embedYouTubeUrlsNewOnly = (localStorage["embedYouTubeUrlsNewOnly"] == "true");
-	$('#embedYouTubeUrlsCount').val(embedYouTubeUrlsCount = +localStorage["embedYouTubeUrlsCount"] || 0);
+		embedYouTubeUrlsNotInQuote = (localStorage["embedYouTubeUrlsNotInQuote"] == "true");
+		embedYouTubeUrlsNewOnly = (localStorage["embedYouTubeUrlsNewOnly"] == "true");
+		$('#embedYouTubeUrlsCount').val(embedYouTubeUrlsCount = +localStorage["embedYouTubeUrlsCount"] || 0);
 	if (narrowSite = (localStorage["narrowSite"] == "true")) {
 		$('body,#center,#nmContainer').css('width','1000px');
 	}
@@ -150,7 +133,7 @@ function SNES_init() {
 	
 	// Event handlers til knapperne
 	var handlerList = ['addLinkToPostReference', 'showPostOnMouseOverReference', 'showPostOnMouseOverReferenceLeft', 'showPostOnMouseOverReferenceMini', 'improvedQuoteSetting',
-					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'showUrlVideos', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote',
+					   'applyTargetBlank', 'applyTargetBlankOnlyOutgoing', 'fixFailTagsSetting', 'showUrlImages', 'showUrlImagesNotInQuote', 'showUrlImagesNewOnly', 'showUrlVideos', 'embedYouTubeUrls', 'embedYouTubeUrlsNotInQuote',
 					   'embedYouTubeUrlsNewOnly', 'narrowSite', 'updateFaviconOnNewPosts', 'updateFaviconOnNewPostsBlink'];
 	for (var i = 0; i < handlerList.length; i++) {
 		$("#" + handlerList[i]).bind("click", function() {
@@ -175,8 +158,11 @@ function SNES_init() {
 			$(this).change();
 		});
 	});
+	$('#showUrlImagesCount').change(function() {
+		$(this).val(localStorage["showUrlImagesCount"] = Math.floor(Math.max(+$(this).val() || 0, 0)));
+	});
 	$('#embedYouTubeUrlsCount').change(function() {
-		$(this).val(localStorage["embedYouTubeUrlsCount"] = Math.max(+$(this).val() || 0, 0));
+		$(this).val(localStorage["embedYouTubeUrlsCount"] = Math.floor(Math.max(+$(this).val() || 0, 0)));
 	});
 	
 	// Styles til fix af newz.dk samt til nogle af SNES' features.
@@ -658,6 +644,7 @@ function SNES_init() {
 function SNES_updateSettingsSub() {
 	$('#addLinkToPostReferenceSub > input').attr('disabled', !$('#addLinkToPostReference').attr('checked'));
 	$('#showPostOnMouseOverReferenceSub input').attr('disabled', (!$('#showPostOnMouseOverReference').attr('checked') || !$('#addLinkToPostReference').attr('checked')));
+	$('#showUrlImagesSub input').attr('disabled', !$('#showUrlImages').attr('checked'));
 	$('#embedYouTubeUrlsSub input').attr('disabled', !$('#embedYouTubeUrls').attr('checked'));
 	$('#applyTargetBlankSub input').attr('disabled', !$('#applyTargetBlank').attr('checked'));
 	$('#updateFaviconOnNewPostsSub input').attr('disabled', !$('#updateFaviconOnNewPosts').attr('checked'));
@@ -702,42 +689,99 @@ function SNES_flashFavicon() {
 
 // Advarsel: Tåler ikke at blive kørt flere gange for samme indlæg, men det burde ikke være noget problem endnu
 function SNES_reportSpam(object) {
+	function _feedback(str) {
+		spamobj.html(str);
+	}
+	
+	function _report() {
+		if (previousFound) {
+			_feedback('[✓] Allerede rapporteret.');
+		} else {
+			_feedback('Klargør rapport...');
+			$.ajax({
+				dataType: 'xml',
+				url: "/z4/action.php",
+				data: {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId},
+				success: function (xml) {
+					_feedback('Rapporterer indlæg...');
+					var text = encodeURIComponent("Automatisk spamrapport.\n[url=" + userLink + "]Brugernavn: " + userName + "[/url]\nURL: " + postLink + "\n\nEksempel på spam:\n[quote]" + $.trim($("Response", xml).text().replace("\n\n\n\n", "\n\n").replace(/www\./gmi, '').replace(/https?:\/\//gmi, '').replace(/\[url=.+?\]/gm, '').replace(/\[\/url\]/gm, '')) + "[/quote]");
+					$.ajax({
+						dataType: 'xml',
+						url: "/z4/action.php",
+						data: {"action":"usersave", "class":"Z4_Forum_Item", "thread_id":119686, "lastId":99999999999999999, "comment":text}, // Jeg har byttet om på action og class (rækkefølgen), så fixPosts() ikke køres. Skide smart, Daniel.
+						success: function (xml) {
+							_feedback('[✓] Rapporteret. Tak.');
+						},
+						error: function() {
+							_feedback('[X] Kunne ikke rapportere indlæg.');
+						}
+					});
+				},
+				error: function() {
+					_feedback('[X] Kunne ikke hente indlæg.');
+				}
+			});
+		}
+	}
+	
 	$('.comment_rating li:first-child', object).before('<li><a title="Rapportér spam" class="reportSpam" href="#"><span></span>Rapportér spam</a></li>');
 	$('.reportSpam', object).bind('click', function(e) {
 		e.preventDefault();
 		
-		if (confirm("Er du sikker på, at dette er spam, som skal rapporteres? Du ender med selv at spamme, hvis dette ikke er spam.\n\nDet er forresten ikke nødvendigt at rapportere samtlige indlæg i en tråd, hvis de er på hinanden følgende.")) {
-			var $this = $(this);
-			$this.html('Rolling...').removeAttr("href").unbind();
-			
-			var postParent = $this.parents('.comment').find('h2');
-			var userLink   = $('a:last', postParent)[0].href.replace('%7E', '~');
-			var userName   = $('a:last', postParent).text();
-			var postId     = $('a:nth-child(2)', postParent).attr('name').substr(2);
-			var postLink   = $('a:nth-child(3)', postParent).attr('href');
-			
-			$.get("/z4/action.php", {"class":"Z4_Forum_Item", "action":"getRaw", "id":postId}, function(xml) {
-				var text = encodeURIComponent("Automatisk spamrapport.\nBrugernavn: [url=" + userLink + "]" + userName + "[/url]\nURL: " + postLink + "\n\nEksempel på spam:\n[quote]" + $.trim($("Response", xml).text().replace("\n\n\n\n", "\n\n").replace(/www\./gmi, '').replace(/https?:\/\//gmi, '').replace(/\[url=.+?\]/gm, '').replace(/\[\/url\]/gm, '')) + "[/quote]");
+		if (confirm("Er du sikker på, at dette er spam, som skal rapporteres? Du ender med selv at spamme, hvis dette ikke er spam.")) {
+			spamobj      = $(this);
+			postParent    = spamobj.parents('.comment').find('h2');
+			userLink      = $('a:last', postParent)[0].href.replace('%7E', '~');
+			userName      = $('a:last', postParent).text();
+			postId        = $('a:nth-child(2)', postParent).attr('name').substr(2);
+			postLink      = $('a:nth-child(3)', postParent).attr('href');
+			previousFound = false;
 				
-				// Jeg har byttet om på action og class (rækkefølgen), så fixPosts() ikke køres. Skide smart, Daniel.
-				$.get("/z4/action.php", {"action":"usersave", "class":"Z4_Forum_Item", "thread_id":119686, "lastId":99999999999999999, "comment":text}, function(xml) {
-					$this.html('Succes!');
-				}, "xml");
-				
-			}, "xml");
+			// Tjekker tråden for at se, om indlægget allerede er rapporteret.
+			spamobj.html('Tjekker om allerede rapporteret...').removeAttr("href").unbind();
+			$.ajax({
+				url: '/forum/newz-dk/spamrapporteringstraaden-119686',
+				success: function(response) {
+					thread = $('' + response);
+					if ($('.comment a[href="'+postLink+'"]', thread).length > 0)
+						previousFound = true;
+					
+					if (previousFound === false && $('.comment', thread).length < 15) {
+						_feedback('Tjekker om allerede rapporteret... (2)')
+						var p = +/var _pageId = (\d+)/.exec(response)[1];
+						$.ajax({
+							url: '/forum/newz-dk/spamrapporteringstraaden-119686/page' + (p-1),
+							success: function(response2) {
+								var thread2 = $('' + response2);
+								
+								if ($('.comment a[href="'+postLink+'"]', thread2).length > 0)
+									previousFound = true;
+								
+								_report();
+							},
+							error: function() {
+								_feedback('[X] Kunne ikke nå spamlisten. (2)');
+							}
+						});
+					} else
+						_report();
+				},
+				error: function() {
+					_feedback('[X] Kunne ikke nå spamlisten.');
+				}
+			});
 		}
-		
 		return false;
 	});
 }
 
 function SNES_embedYouTubeUrlsFunc(object) {
-	function ttotime(s) {
-		s = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?$/.exec(s);
-		return (typeof s[1] === "undefined" ? 0 : +s[1])*3600 + (typeof s[2] === "undefined" ? 0 : +s[2])*60 + (typeof s[3] === "undefined" ? 0 : +s[3]);
-	}
-	
 	if (embedYouTubeUrls) {
+		function ttotime(s) {
+			s = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?$/.exec(s);
+			return (typeof s[1] === "undefined" ? 0 : +s[1])*3600 + (typeof s[2] === "undefined" ? 0 : +s[2])*60 + (typeof s[3] === "undefined" ? 0 : +s[3]);
+		}
+		
 		var count = 0,
 			countmax = embedYouTubeUrlsCount;
 		
@@ -880,15 +924,30 @@ function SNES_fixFailTags(object) {
 
 function SNES_urlToImg(object) {
 	if (showUrlImages) {
-		$('.text_content a:not([href^="#"])', object).filter(function() {
-			return (/\.(png|gif|jp(e)?g)$/i.test(this.href) && $(this).attr('data') === undefined);
-		}).each(function() {
-			var e = $(this);
-			var b = this.href;
-			var c = e.text();
-			if (b == c)
-				var c = $('<div><a href="'+b+'">'+b+'</a></div>').linkShorten().find('a').text();
-			e.replaceWith('<a data="SNES_img" title="'+c+'" href="'+b+'"><img title="'+c+'" alt="'+c+'" class="SNES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
+		var count = 0,
+			countmax = showUrlImagesCount;
+		
+		if (showUrlImagesNewOnly && object == undefined) {
+			var a = $('.comments_new');
+			if (a.length > 0) {
+				object = a.nextAll();
+				countmax = 0;
+			}
+		}
+		
+		$('.text_content a:not([href^="#"])', object).reverse().each(function() {
+			var w = parseInt($(this).parent().css('width'));
+			if (/\.(png|gif|jp(e)?g)$/i.test(this.href) && $(this).attr('data') === undefined && (!showUrlImagesNotInQuote || (showUrlImagesNotInQuote && w === 381))) {
+				var e = $(this);
+				var b = this.href;
+				var c = e.text();
+				if (b == c)
+					var c = $('<div><a href="'+b+'">'+b+'</a></div>').linkShorten().find('a').text();
+				e.replaceWith('<a data="SNES_img" title="'+c+'" href="'+b+'"><img title="'+c+'" alt="'+c+'" class="SNES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
+				
+				if (countmax > 0 && ++count >= countmax)
+					return false;
+			}
 		});
 	}
 }
@@ -918,7 +977,7 @@ function SNES_addLinkToPostReferenceFunc(object, isPreview) {
 				if (this.nodeType == 3) {
 					// #tal efterfulgt af enten mellemrum, linjeknæk, kolon, komma, punktum, spørgsmålstegn, udråbstegn eller parentes-slut samt ved afsluttet afsnit eller linje
 					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|\?|!|\)|<\/p>|$)/gm, function(str, a, b) {
-						if (a < 100 && _pageId > 20) { // Fra indlæg #1001 vil #99 betyder #999 osv.
+						if (a < 100 && _pageId > 20) { // Fra indlæg #1001 vil #99 betyde #999 osv.
 							c = Math.floor((50 * (_pageId - 1)) / 100) * 100 + +a;
 							if (c > postNum)
 								c -= 100;
@@ -1471,4 +1530,29 @@ function splitquery(q) {
 		u[t[0]] = t[1];
 	}
 	return u;
+}
+
+if (!$) {
+	// Rækkefølgen af scripts er ikke altid den samme (tak for lort, HTML5, IE og Webkit).
+	// Når jQuery er cached, burde det ikke være noget problem.
+	alert('Opdatér (F5, men IKKE Ctrl+F5) lige. Får du denne pop-up flere gange, skal du fjerne SNES og fortælle om det.');
+} else {
+	if ((typeof localStorage === 'undefined') || (typeof window.history.pushState === 'undefined')) {
+		$(document).ready(function () {
+			$('#nmSiteSelect').next().find('a:last').before('Failbrowser. SNES kan ikke køre her. | ');
+		});
+	} else {
+		if ((/^http:\/\/(.+\.)?newz\.dk(?!\/banner).*$/.test(location.href)) && (!SNES_loaded)) {
+			SNES_loaded = true;
+			var SNES_startHash = location.hash;   // Gemmer hash, hvis newz.dk AJAX'er til den rigtige side, så vi kan hoppe til det rigtige indlæg
+			var SNES_postSortByRating = false;    // true, når der er trykket på "Sorter indlæg efter rating"
+			var SNES_fixPostTimesCounter = 0;     // setTimeout til SNES_fixPostTimes()
+			var SNES_flashFaviconCounter = 0;     //setInterval til SNES_flashFavicon(), som startes fra "SNES_flashFavicon() #2" (TAG)
+			var SNES_flashFaviconBoolean = false; // Hører også til SNES_flashFavicon()
+			$(document).ready(function () {
+				$.fn.reverse = [].reverse;
+				SNES_init();
+			});
+		}
+	}
 }
