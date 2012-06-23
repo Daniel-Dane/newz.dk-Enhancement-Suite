@@ -975,8 +975,8 @@ function SNES_addLinkToPostReferenceFunc(object, isPreview) {
 			
 			$(this.childNodes).each(function() {
 				if (this.nodeType == 3) {
-					// #tal efterfulgt af enten mellemrum, linjeknæk, kolon, komma, punktum, spørgsmålstegn, udråbstegn eller parentes-slut samt ved afsluttet afsnit eller linje
-					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|'|\?|!|\)|<\/p>|$)/gm, function(str, a, b) {
+					// #tal efterfulgt af enten mellemrum, linjeknæk, kolon, komma, punktum, apostrof, skråstreg, spørgsmålstegn, udråbstegn, plus eller parentes-slut samt ved afsluttet afsnit eller linje
+					$(this).replaceWith(this.nodeValue.replace(/#(\d+)( |<br>|:|,|\.|'|/|\?|!|+|\)|<\/p>|$)/gm, function(str, a, b) {
 						if (a < 100 && _pageId > 20) { // Fra indlæg #1001 vil #99 betyde #999 osv.
 							c = Math.floor((50 * (_pageId - 1)) / 100) * 100 + +a;
 							if (c > postNum)
