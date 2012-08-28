@@ -663,7 +663,7 @@ function SNES_fixPosts(object, afterEdit, isPreview) {
 		SNES_improvedQuote(object);
 		SNES_addPermLink(object);
 		SNES_fixPostTimes(object);
-		SNES_reportSpam(object);
+		//SNES_reportSpam(object);
 	}
 	
 	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
