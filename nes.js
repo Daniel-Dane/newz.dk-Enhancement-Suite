@@ -666,6 +666,11 @@ function SNES_fixPosts(object, afterEdit, isPreview) {
 		//SNES_reportSpam(object);
 	}
 	
+	// Forkorter links efter endt redigering (rettelse) for brugeren (altså, ændrer ikke i teksten), da det normalt gøres ved indsendelse af indlæg og når siden opdateres
+	if (afterEdit === true) {
+		$(object).linkShorten();
+	}
+	
 	// Køres kun én per indlæg (men også når indlægget er blevet rettet)
 	SNES_addLinkToPostReferenceFunc(object, (isPreview === true));
 	SNES_urlToImg(object);
@@ -1572,6 +1577,7 @@ if (!$) {
 			var SNES_flashFaviconBoolean = false; // Hører også til SNES_flashFavicon()
 			$(document).ready(function () {
 				$.fn.reverse = [].reverse;
+				$('table:has(table:has(.adform-adbox))').parent().remove(); // Fjerner pop-up-reklamen
 				SNES_init();
 			});
 		}
