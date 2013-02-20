@@ -848,11 +848,20 @@ function SNES_fixPostTimes(object) {
 		var b = $('.comment_date:contains("sek siden")', object);
 		var c = $('.comment_date:contains("nu")', object);
 		var d = $('.comment_date:contains("i dag"):not(:contains("."))', object);
+		var q = $('.comment_date:not(:contains("i dag")):not(:contains("nu")):not(:contains("sek siden")):not(:contains("min siden"))', object);
 		
 		d.each(function() {
 			var e = $(this);
 			var dat = new Date();
 			e.html(weekday[dat.getDay()] + 'd. ' + e.attr('title') + ' (i dag)');
+		});
+		
+		q.each(function() {
+			var e = $(this);
+			var m = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11};
+			var s = /(\d+)\. ([a-z]+)\.? (\d+) (\d+):(\d+)/.exec(e.attr('title'));
+			var dat = new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0);
+			e.html(weekday[dat.getDay()] + 'd. ' + e.attr('title'));
 		});
 		
 		if (b.length > 0 || c.length > 0)
@@ -882,12 +891,12 @@ function SNES_fixPostTimes(object) {
 			var e = $(this);
 			var m = {'jan':0,'feb':1,'mar':2,'apr':3,'maj':4,'jun':5,'jul':6,'aug':7,'sep':8,'okt':9,'nov':10,'dec':11};
 			var s = /(\d+)\. ([a-z]+)\.? (\d+) (\d+):(\d+)/.exec(e.attr('title'));
-			var d = new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0);
-			var v = Math.round(((new Date()) - d)/(60000));
+			var dat = new Date(s[3], m[s[2]], s[1], s[4], s[5], 0, 0);
+			var v = Math.round(((new Date()) - dat)/(60000));
 			if (v >= 60)
-				e.html(weekday[d.getDay()] + 'd. ' + e.attr('title') + ' (i dag)');
+				e.html(weekday[dat.getDay()] + 'd. ' + e.attr('title') + ' (i dag)');
 			else
-				e.html(weekday[d.getDay()] + 'd. ' + e.attr('title') + ' (' + v + ' min siden)');
+				e.html(weekday[dat.getDay()] + 'd. ' + e.attr('title') + ' (' + v + ' min siden)');
 		});
 	}
 	catch(wejrhewhigrissldghdkguhsfdkguifhdugifhdgfdhigfd) {
