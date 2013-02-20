@@ -834,7 +834,7 @@ function SNES_fixSpoilers(object) {
 }
 
 function SNES_fixPostTimes(object) {
-	try {
+	//try {
 		var weekday = new Array(7);
 		weekday[0] = "Søn. ";
 		weekday[1] = "Man. ";
@@ -889,9 +889,9 @@ function SNES_fixPostTimes(object) {
 			else
 				e.html(weekday[d.getDay()] + 'd. ' + e.attr('title') + ' (' + v + ' min siden)');
 		});
-	}
-	catch(wejrhewhigrissldghdkguhsfdkguifhdugifhdgfdhigfd) {
-	}
+	//}
+	//catch(wejrhewhigrissldghdkguhsfdkguifhdugifhdgfdhigfd) {
+	//}
 	clearTimeout(SNES_fixPostTimesCounter);
 	SNES_fixPostTimesCounter = setTimeout("SNES_fixPostTimes()", l);
 }
