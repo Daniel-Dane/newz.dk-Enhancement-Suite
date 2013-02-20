@@ -851,7 +851,8 @@ function SNES_fixPostTimes(object) {
 		
 		d.each(function() {
 			var e = $(this);
-			e.html(weekday[d.getDay()] + 'd. ' + e.attr('title') + ' (i dag)');
+			var dat = new Date();
+			e.html(weekday[dat.getDay()] + 'd. ' + e.attr('title') + ' (i dag)');
 		});
 		
 		if (b.length > 0 || c.length > 0)
@@ -863,16 +864,18 @@ function SNES_fixPostTimes(object) {
 		
 		c.each(function() {
 			var e = $(this);
-			e.html(weekday[d.getDay()] + 'd. ' + e.attr('title') + ' (1 sek siden)');
+			var dat = new Date();
+			e.html(weekday[dat.getDay()] + 'd. ' + e.attr('title') + ' (1 sek siden)');
 		});
 		
 		b.each(function() {
 			var e = $(this);
 			var s = +e.html().match(/(\d+) sek siden/)[1] + 1;
+			var dat = new Date();
 			if (s >= 60)
-				$(this).html(weekday[d.getDay()] + 'd. ' + e.attr('title') + ' (1 min siden)');
+				$(this).html(weekday[dat.getDay()] + 'd. ' + e.attr('title') + ' (1 min siden)');
 			else
-				$(this).html(weekday[d.getDay()] + 'd. ' + e.attr('title') + ' (' + s + ' sek siden)');
+				$(this).html(weekday[dat.getDay()] + 'd. ' + e.attr('title') + ' (' + s + ' sek siden)');
 		});
 		
 		a.each(function() {
