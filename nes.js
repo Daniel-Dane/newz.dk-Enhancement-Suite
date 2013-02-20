@@ -966,7 +966,7 @@ function SNES_urlToImg(object) {
 			if (/\.(png|gif|jp(e)?g)$/i.test(this.href) && $(this).attr('data') === undefined && (!showUrlImagesNotInQuote || (showUrlImagesNotInQuote && w === 381))) {
 				var e = $(this);
 				var b = this.href;
-				var c = e.text();
+				var c = e.text().replace(/"/gm, '&quot;'));
 				if (b == c)
 					var c = $('<div><a href="'+b+'">'+b+'</a></div>').linkShorten().find('a').text();
 				e.replaceWith('<a data="SNES_img" title="'+c+'" href="'+b+'"><img title="'+c+'" alt="'+c+'" class="SNES_urlImg" style="max-width: ' + e.parent().css('width') + ';" src="' + b + '" /></a>');
